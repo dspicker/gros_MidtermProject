@@ -1,10 +1,10 @@
-# gros_MidtermProject
-Midterm Project of lecture "Advanced Introduction to C++, scientific computing and machine learning".
+gros_MidtermProject   
+Midterm Project of lecture "Advanced Introduction to C++, scientific computing and machine learning".   
 Wintersemester 2018/19
 
 # Description
-## 2.20 Pathfinding
-[Emanuele Varriale](mailto:varriale@itp.uni-frankfurt.de)
+### 2.20 Pathfinding
+[Emanuele Varriale](mailto:varriale@itp.uni-frankfurt.de   
 Pathfinding algorithms have to find the optimal path between two points on a map (1). A map can
 be represented as a graph, the easiest way being "discretizing" the map into a grid: cells are nodes that
 are connected, for example, with nearest neighbours.
@@ -24,9 +24,9 @@ Your task is to implement these algorithms, compare the time performance, optima
 on different kind of maps. You should consider maps with normal cells with weight 1, walls, i.e. cells
 that cannot be visited, and, "forest" cells with weight 5. Use these elements to create interesting geometries
 showing different behaviours of the algorithms. As an implementation detail, `std::queue` and
-`std::priority_queue` can be used to store the nodes to visit next.
-(1) [Pathfinding](https://en.wikipedia.org/wiki/Pathfinding)
-(2) [Breadthfirst search](https://en.wikipedia.org/wiki/Breadth-first_search)
-(3) [Greedy best first](https://en.wikipedia.org/wiki/Best-first_search)
-(4) [Uniform cost search](https://algorithmicthoughts.wordpress.com/2012/12/15/artificial-intelligence-uniform-cost-searchucs/)
-(5) [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
+`std::priority_queue` can be used to store the nodes to visit next.   
+(1) [Pathfinding](https://en.wikipedia.org/wiki/Pathfinding)   
+(2) [Breadth first search](https://en.wikipedia.org/wiki/Breadth-first_search)   
+(3) [Greedy best first](https://en.wikipedia.org/wiki/Best-first_search)   
+(4) [Uniform cost search](https://algorithmicthoughts.wordpress.com/2012/12/15/artificial-intelligence-uniform-cost-searchucs/)   
+(5) [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)   
