@@ -19,6 +19,8 @@ public:
 
   std::string GetTypeName() ;
 
+  void Print();
+
 };
 
 
