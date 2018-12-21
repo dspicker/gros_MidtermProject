@@ -5,13 +5,14 @@
 
 class pfNode {
 private:
-  int type ;   // type of node. wall, grass, forest
+  int type ;   // type of node. 1 wall, 2 grass, 3 forest
   int weight;  // depends on the type. grass 1, forest 5, wall -1
 
 
 public:
   // constructor
   pfNode(int t);
+
 
   int GetType(){ return type; }
   int GetWeight(){ return weight; }

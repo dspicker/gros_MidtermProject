@@ -2,14 +2,16 @@
 #define pfMap_h
 
 #include "class_node.h"
-#include <vector>
+#include <map>
+#include <array>
 
 class pfMap {
 private:
   int width;   // number of nodes in horizontal direction
   int height;  // number of nodes in vertical direction
 
-  std::vector<pfNode> nodes;
+
+  std::map< std::array<int,2>, pfNode > nodes ;
 
 public:
   // constructor to initialise the map with random nodes
@@ -23,7 +25,7 @@ public:
   int GetHeigth(){ return height; }
   int GetNnodes(){ return width * height ; }
 
-
+  int PrintMap();
 
 };
 
