@@ -4,7 +4,7 @@ Wintersemester 2018/19
 
 # Description
 ### 2.20 Pathfinding
-[Emanuele Varriale](mailto:varriale@itp.uni-frankfurt.de   
+Supervisor: [Emanuele Varriale](mailto:varriale@itp.uni-frankfurt.de)   
 Pathfinding algorithms have to find the optimal path between two points on a map (1). A map can
 be represented as a graph, the easiest way being "discretizing" the map into a grid: cells are nodes that
 are connected, for example, with nearest neighbours.
@@ -26,7 +26,7 @@ that cannot be visited, and, "forest" cells with weight 5. Use these elements to
 showing different behaviours of the algorithms. As an implementation detail, `std::queue` and
 `std::priority_queue` can be used to store the nodes to visit next.   
 (1) [Pathfinding](https://en.wikipedia.org/wiki/Pathfinding)   
-(2) [Breadth first search](https://en.wikipedia.org/wiki/Breadth-first_search)   
+(2) [Breadthfirst search](https://en.wikipedia.org/wiki/Breadth-first_search)   
 (3) [Greedy best first](https://en.wikipedia.org/wiki/Best-first_search)   
 (4) [Uniform cost search](https://algorithmicthoughts.wordpress.com/2012/12/15/artificial-intelligence-uniform-cost-searchucs/)   
 (5) [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)   
