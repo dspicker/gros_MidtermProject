@@ -14,15 +14,16 @@ pfMap::pfMap(int w, int h){
   // obtain a seed, initialize a random number generator and  initialize a uniform distribution
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   std::mt19937_64 gen(seed);
-  std::uniform_int_distribution<int> rnd_type(1,3);
-
+  std::uniform_int_distribution<int> random(1,4);
 
   for(int i=0 ; i<width ; i++){
     for(int j=0 ; j<height ; j++){
       if( i==0 || i==(width-1) || j==0 || j==(height-1) ){
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(1) ) );
       } else {
-        nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode( rnd_type(gen) ) ) );
+        int rnd_type = random(gen) ;
+        if(rnd_type == 4 ){ rnd_type = 2; }
+        nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(rnd_type) ) );
       }
     }
   }
@@ -31,12 +32,16 @@ pfMap::pfMap(int w, int h){
 
 int pfMap::PrintMap(){
   std::array<int,2> pos;
-  for(int i=0 ; i<width ; i++){
-    for(int j=0 ; j<height ; j++){
+  for(int j=height ; j>0 ; j--){
+    for(int i=0 ; i<width ; i++){
       pos[0] = i;
-      pos[1] = j;
-      
+      pos[1] = j-1;
+      auto it = nodes.find(pos);
+      if( it != nodes.end() ){
+        it->second.Print();
+      }
     }
+    std::cout << std::endl ;
   }
-
+  std::cout << std::endl ;
 }

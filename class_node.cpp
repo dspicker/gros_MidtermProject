@@ -40,7 +40,7 @@ void pfNode::Print(){
   std::array<int,3> color = {0,0,0};
   switch (type) {
     case 1 :         // Wall
-      color = {180,180,180};
+      color = {115,115,115};
       break;
     case 2 :        // Grass
       color = {51, 204, 51};
