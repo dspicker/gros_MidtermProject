@@ -12,9 +12,6 @@ class_map: class_map.cpp class_map.h
 class_node: class_node.cpp class_node.h
 		g++ $(CFLAGS) -c class_node.cpp
 
-#class_Square: class_Square.cpp class_Square.h
-#	g++ $(CFLAGS) -c class_Square.cpp
-
 clean:
 		rm -f core *.o
 		rm *~
