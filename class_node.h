@@ -17,8 +17,10 @@ public:
   int GetType(){ return type; }
   int GetWeight(){ return weight; }
 
+  // returns "Wall", "Grass", etc..
   std::string GetTypeName() ;
 
+  // prints the node to std::cout with an rgb colored whitespace
   void Print();
 
 };

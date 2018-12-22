@@ -14,7 +14,7 @@ std::cout << n1.GetTypeName() << std::endl ;
 std::cout << n2.GetTypeName() << std::endl ;
 std::cout << n3.GetTypeName() << std::endl ;
 */
-pfMap map1(20,20);
+pfMap map1(50,20);
 
 map1.PrintMap();
 

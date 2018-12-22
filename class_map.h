@@ -20,11 +20,11 @@ public:
   void SetWidth(int w) ;
   void SetHeight(int h) ;
 
-
   int GetWidth(){ return width; }
   int GetHeigth(){ return height; }
   int GetNnodes(){ return width * height ; }
 
+  // prints the map to std::cout
   int PrintMap();
 
 };
