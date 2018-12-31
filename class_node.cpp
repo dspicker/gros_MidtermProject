@@ -3,6 +3,7 @@
 #include <iostream>
 #include <array>
 
+// constructor
 pfNode::pfNode(int t){
   // TODO: catch wrong values of t .
   type = t;
@@ -22,6 +23,16 @@ pfNode::pfNode(int t){
 
 }
 
+void pfNode::SetStart(){
+  type = 4;
+  weight = 1;
+}
+
+void pfNode::SetTarget(){
+  type = 5;
+  weight = 1;
+}
+
 std::string pfNode::GetTypeName(){
   switch (type) {
     case 1 :         // Wall
@@ -30,6 +41,10 @@ std::string pfNode::GetTypeName(){
       return "Grass" ;
     case 3 :        // Forest
       return "Forest" ;
+    case 4 :        // start-node
+      return "Start-Node" ;
+    case 5 :        // target-node
+      return "Target-Node" ;
     default :
       return "Undefined" ;
   }
@@ -47,6 +62,12 @@ void pfNode::Print(){
       break;
     case 3 :        // Forest
       color = {0, 153, 51};
+      break;
+    case 4 :
+      color = {204, 51, 0};
+      break;
+    case 5 :
+      color = {0, 51, 204};
       break;
   }
   char buffer1[50];

@@ -4,7 +4,7 @@
 #include <chrono>
 #include <random>
 
-
+// constructor to initialise the map with random nodes
 pfMap::pfMap(int w, int h){
   width = w;
   height = h;
