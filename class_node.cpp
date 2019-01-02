@@ -63,10 +63,10 @@ void pfNode::Print(){
     case 3 :        // Forest
       color = {0, 153, 51};
       break;
-    case 4 :
+    case 4 :       // start
       color = {204, 51, 0};
       break;
-    case 5 :
+    case 5 :       // target
       color = {0, 51, 204};
       break;
   }

@@ -18,5 +18,10 @@ pfMap map1(50,20);
 
 map1.PrintMap();
 
+//std::cout <<  << std::endl ;
+
+map1.GetNodeAt(50,50)->SetTarget() ;
+map1.PrintMap();
+
 return 0;
 }

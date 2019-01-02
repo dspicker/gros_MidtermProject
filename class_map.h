@@ -27,6 +27,9 @@ public:
   // prints the map to std::cout
   int PrintMap();
 
+  // returns pointer to the node at the given position
+  pfNode* GetNodeAt(int x, int y);
+
 };
 
 

@@ -45,3 +45,14 @@ int pfMap::PrintMap(){
   }
   std::cout << std::endl ;
 }
+
+pfNode* pfMap::GetNodeAt(int x, int y){
+  std::array<int,2> pos = {x,y};
+  auto it = nodes.find(pos);
+  if( it != nodes.end() ){
+    return &(it->second) ;
+  } else {
+    std::cerr << "\033[38;2;255;0;0m"<< "Error in GetNodeAt: Node not found!" << "\033[0m" << std::endl ;
+    return NULL;
+  }
+}
