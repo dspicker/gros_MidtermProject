@@ -12,10 +12,13 @@ private:
 
 
   std::map< std::array<int,2>, pfNode > nodes ;
+  // eventuell doch vector?
 
 public:
   // constructor to initialise the map with random nodes
   pfMap(int w, int h);
+
+  //TODO: load map from file, copy constuctor
 
   void SetWidth(int w) ;
   void SetHeight(int h) ;
@@ -29,6 +32,7 @@ public:
 
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
+
 
 };
 

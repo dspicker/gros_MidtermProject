@@ -26,6 +26,7 @@ public:
   // prints the node to std::cout with an rgb colored whitespace
   void Print();
 
+
 };
 
 
