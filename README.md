@@ -2,7 +2,7 @@ gros_MidtermProject
 Midterm Project of lecture "Advanced Introduction to C++, scientific computing and machine learning".   
 Wintersemester 2018/19
 
-# Description
+# Project Description
 ### 2.20 Pathfinding
 Supervisor: [Emanuele Varriale](mailto:varriale@itp.uni-frankfurt.de)   
 Pathfinding algorithms have to find the optimal path between two points on a map (1). A map can
@@ -30,3 +30,9 @@ showing different behaviours of the algorithms. As an implementation detail, `st
 (3) [Greedy best first](https://en.wikipedia.org/wiki/Best-first_search)   
 (4) [Uniform cost search](https://algorithmicthoughts.wordpress.com/2012/12/15/artificial-intelligence-uniform-cost-searchucs/)   
 (5) [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)   
+
+
+# How to compile
+After cloning the repository, or making changes in the sourcecode, just do   
+` /gros_MidtermProject$ make `   
+if this succeeds without errors, there will be an executable "pathfinder".
