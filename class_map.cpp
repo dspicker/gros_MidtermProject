@@ -27,7 +27,15 @@ pfMap::pfMap(int w, int h){
       }
     }
   }
+}
 
+
+// copy constructor
+pfMap::pfMap(pfMap &old){
+  width = old.width ;
+  height = old.height;
+
+  nodes = std::map< std::array<int,2>, pfNode >(old.nodes) ;
 }
 
 int pfMap::PrintMap(){

@@ -18,6 +18,9 @@ public:
   // constructor to initialise the map with random nodes
   pfMap(int w, int h);
 
+  // copy constructor
+  pfMap(pfMap &old);
+
   //TODO: load map from file, copy constuctor
 
   void SetWidth(int w) ;
