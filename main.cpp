@@ -1,4 +1,3 @@
-// MA: TEEEEEEEEEEEEEEEEST
 #include <iostream>
 
 #include "class_node.h"
@@ -18,24 +17,28 @@ std::cout << n1.GetTypeName() << std::endl ;
 std::cout << n2.GetTypeName() << std::endl ;
 std::cout << n3.GetTypeName() << std::endl ;
 */
-pfMap map1(50,20);
 
-pfMap* map2 = new pfMap(30,30);
+/*
+pfMap map1(50,20);      // create map on stack
+map1.PrintMap();        // print the map to the console
+map1.GetNodeAt(3,3)->SetStart() ;   // change something
 
-map1.PrintMap();
+pfMap* map2 = new pfMap(30,30);   // create another map on the heap
+map2->PrintMap();                 // print this one
+std::cout << map2->GetNodeAt(4,3)->GetWeight() << std::endl ;  // print weight of a node
 
-//std::cout <<  << std::endl ;
+pfMap map3(*map2);  // make a copy of map2
+map3.PrintMap();    // print the copy
 
-map1.GetNodeAt(3,3)->SetStart() ;
-map1.GetNodeAt(3,3)->GetWeight() ;
+pfMap map4(map1);   // create a copy of map1
 
-map1.PrintMap();
+delete map2 ;     // delete map from the heap
+*/
 
-map2->PrintMap();
-map2->GetNodeAt(4,3)->GetWeight() ;
 
-delete map2 ;
-
+pfMap* map1 = pfMap::LoadMap("map1.csv") ;
+map1->PrintMap();
+delete map1 ;
 
 return 0;
 }

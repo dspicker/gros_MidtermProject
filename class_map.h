@@ -15,10 +15,16 @@ private:
   // eventuell doch vector?
 
 public:
+  // default constructor
+  pfMap();
+  
   // constructor to initialise the map with random nodes
   pfMap(int w, int h);
 
-  //TODO: load map from file, copy constuctor
+  // copy constructor
+  pfMap(pfMap &old);
+
+  //TODO: load map from file
 
   void SetWidth(int w) ;
   void SetHeight(int h) ;
@@ -33,6 +39,8 @@ public:
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
 
+  // loads a map from a csv-file. creates new map object and returns pointer to it.
+  static pfMap* LoadMap(std::string filename);
 
 };
 
