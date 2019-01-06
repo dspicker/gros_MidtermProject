@@ -10,19 +10,26 @@ private:
 
 
 public:
-  // constructor
+  // Constructor
+  // Should be used for initializing pfNode
   pfNode(int t);
 
-  int GetType(){ return type; }
-  int GetWeight(){ return weight; }
+  //can bu used, for createing *pfNode
+  pfNode()=default;
 
+  // Getter:
+  // Should be const, expecially for using a std::priority_queue
+  int GetType() const { return type; }
+  int GetWeight() const { return weight; }
+  std::string GetTypeName() const; // returns "Wall", "Grass", etc..
+
+  
+  // Setter:
   // set the node as a start or end point of the path.
   void SetStart();
   void SetTarget();
 
-  // returns "Wall", "Grass", etc..
-  std::string GetTypeName() ;
-
+  
   // prints the node to std::cout with an rgb colored whitespace
   void Print();
 

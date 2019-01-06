@@ -33,7 +33,7 @@ void pfNode::SetTarget(){
   weight = 1;
 }
 
-std::string pfNode::GetTypeName(){
+std::string pfNode::GetTypeName()const{
   switch (type) {
     case 1 :         // Wall
       return "Wall" ;
