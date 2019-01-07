@@ -52,8 +52,8 @@ pfMap::pfMap(pfMap &old){
 
 int pfMap::PrintMap(){
   std::array<int,2> pos;
-  for(int i=0 ; i<width ; i++){
-    for(int j=0 ; j<height ; j++){
+  for(int j=0 ; j<height ; j++){
+    for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
       auto it = nodes.find(pos);
@@ -108,7 +108,7 @@ pfMap* pfMap::LoadMap(std::string filename){
   for(int i=h-1 ; i>=0 ; i--){   // lines, beginning at last and then backwards
     for(int j=0 ; j<w ; j++){
       int newtype = std::stoi( lines[i].substr(j,1) ) ;
-      m0->nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode( newtype ) ) );
+      m0->nodes.insert( std::make_pair( std::array<int,2>{j,i}, pfNode( newtype ) ) );
     }
   }
 
