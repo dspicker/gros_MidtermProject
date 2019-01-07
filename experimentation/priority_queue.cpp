@@ -11,6 +11,9 @@ void printQ(T& q){  // can only be used once
   }
   std::cout << std::endl;
 }
+bool compare(int a, int b){
+  return a>b;
+}
 
 // main
 int main(){
@@ -26,4 +29,5 @@ int main(){
   // (alternative would be structure with comparison function..?)
   auto comp = [](int a, int b){return a>b;};
   std::priority_queue<int,std::vector<int>, decltype(comp)> q2(comp);
+  std::priority_queue<int, std::vector<int>, decltype(&compare)> q3(&compare);
 }

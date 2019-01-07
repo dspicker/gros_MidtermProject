@@ -2,6 +2,7 @@
 
 #include "class_node.h"
 #include "class_map.h"
+#include "uniformCost"
 
 
 
@@ -38,6 +39,8 @@ delete map2 ;     // delete map from the heap
 
 pfMap* map1 = pfMap::LoadMap("map1.csv") ;
 map1->PrintMap();
+
+
 delete map1 ;
 
 return 0;
