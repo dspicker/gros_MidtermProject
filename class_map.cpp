@@ -76,7 +76,7 @@ pfMap* pfMap::LoadMap(std::string filename){
   // check if file is a csv file
   std::string test = ".csv" ;
   if( filename.find(test) == std::string::npos){
-    std::cerr << "\033[38;2;255;0;0m"<< "Error in LoadMap: txt file required" << "\033[0m" << std::endl ;
+    std::cerr << "\033[38;2;255;0;0m"<< "Error in LoadMap: Wrong file!" << "\033[0m" << std::endl ;
     pfMap* merr = new pfMap() ;
     return merr ;
   }
@@ -99,14 +99,12 @@ pfMap* pfMap::LoadMap(std::string filename){
   m0->width = w ;
   m0->height = h ;
 
-
   for(int i=h-1 ; i>=0 ; i--){   // lines, beginning at last and then backwards
     for(int j=0 ; j<w ; j++){
       int newtype = std::stoi( lines[i].substr(j,1) ) ;
       m0->nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode( newtype ) ) );
     }
   }
-
 
   return m0 ;
 }

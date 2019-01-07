@@ -17,14 +17,13 @@ private:
 public:
   // default constructor
   pfMap();
-  
+
   // constructor to initialise the map with random nodes
   pfMap(int w, int h);
 
   // copy constructor
   pfMap(pfMap &old);
 
-  //TODO: load map from file
 
   void SetWidth(int w) ;
   void SetHeight(int h) ;
