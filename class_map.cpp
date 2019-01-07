@@ -37,10 +37,10 @@ pfMap::pfMap(int w, int h, bool weighted){
     }
   }
 
-  start_loc.x = 0;
-  start_loc.y = 0;
-  target_loc.x = 0;
-  target_loc.y = 0;
+  start_loc[0] = 0;
+  start_loc[1] = 0;
+  target_loc[0] = 0;
+  target_loc[1] = 0;
 }
 
 // copy constructor
@@ -59,23 +59,23 @@ void pfMap::SetStartAt(int x, int y){
     if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
     pfNode* start = GetNodeAt(x,y) ;
     start->SetStart();
-    start_loc.x = x;
-    start_loc.y = y;
+    start_loc[0] = x;
+    start_loc[1] = y;
 }
 
 void pfMap::SetTargetAt(int x, int y){
     if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
     pfNode* target = GetNodeAt(x,y) ;
     target->SetStart();
-    target_loc.x = x;
-    target_loc.y = y;
+    target_loc[0] = x;
+    target_loc[1] = y;
 }
 
-pfLocation pfMap::GetStartLoc(){
+std::array<int,2> pfMap::GetStartLoc(){
   return start_loc;
 }
 
-pfLocation pfMap::GetTargetLoc(){
+std::array<int,2> pfMap::GetTargetLoc(){
   return target_loc;
 }
 
@@ -141,12 +141,12 @@ pfMap* pfMap::LoadMap(std::string filename){
       int newtype = std::stoi( lines[i].substr(j,1) ) ;
       m0->nodes.insert( std::make_pair( std::array<int,2>{j,i}, pfNode( newtype ) ) );
       if( newtype==4 ){
-        m0->start_loc.x = j;
-        m0->start_loc.y = i;
+        m0->start_loc[0] = j;
+        m0->start_loc[1] = i;
       }
       if( newtype==5 ){
-        m0->target_loc.x = j;
-        m0->target_loc.y = i;
+        m0->target_loc[0] = j;
+        m0->target_loc[1] = i;
       }
     }
   }

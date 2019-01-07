@@ -6,12 +6,6 @@
 #include <array>
 
 
-struct pfLocation {
-  int x;
-  int y;
-};
-
-
 class pfMap {
 private:
   int width;   // number of nodes in horizontal direction
@@ -21,8 +15,8 @@ private:
   std::map< std::array<int,2>, pfNode > nodes ;
   // eventuell doch vector?
 
-  pfLocation start_loc;
-  pfLocation target_loc;
+  std::array<int,2> start_loc;
+  std::array<int,2> target_loc;
 public:
   // default constructor
   pfMap();
@@ -46,8 +40,8 @@ public:
   int GetHeigth(){ return height; }
   int GetNnodes(){ return width * height ; }
 
-  pfLocation GetStartLoc() ;
-  pfLocation GetTargetLoc() ;
+  std::array<int,2> GetStartLoc() ;
+  std::array<int,2> GetTargetLoc() ;
 
   // prints the map to std::cout
   int PrintMap();

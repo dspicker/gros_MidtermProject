@@ -3,6 +3,7 @@
 #include "class_node.h"
 #include "class_map.h"
 
+#include "breadthfirst.cpp"
 
 
 
@@ -40,7 +41,7 @@ delete map2 ;     // delete map from the heap
 pfMap* map5 = pfMap::LoadMap("map1.csv") ;
 map5->PrintMap();
 
-std::cout << map5->GetTargetLoc().x << '\n';
+std::cout << map5->GetTargetLoc()[0] << '\n';
 
 delete map5 ;
 
