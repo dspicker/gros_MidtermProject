@@ -24,12 +24,14 @@ std::vector< bfLocation > bfNeighbours( bfLocation id ){
   return result;
 }
 
-std::map< bfLocation , bfLocation > Breadthfirst(pfMap Map){
+std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
   std::queue< bfLocation > search_queue ;           // the queue of the algorithm
   // get target node from map. this algorithm starts at the target
   bfLocation search_begin = Map.GetTargetLoc() ;
   // put coordinates of starting-point into queue
   search_queue.push(search_begin) ;
+
+  bfLocation goal = Map.GetStartLoc();
 
   // the map that is later returned.
   // it stores, from which neighbour of the first argument (key) the algorithm came from
@@ -41,16 +43,20 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap Map){
     bfLocation current = search_queue.front();
     search_queue.pop();
 
+    // early exit as soon as start node is reached.
+    if( current == goal ) break ;
+
     // loop trough all neighbours of current element
     for (bfLocation next : bfNeighbours(current) ) {
-      // check if neighbour "next" is a wall:
-      if( Map.GetNodeAt(next)->GetWeight() == -1 ) { continue ;}
       // if the neighbour "next" is not in "search_result" i.e. if "next" has not been visited yet:
       if ( search_result.find(next) == search_result.end() ) {
-        //then, put "next" into the queue
-        search_queue.push(next);
-        // and save from where the algorithm walked to "next"
-        search_result[next] = current;
+        // check if neighbour "next" is a wall:
+        if( Map.GetNodeAt(next)->GetWeight() != -1 ) {
+          //then, put "next" into the queue
+          search_queue.push(next);
+          // and save from where the algorithm walked to "next"
+          search_result[next] = current;
+        }
       }
     }
   }
@@ -58,7 +64,15 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap Map){
   return search_result;
 }
 
-void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap Map){
 
-  
+void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
+  bfLocation start = Map.GetStartLoc() ;
+  bfLocation target = Map.GetTargetLoc() ;
+
+  bfLocation next = flow[start] ;
+  //for(int i=0; i<20 ; i++) {
+  while ( next != target ) {
+    Map.SetTypeAt(next[0],next[1],6);
+    next = flow[next];
+  }
 }

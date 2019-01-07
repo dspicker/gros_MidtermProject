@@ -64,14 +64,15 @@ void pfMap::SetTypeAt(int x, int y, int t){
     curr->SetStart();
     start_loc[0] = x;
     start_loc[1] = y;
-  } else if( t==5 ) {
+  }
+  if( t==5 ) {
     curr->SetTarget();
     target_loc[0] = x;
     target_loc[1] = y;
-  } else if( t==6 ) {
+  }
+  if( t==6 ) {
     curr->SetPath();
   }
-  return ;
 }
 
 std::array<int,2> pfMap::GetStartLoc(){
@@ -79,7 +80,11 @@ std::array<int,2> pfMap::GetStartLoc(){
 }
 
 std::array<int,2> pfMap::GetTargetLoc(){
-  return target_loc;
+  std::array<int,2> ret;
+  ret[0] = target_loc[0];
+  ret[1] = target_loc[1];
+  //std::cout << ret[0] << " gettar " << ret[1] << std::endl ;
+  return ret;
 }
 
 
