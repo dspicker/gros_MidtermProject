@@ -23,6 +23,7 @@ int main(){
   printQ(q);
 
   // with custom compare function using lambda:
+  // (alternative would be structure with comparison function..?)
   auto comp = [](int a, int b){return a>b;};
   std::priority_queue<int,std::vector<int>, decltype(comp)> q2(comp);
 }
