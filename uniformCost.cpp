@@ -8,9 +8,9 @@
 
 
 //algorithm
-pfMap* uniformCost(pfMap* pfMapP){
+pfMap* uniformCost(pfMap &map){
   //or just pass Object of class pfMap to algorithm?
-  return pfMapP;
+  return &map;
 }
 
 
