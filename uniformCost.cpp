@@ -2,8 +2,7 @@
 
 #include <iostream>
 #include <vector>
-#include <priority_queue>
-#include <queue>   // probably not needed..
+#include <queue>
 
 // declaration of helper functions
 
