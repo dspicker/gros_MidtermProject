@@ -2,7 +2,7 @@
 
 #include "class_node.h"
 #include "class_map.h"
-#include "uniformCost"
+#include "uniformCost.cpp"
 
 
 
