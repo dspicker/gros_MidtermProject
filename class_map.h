@@ -5,6 +5,13 @@
 #include <map>
 #include <array>
 
+
+struct pfLocation {
+  int x;
+  int y;
+};
+
+
 class pfMap {
 private:
   int width;   // number of nodes in horizontal direction
@@ -14,6 +21,8 @@ private:
   std::map< std::array<int,2>, pfNode > nodes ;
   // eventuell doch vector?
 
+  pfLocation start_loc;
+  pfLocation target_loc;
 public:
   // default constructor
   pfMap();
@@ -27,13 +36,18 @@ public:
   // copy constructor
   pfMap(pfMap &old);
 
+  void SetWidth(int w){ width=w; }
+  void SetHeight(int h){ height=h; }
 
-  void SetWidth(int w) ;
-  void SetHeight(int h) ;
+  void SetStartAt(int x, int y);
+  void SetTargetAt(int x, int y);
 
   int GetWidth(){ return width; }
   int GetHeigth(){ return height; }
   int GetNnodes(){ return width * height ; }
+
+  pfLocation GetStartLoc() ;
+  pfLocation GetTargetLoc() ;
 
   // prints the map to std::cout
   int PrintMap();
@@ -43,6 +57,7 @@ public:
 
   // loads a map from a csv-file. creates new map object and returns pointer to it.
   static pfMap* LoadMap(std::string filename);
+
 
 };
 
