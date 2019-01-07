@@ -83,14 +83,11 @@ std::array<int,2> pfMap::GetTargetLoc(){
 // prints the map to std::cout
 int pfMap::PrintMap(){
   std::array<int,2> pos;
-  for(int j=0 ; j<height ; j++){
+  for(int j=height-1 ; j>=0 ; j--){
     for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
-      auto it = nodes.find(pos);
-      if( it != nodes.end() ){
-        it->second.Print();
-      }
+      nodes.at(pos).Print();
     }
     std::cout << std::endl ;
   }
@@ -133,6 +130,7 @@ pfMap* pfMap::LoadMap(std::string filename){
     std::string instr = str ;
     lines.push_back(instr) ;
   }
+  std::reverse(lines.begin(), lines.end() ); // needed for correct insertion of nodes
   //std::cout <<  lines[0].size() << std::endl ;
   pfMap* m0 = new pfMap();
   int w = lines[0].size() ;
@@ -140,7 +138,7 @@ pfMap* pfMap::LoadMap(std::string filename){
   m0->width = w ;
   m0->height = h ;
 
-  for(int i=h-1 ; i>=0 ; i--){   // lines, beginning at last and then backwards
+  for(int i=0 ; i<h ; i++){   // lines
     for(int j=0 ; j<w ; j++){
       int newtype = std::stoi( lines[i].substr(j,1) ) ;
       m0->nodes.insert( std::make_pair( std::array<int,2>{j,i}, pfNode( newtype ) ) );

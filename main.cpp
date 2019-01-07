@@ -37,16 +37,16 @@ pfMap map4(map1);   // create a copy of map1
 delete map2 ;     // delete map from the heap
 */
 
-
+/*
 pfMap* map5 = pfMap::LoadMap("map1.csv") ;
 map5->PrintMap();
 
 std::cout << map5->GetTargetLoc()[0] << '\n';
 
 delete map5 ;
+*/
 
-
-pfMap map1(20,20);
+pfMap map1(20,20,0);
 map1.SetStartAt(4,4);
 map1.SetTargetAt(15,15);
 map1.PrintMap();
