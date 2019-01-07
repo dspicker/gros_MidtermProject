@@ -46,6 +46,12 @@ std::cout << map5->GetTargetLoc()[0] << '\n';
 delete map5 ;
 
 
+pfMap map1(20,20);
+map1.SetStartAt(4,4);
+map1.SetTargetAt(15,15);
+map1.PrintMap();
+
+auto path = Breadthfirst(map1);
 
 return 0;
 }

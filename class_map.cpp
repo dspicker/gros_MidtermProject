@@ -66,7 +66,7 @@ void pfMap::SetStartAt(int x, int y){
 void pfMap::SetTargetAt(int x, int y){
     if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
     pfNode* target = GetNodeAt(x,y) ;
-    target->SetStart();
+    target->SetTarget();
     target_loc[0] = x;
     target_loc[1] = y;
 }
@@ -107,6 +107,10 @@ pfNode* pfMap::GetNodeAt(int x, int y){
     return NULL;
   }
 }
+pfNode* pfMap::GetNodeAt(std::array<int,2> pos){
+  return &( nodes.at(pos) );
+}
+
 
 // loads a map from a csv-file. creates new map object and returns pointer to it.
 pfMap* pfMap::LoadMap(std::string filename){

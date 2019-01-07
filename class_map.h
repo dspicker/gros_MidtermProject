@@ -48,6 +48,7 @@ public:
 
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
+  pfNode* GetNodeAt(std::array<int,2> pos);
 
   // loads a map from a csv-file. creates new map object and returns pointer to it.
   static pfMap* LoadMap(std::string filename);
