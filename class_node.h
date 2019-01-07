@@ -5,8 +5,10 @@
 
 class pfNode {
 private:
-  int type ;   // type of node. 1 wall, 2 grass, 3 forest, 4 start-node, 5 target-node
-  int weight;  // depends on the type. grass 1, forest 5, wall -1
+  // type of node. 1 wall, 2 grass, 3 forest, 4 start-node, 5 target-node, 6 path
+  int type ;
+  // weight depends on the type. grass 1, forest 5, wall -1, rest 1
+  int weight;
 
 public:
   // constructor
@@ -18,6 +20,7 @@ public:
   // set the node as a start or end point of the path.
   void SetStart();
   void SetTarget();
+  void SetPath();
 
   // returns "Wall", "Grass", etc..
   std::string GetTypeName() ;

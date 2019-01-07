@@ -33,8 +33,8 @@ public:
   void SetWidth(int w){ width=w; }
   void SetHeight(int h){ height=h; }
 
-  void SetStartAt(int x, int y);
-  void SetTargetAt(int x, int y);
+  // 4=start, 5=target, 6=path
+  void SetTypeAt(int x, int y, int t);
 
   int GetWidth(){ return width; }
   int GetHeigth(){ return height; }

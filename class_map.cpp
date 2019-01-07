@@ -55,20 +55,23 @@ pfMap::pfMap(pfMap &old){
   target_loc = old.start_loc;
 }
 
-void pfMap::SetStartAt(int x, int y){
-    if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
-    pfNode* start = GetNodeAt(x,y) ;
-    start->SetStart();
+
+void pfMap::SetTypeAt(int x, int y, int t){
+  // TODO: check if start and target have already been set.
+  if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
+  pfNode* curr = GetNodeAt(x,y) ;
+  if ( t==4 ){
+    curr->SetStart();
     start_loc[0] = x;
     start_loc[1] = y;
-}
-
-void pfMap::SetTargetAt(int x, int y){
-    if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
-    pfNode* target = GetNodeAt(x,y) ;
-    target->SetTarget();
+  } else if( t==5 ) {
+    curr->SetTarget();
     target_loc[0] = x;
     target_loc[1] = y;
+  } else if( t==6 ) {
+    curr->SetPath();
+  }
+  return ;
 }
 
 std::array<int,2> pfMap::GetStartLoc(){

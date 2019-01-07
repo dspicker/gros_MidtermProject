@@ -27,10 +27,12 @@ void pfNode::SetStart(){
   type = 4;
   weight = 1;
 }
-
 void pfNode::SetTarget(){
   type = 5;
   weight = 1;
+}
+void pfNode::SetPath(){
+  type = 6;
 }
 
 std::string pfNode::GetTypeName(){

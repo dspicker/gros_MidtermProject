@@ -55,6 +55,10 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap Map){
     }
   }
 
-
   return search_result;
+}
+
+void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap Map){
+
+  
 }
