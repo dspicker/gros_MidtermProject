@@ -40,6 +40,7 @@ delete map2 ;     // delete map from the heap
 pfMap* map1 = pfMap::LoadMap("map1.csv") ;
 map1->PrintMap();
 
+uniformCost(map1)PrintMap();
 
 delete map1 ;
 
