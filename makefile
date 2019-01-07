@@ -13,7 +13,7 @@ class_node: class_node.cpp class_node.h
 		g++ $(CFLAGS) -c class_node.cpp
 
 uniformCost: uniformCost.cpp
-		g++ $(CFLAGS) -c uniformCost
+		g++ $(CFLAGS) -c uniformCost.cpp
 
 clean:
 		rm -f core *.o
