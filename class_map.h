@@ -18,8 +18,11 @@ public:
   // default constructor
   pfMap();
 
-  // constructor to initialise the map with random nodes
+  // constructor to initialise the map with random weighted nodes
   pfMap(int w, int h);
+
+  // constructor to initialise the map with random nodes
+  pfMap(int w, int h, bool weighted);
 
   // copy constructor
   pfMap(pfMap &old);

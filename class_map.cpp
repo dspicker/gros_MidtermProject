@@ -9,8 +9,11 @@
 // default constructor
 pfMap::pfMap(){ }
 
+// constructor to initialise the map with random weighted nodes
+pfMap::pfMap(int w, int h) : pfMap(w,h,1) {}    // delegating ctor
+
 // constructor to initialise the map with random nodes
-pfMap::pfMap(int w, int h){
+pfMap::pfMap(int w, int h, bool weighted){
   width = w;
   height = h;
   // fill the nodes-vector with random nodes
@@ -28,11 +31,14 @@ pfMap::pfMap(int w, int h){
       } else {
         int rnd_type = random(gen) ;
         if(rnd_type == 4 ){ rnd_type = 2; }
+        if( !weighted && rnd_type==3 ){rnd_type=2;}
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(rnd_type) ) );
       }
     }
   }
+
 }
+
 
 
 // copy constructor
