@@ -8,8 +8,17 @@ bool compare(T a,T b){
   return (a>b);
 }
 
+// function to print contnent of priority_queue from last to first (?)
+template<typename T>
+void print(q){
+  while(!q.empty()){
+    std::cout << q.pop() << " " << std::endl;
+    q.pop();  // why do it here again? should the element not be gone alreaydy?
+  }
+}
+
+// main
 int main(){
-  double a = 3;
-  double b = 2.0;
   std::cout << compare(a,b) << '\n';
+
 }
