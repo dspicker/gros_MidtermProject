@@ -2,23 +2,27 @@
 #include <queue>
 #include <iostream>
 
-// simple compare function (not lambda function..)
-template<typename T>
-bool compare(T a,T b){
-  return (a>b);
-}
-
 // function to print contnent of priority_queue from last to first (?)
 template<typename T>
-void print(q){
+void printQ(T& q){  // can only be used once
   while(!q.empty()){
-    std::cout << q.pop() << " " << std::endl;
-    q.pop();  // why do it here again? should the element not be gone alreaydy?
+    std::cout << q.top() << " ";
+    q.pop();
   }
+  std::cout << std::endl;
 }
 
 // main
 int main(){
-  std::cout << compare(a,b) << '\n';
+  int intArr[] = {1,5,9,10,30,3,3,4,1};
 
+  // default
+  std::priority_queue<int> q;
+  for(int i : intArr)
+    q.push(i);
+  printQ(q);
+
+  // with custom compare function using lambda:
+  auto comp = [](int a, int b){return a>b;};
+  std::priority_queue<int,std::vector<int>, decltype(comp)> q2(comp);
 }
