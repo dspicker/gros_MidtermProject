@@ -41,11 +41,11 @@ pfMap* map1 = pfMap::LoadMap("map1.csv") ;
 pfMap map2(10,10);
 pfMap* pt_map2 = &map2;
 //map1->PrintMap();
-//map2.PrintMap();
+//pt_map2->PrintMap();
 
 // test uniformCost algorithm
-uniformCost(*map1)
-uniformCost(*pt_map2);
+uniformCost(*map1)->PrintMap();
+uniformCost(*pt_map2)->PrintMap();
 
 
 // delete map(s) created on heap

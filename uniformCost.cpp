@@ -4,8 +4,9 @@
 #include <vector>
 #include <queue>
 
+
 /*
-For this algorithm pfNodes need an additional integer varaiable "distance"
+For this algorithm pfNode need an additional integer varaiable "distance"
 containing the distance to the starting node.
 
 It also would be helpful if there was a possibility to mark a node as wasVisited,
@@ -17,14 +18,30 @@ in a container and searching for them at every step (bad performance!)
 */
 
 // declaration of helper functions
-bool compare(pfNode &a, pfNode &b);
+bool justType(pfNode a, pfNode b);      // only! for decltype to get the correct type
+bool lightest(pfNode a, pfNode b);      // closest to origin first (use in unvisited)
+bool heaviest(pfNode a, pfNode b);      // farthest to origin first (use in ??)
+
+typedef std::priority_queue<pfNode,std::vector<pfNode>, decltype(&justType)> pfNodePQ;
 
 
 
 //algorithm
 pfMap* uniformCost(pfMap &map){
+// PART1: search target nodes
+  pfNodePQ unvisited(&lightest);
+
+
+// PART2: find optimal path trom start to Target
+  pfNodePQ visited(&heaviest);  // bad name, maybe change afterwards..
+
+
+
+
+
+
+
 /*  some testing
-  std::priority_queue<pfNodes, std::vector<pfNodes>, decltype(&comp)
   map.PrintMap();
   std::cout << map.GetNodeAt(1,1) -> wasVisited << std::endl;
 */
@@ -33,6 +50,15 @@ pfMap* uniformCost(pfMap &map){
 
 
 // definition of helper functions
-bool compare(pfNode &a, pfNode &b){
-  return ?  // how exactly should they be prioritised?
+
+bool justType(pfNode a, pfNode b){
+  return true;
+} // only for decltype (do not use elsewhere!)
+
+bool lightest(pfNode a, pfNode b){
+  return true;  // TODO: implement condition so that closest is first
+}
+
+bool heaviest(pfNode a, pfNode b){
+  return true;  // TODO: implement condition so that furthest is first
 }
