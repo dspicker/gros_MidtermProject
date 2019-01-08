@@ -4,7 +4,10 @@
 #include <array>
 
 //TODO: https://stackoverflow.com/questions/649640/how-to-do-an-efficient-priority-update-in-stl-priority-queue
-
+//      -> just push the updated object and check if poped object is visited
+//         and discard if necessary.
+//         This could also replace the check if visited before pushing into queue
+//         (unnecessary storage)
 // function to print contnent of priority_queue from last to first (?)
 template<typename T>
 void printQ(T& q){  // can only be used once
@@ -14,10 +17,6 @@ void printQ(T& q){  // can only be used once
   }
   std::cout << std::endl;
 }
-// compare function (only integer)
-bool compare(int a, int b){
-  return a>b;
-}
 // function to fill que
 template<typename T>
 void fillQ(T &q, int arr[]){
@@ -25,6 +24,21 @@ void fillQ(T &q, int arr[]){
     q.push(arr[i]);
   }
 }
+
+// compare functions (only integer)
+bool compare(int a, int b){
+  return a>b;
+}
+
+bool compare2(int a, int b){
+  return a<b;
+}
+
+bool justType(int a, int b){
+  return true;
+} // just to get correct type..
+
+typedef std::priority_queue<int, std::vector<int>, decltype(&justType)> intPQ;
 
 
 // main
@@ -51,4 +65,13 @@ int main(){
   std::priority_queue<int, std::vector<int>, decltype(&compare)> q3(&compare);
   fillQ(q3, intArr);
   printQ(q3);
+
+  // using type intPQ
+  intPQ q4(&compare);
+  fillQ(q4, intArr);
+  printQ(q4);
+
+  intPQ q5(&compare2);
+  fillQ(q5, intArr);
+  printQ(q5);
 }
