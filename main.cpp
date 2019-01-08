@@ -36,14 +36,19 @@ pfMap map4(map1);   // create a copy of map1
 delete map2 ;     // delete map from the heap
 */
 
-
+// create some maps
 pfMap* map1 = pfMap::LoadMap("map1.csv") ;
-map1->PrintMap();
-
 pfMap map2(10,10);
 pfMap* pt_map2 = &map2;
-uniformCost(*pt_map2)->PrintMap();
+//map1->PrintMap();
+//map2.PrintMap();
 
+// test uniformCost algorithm
+uniformCost(*map1)
+uniformCost(*pt_map2);
+
+
+// delete map(s) created on heap
 delete map1;
 
 return 0;
