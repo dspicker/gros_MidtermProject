@@ -25,8 +25,7 @@ bool costliest(std::array<int,2> a, std::array<int,2> b);     // costliest first
 
 // ture if visited or wall respectively
 bool wasVisited(std::array<int,2> loc, std::map<std::array<int,2>, int> visited);
-bool isWall(std::array<int,2> loc);
-
+bool isWall(std::array<int,2> loc, pfMap map);
 
 
 typedef std::priority_queue<std::array<int,2>, std::vector<std::array<int,2>>, decltype(&cheapest)> intArrPQ;
@@ -45,16 +44,19 @@ pfMap* uniformCost(pfMap &map){
   std::array<int,2> neighborLoc;
 
   startLoc = map.GetStartLoc();
+  std::cout << "start: " << startLoc[0] << "," << startLoc[1] << '\n';
   unvisitedPQ.push(startLoc);
 
   while(!unvisitedPQ.empty()){
-    // visit currentLoc 
+    // visit currentLoc
     currentLoc = unvisitedPQ.top();
     visited.insert(std::make_pair(currentLoc, map.GetNodeAt(currentLoc)->GetWeight()));
-/*
+
     // check neighbors (clockwise),if possible assign cumulative cost and add to unvisitedPQ
     neighborLoc = {currentLoc[0], currentLoc[1]+1};
-    if( !(wasVisited(neighborLoc, visited) | isWall(neighborLoc, *map))){
+    std::cout << "1. neighbor: " << neighborLoc[0] << "," << neighborLoc[1] << '\n';
+    if( !(wasVisited(neighborLoc, visited) | isWall(neighborLoc, map))){
+      // TODO: functions dont work as intended!!
       std::cout << "it works so far?!" << '\n';
     }
 
@@ -66,7 +68,7 @@ pfMap* uniformCost(pfMap &map){
     neighborLoc = {currentLoc[0]-1, currentLoc[1]};
 
 
-*/
+
 
 
 
@@ -117,9 +119,9 @@ bool costliest(std::array<int,2> a, std::array<int,2> b){
 }
 
 bool wasVisited(std::array<int,2> loc, std::map<std::array<int,2>, int>visited){
-  return (visited.find(loc) == visited.end());
+  return (visited.find(loc) != visited.end());
 }
 
-bool isWall(std::array<int,2> loc, pfMap &map){
+bool isWall(std::array<int,2> loc, pfMap map){
   return (map.GetNodeAt(loc)->GetWeight() == -1);
 }
