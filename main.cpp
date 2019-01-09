@@ -51,7 +51,7 @@ map2.GetNodeAt(map2_w-2,map2_h-2)->SetTarget();
 
 // test uniformCost algorithm
 uniformCost(*map1);
-uniformCost(*pt_map2);
+//uniformCost(*pt_map2);
 
 
 
