@@ -42,12 +42,12 @@ bool compArr(int a[], int b[]){
   return (a[0]+a[1] > b[0] +b[1]);
 }
 
-/* try at alternavive..
-bool compArr2(std::array<int,2> a), std::array<int,2> b){
+// try at alternavive using library array
+bool compArr2(std::array<int,2> a, std::array<int,2> b){
   return (a[0]+a[1] > b[0] +b[1]);
 }
 typedef std::priority_queue< std::array<int,2>, std::vector<std::array<int,2>>,decltype(&compArr2) > arrPQ2;
-*/
+
 
 // typedef
 typedef std::priority_queue<int, std::vector<int>, decltype(&justType)> intPQ;
@@ -98,5 +98,12 @@ int main(){
   std::cout << aPQ.top()[0] << " " << aPQ.top()[1] << '\n';
   aPQ.pop();
   std::cout << aPQ.top()[0] << " " << aPQ.top()[1] << '\n';
+
+  // using lirbrary arrays
+  std::array<int,2> libArr {1,2};
+  std::cout << std::endl;
+  arrPQ2 libArrPQ(&compArr2);
+  libArrPQ.push(libArr);
+  std::cout << libArrPQ.top()[0] << " " << libArrPQ.top()[1] << '\n';
 
 }
