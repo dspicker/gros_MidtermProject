@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <queue>
+#include <map>
 
 
 /*
@@ -19,21 +20,76 @@ in a container and searching for them at every step (bad performance!)
 */
 
 // declaration of helper functions
-bool cheapest(int a[], int[]);      // cheapest first (use in unvisited)
-bool costliest(int a[], int[]);     // costliest first (probably not needed?)
+bool  cheapest(std::array<int,2> a, std::array<int,2> b);     // cheapest first
+bool costliest(std::array<int,2> a, std::array<int,2> b);     // costliest first
 
-typedef std::priority_queue< int*,std::vector<int*>,decltype(&cheapest) > intArrPQ;
+// ture if visited or wall respectively
+bool wasVisited(std::array<int,2> loc, std::map<std::array<int,2>, int> visited);
+bool isWall(std::array<int,2> loc);
 
+
+
+typedef std::priority_queue<std::array<int,2>, std::vector<std::array<int,2>>, decltype(&cheapest)> intArrPQ;
 
 
 //algorithm
 pfMap* uniformCost(pfMap &map){
 // PART1: search target nodes
-  intArrPQ unvisited(&cheapest);
+
+  intArrPQ unvisitedPQ(&cheapest);          // PQ to keep track of unvisited nodes
+  std::map<std::array<int,2>, int> visited; // map to keep track of visited nodes and their cumulative cost
+
+  std::array<int,2> startLoc;
+  std::array<int,2> targetLoc;
+  std::array<int,2> currentLoc;
+  std::array<int,2> neighborLoc;
+
+  startLoc = map.GetStartLoc();
+  unvisitedPQ.push(startLoc);
+
+  while(!unvisitedPQ.empty()){
+    // visit currentLoc 
+    currentLoc = unvisitedPQ.top();
+    visited.insert(std::make_pair(currentLoc, map.GetNodeAt(currentLoc)->GetWeight()));
+/*
+    // check neighbors (clockwise),if possible assign cumulative cost and add to unvisitedPQ
+    neighborLoc = {currentLoc[0], currentLoc[1]+1};
+    if( !(wasVisited(neighborLoc, visited) | isWall(neighborLoc, *map))){
+      std::cout << "it works so far?!" << '\n';
+    }
+
+    //  handle these analog to neighbor one
+    neighborLoc = {currentLoc[0]+1, currentLoc[1]};
+
+    neighborLoc = {currentLoc[0], currentLoc[1]-1};
+
+    neighborLoc = {currentLoc[0]-1, currentLoc[1]};
+
+
+*/
+
+
+
+
+
+
+    if (currentLoc == targetLoc)
+      break;
+
+
+
+
+    unvisitedPQ.pop();
+  }
+
+
+
+
+
 
 
 // PART2: find optimal path trom start to Target
-  intArrPQ visited(&costliest);  // bad name, maybe change afterwards..
+  intArrPQ visitedPQ(&costliest);  // bad name, maybe change afterwards..
 
 
 
@@ -45,16 +101,25 @@ pfMap* uniformCost(pfMap &map){
   map.PrintMap();
   std::cout << map.GetNodeAt(1,1) -> wasVisited << std::endl;
 */
+  map.PrintMap();
   return &map;
 }
 
 
 // definition of helper functions
 
-bool cheapest(int a[], int[]){
-  return true;  // TODO: implement condition so that closest is first
+bool cheapest(std::array<int,2> a, std::array<int,2> b){
+  return true;  // TODO: implement condition so that cheapest is first
 }
 
-bool costliest(int a[], int[]){
-  return true;  // TODO: implement condition so that furthest is first
+bool costliest(std::array<int,2> a, std::array<int,2> b){
+  return true;  // TODO: implement condition so that costliest is first
+}
+
+bool wasVisited(std::array<int,2> loc, std::map<std::array<int,2>, int>visited){
+  return (visited.find(loc) == visited.end());
+}
+
+bool isWall(std::array<int,2> loc, pfMap &map){
+  return (map.GetNodeAt(loc)->GetWeight() == -1);
 }
