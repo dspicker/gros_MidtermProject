@@ -19,8 +19,8 @@ in a container and searching for them at every step (bad performance!)
 */
 
 // declaration of helper functions
-bool cheapest(int a[], int[]);      // closest to origin first (use in unvisited)
-bool costliest(int a[], int[]);     // farthest to origin first (use in ??)
+bool cheapest(int a[], int[]);      // cheapest first (use in unvisited)
+bool costliest(int a[], int[]);     // costliest first (probably not needed?)
 
 typedef std::priority_queue< int*,std::vector<int*>,decltype(&cheapest) > intArrPQ;
 
