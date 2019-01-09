@@ -1,7 +1,7 @@
-CFLAGS = -Wall -W -std=c++11	# removed -O because it was annoying
+CFLAGS = -Wall -W -O -std=c++11
 
-#all: main.o class_map.o class_node.o
-#		g++ $(CFLAGS) -o pathfinder main.o class_map.o class_node.o
+all: main.o class_map.o class_node.o
+		g++ $(CFLAGS) -o pathfinder main.o class_map.o class_node.o
 
 main: main.cpp
 		g++ $(CFLAGS) -c main.cpp
