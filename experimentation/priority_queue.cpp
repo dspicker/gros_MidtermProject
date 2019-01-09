@@ -38,15 +38,21 @@ bool justType(int a, int b){
   return true;
 } // just to get correct type..
 
+bool compArr(int a[], int b[]){
+  return (a[0]+a[1] > b[0] +b[1]);
+}
+
+// typedef
 typedef std::priority_queue<int, std::vector<int>, decltype(&justType)> intPQ;
+typedef std::priority_queue< int*,
+                             std::vector<int*>,
+                             decltype(&compArr) > arrPQ;
+
 
 
 // main
 int main(){
-  int a = 1;
-  int b = 4;
-  int c = 2;
-  int intArr[] = {a,b,c};
+  int intArr[] = {1,4,2};
 
   // default
   std::priority_queue<int> q;
@@ -67,6 +73,7 @@ int main(){
   printQ(q3);
 
   // using type intPQ
+
   intPQ q4(&compare);
   fillQ(q4, intArr);
   printQ(q4);
@@ -74,4 +81,17 @@ int main(){
   intPQ q5(&compare2);
   fillQ(q5, intArr);
   printQ(q5);
+
+  // using arrays as entries
+  std::cout << std::endl;
+  arrPQ aPQ(&compArr);
+  int arr1[2] = {1,4};
+  int arr2[2] = {2,2};
+  aPQ.push(arr1);
+  aPQ.push(arr2);
+  // print:
+  std::cout << aPQ.top()[0] << " " << aPQ.top()[1] << '\n';
+  aPQ.pop();
+  std::cout << aPQ.top()[0] << " " << aPQ.top()[1] << '\n';
+
 }
