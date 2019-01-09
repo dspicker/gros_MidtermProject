@@ -8,7 +8,8 @@
 //         and discard if necessary.
 //         This could also replace the check if visited before pushing into queue
 //         (unnecessary storage)
-// function to print contnent of priority_queue from last to first (?)
+
+// function to print content of priority_
 template<typename T>
 void printQ(T& q){  // can only be used once
   while(!q.empty()){
@@ -25,19 +26,13 @@ void fillQ(T &q, int arr[]){
   }
 }
 
-// compare functions (only integer)
+// compare functions
 bool compare(int a, int b){
   return a>b;
 }
-
 bool compare2(int a, int b){
   return a<b;
 }
-
-bool justType(int a, int b){
-  return true;
-} // just to get correct type..
-
 bool compArr(int a[], int b[]){
   return (a[0]+a[1] > b[0] +b[1]);
 }
@@ -46,12 +41,11 @@ bool compArr(int a[], int b[]){
 bool compArr2(std::array<int,2> a, std::array<int,2> b){
   return (a[0]+a[1] > b[0] +b[1]);
 }
-typedef std::priority_queue< std::array<int,2>, std::vector<std::array<int,2>>,decltype(&compArr2) > arrPQ2;
-
 
 // typedef
-typedef std::priority_queue<int, std::vector<int>, decltype(&justType)> intPQ;
+typedef std::priority_queue<int, std::vector<int>, decltype(&compare)> intPQ;
 typedef std::priority_queue< int*, std::vector<int*>,decltype(&compArr) > arrPQ;
+typedef std::priority_queue< std::array<int,2>, std::vector<std::array<int,2>>,decltype(&compArr2) > arrPQ2;
 
 
 
@@ -59,6 +53,7 @@ typedef std::priority_queue< int*, std::vector<int*>,decltype(&compArr) > arrPQ;
 int main(){
   int intArr[] = {1,4,2};
 
+/*  prior testing
   // default
   std::priority_queue<int> q;
 //  for(int i : intArr)
@@ -98,12 +93,30 @@ int main(){
   std::cout << aPQ.top()[0] << " " << aPQ.top()[1] << '\n';
   aPQ.pop();
   std::cout << aPQ.top()[0] << " " << aPQ.top()[1] << '\n';
+*/
 
   // using lirbrary arrays
   std::array<int,2> libArr {1,2};
-  std::cout << std::endl;
+  std::array<int,2> libArr2 {2,2};
+
+  // using lambda
+  auto compArrLambda = [libArr](std::array<int,2> a, std::array<int,2> b){
+    std::cout << "libArr of the main scope: " << "libArr = "
+              << "[" << libArr[0] << "," << libArr[1] << "]" << '\n';
+    return (a[0]+a[1] < b[0] +b[1]);
+  };
+  typedef std::priority_queue< std::array<int,2>, std::vector<std::array<int,2>>,decltype(compArrLambda) > arrPQL;
+  arrPQL PQ(compArrLambda);
+  PQ.push(libArr);
+  PQ.push(libArr2);
+  std::cout << PQ.top()[0] << " " << PQ.top()[1] << '\n';
+
+
+  // using compArr2
   arrPQ2 libArrPQ(&compArr2);
   libArrPQ.push(libArr);
   std::cout << libArrPQ.top()[0] << " " << libArrPQ.top()[1] << '\n';
+
+  //std::array<int,2> test = libArr - libArr2;
 
 }
