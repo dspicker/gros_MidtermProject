@@ -38,14 +38,20 @@ delete map2 ;     // delete map from the heap
 
 // create some maps
 pfMap* map1 = pfMap::LoadMap("map1.csv") ;
-pfMap map2(10,10);
+int map2_w = 10;
+int map2_h = 10;
+pfMap map2(map2_w,map2_h);
 pfMap* pt_map2 = &map2;
+
+map2.GetNodeAt(1,1)->SetStart();
+map2.GetNodeAt(map2_w-2,map2_h-2)->SetTarget();
 //map1->PrintMap();
 //pt_map2->PrintMap();
 
 // test uniformCost algorithm
 uniformCost(*map1);
 uniformCost(*pt_map2);
+
 
 
 // delete map(s) created on heap
