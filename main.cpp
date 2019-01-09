@@ -44,8 +44,8 @@ pfMap* pt_map2 = &map2;
 //pt_map2->PrintMap();
 
 // test uniformCost algorithm
-uniformCost(*map1)->PrintMap();
-uniformCost(*pt_map2)->PrintMap();
+uniformCost(*map1);
+uniformCost(*pt_map2);
 
 
 // delete map(s) created on heap

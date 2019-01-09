@@ -19,10 +19,10 @@ in a container and searching for them at every step (bad performance!)
 */
 
 // declaration of helper functions
-bool cheapest(pfNode a, pfNode b);      // closest to origin first (use in unvisited)
-bool costliest(pfNode a, pfNode b);      // farthest to origin first (use in ??)
+bool cheapest(int a[], int[]);      // closest to origin first (use in unvisited)
+bool costliest(int a[], int[]);     // farthest to origin first (use in ??)
 
-typedef std::priority_queue< int*,std::vector<int*>,decltype(&compArr) > intArrPQ;
+typedef std::priority_queue< int*,std::vector<int*>,decltype(&cheapest) > intArrPQ;
 
 
 
