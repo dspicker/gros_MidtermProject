@@ -42,11 +42,16 @@ bool compArr(int a[], int b[]){
   return (a[0]+a[1] > b[0] +b[1]);
 }
 
+/* try at alternavive..
+bool compArr2(std::array<int,2> a), std::array<int,2> b){
+  return (a[0]+a[1] > b[0] +b[1]);
+}
+typedef std::priority_queue< std::array<int,2>, std::vector<std::array<int,2>>,decltype(&compArr2) > arrPQ2;
+*/
+
 // typedef
 typedef std::priority_queue<int, std::vector<int>, decltype(&justType)> intPQ;
-typedef std::priority_queue< int*,
-                             std::vector<int*>,
-                             decltype(&compArr) > arrPQ;
+typedef std::priority_queue< int*, std::vector<int*>,decltype(&compArr) > arrPQ;
 
 
 
