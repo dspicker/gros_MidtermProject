@@ -2,14 +2,15 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
 #include <queue>
 
 
 /*
-For this algorithm pfNode need an additional integer varaiable "distance"
+For this algorithm pfNode need an additional integer varaiable "cumulative cost"
 containing the distance to the starting node.
 
-It also would be helpful if there was a possibility to mark a node as wasVisited,
+It also would be helpful if there was a possibility to mark a node as visited,
 for example with an additional boolean variable "visited".
 Alternatively it would be possible to keep track of visited nodes by storing them
 in a container and searching for them at every step (bad performance!)
@@ -18,22 +19,21 @@ in a container and searching for them at every step (bad performance!)
 */
 
 // declaration of helper functions
-bool justType(pfNode a, pfNode b);      // only! for decltype to get the correct type
-bool lightest(pfNode a, pfNode b);      // closest to origin first (use in unvisited)
-bool heaviest(pfNode a, pfNode b);      // farthest to origin first (use in ??)
+bool cheapest(pfNode a, pfNode b);      // closest to origin first (use in unvisited)
+bool costliest(pfNode a, pfNode b);      // farthest to origin first (use in ??)
 
-typedef std::priority_queue<pfNode,std::vector<pfNode>, decltype(&justType)> pfNodePQ;
+typedef std::priority_queue< int*,std::vector<int*>,decltype(&compArr) > intArrPQ;
 
 
 
 //algorithm
 pfMap* uniformCost(pfMap &map){
 // PART1: search target nodes
-  pfNodePQ unvisited(&lightest);
+  intArrPQ unvisited(&cheapest);
 
 
 // PART2: find optimal path trom start to Target
-  pfNodePQ visited(&heaviest);  // bad name, maybe change afterwards..
+  intArrPQ visited(&costliest);  // bad name, maybe change afterwards..
 
 
 
@@ -51,14 +51,10 @@ pfMap* uniformCost(pfMap &map){
 
 // definition of helper functions
 
-bool justType(pfNode a, pfNode b){
-  return true;
-} // only for decltype (do not use elsewhere!)
-
-bool lightest(pfNode a, pfNode b){
+bool cheapest(int a[], int[]){
   return true;  // TODO: implement condition so that closest is first
 }
 
-bool heaviest(pfNode a, pfNode b){
+bool costliest(int a[], int[]){
   return true;  // TODO: implement condition so that furthest is first
 }
