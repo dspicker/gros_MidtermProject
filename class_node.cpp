@@ -27,10 +27,12 @@ void pfNode::SetStart(){
   type = 4;
   weight = 1;
 }
-
 void pfNode::SetTarget(){
   type = 5;
   weight = 1;
+}
+void pfNode::SetPath(){
+  type = 6;
 }
 
 std::string pfNode::GetTypeName(){
@@ -45,6 +47,8 @@ std::string pfNode::GetTypeName(){
       return "Start-Node" ;
     case 5 :        // target-node
       return "Target-Node" ;
+    case 6 :        // target-node
+      return "Path-Node" ;
     default :
       return "Undefined" ;
   }
@@ -68,6 +72,9 @@ void pfNode::Print(){
       break;
     case 5 :       // target
       color = {0, 51, 204};
+      break;
+    case 6 :       // target
+      color = {255, 51, 204};
       break;
   }
   char buffer1[50];
