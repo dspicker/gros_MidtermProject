@@ -43,6 +43,7 @@ int map2_h = 10;
 pfMap map2(map2_w,map2_h);
 pfMap* pt_map2 = &map2;
 
+// DOES NOT WORK! NEEDS TO BE A FUNCTION OF pfMap that sets start_loc or target_loc
 map2.GetNodeAt(1,1)->SetStart();
 map2.GetNodeAt(map2_w-2,map2_h-2)->SetTarget();
 //map1->PrintMap();
