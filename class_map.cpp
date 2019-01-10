@@ -30,7 +30,7 @@ pfMap::pfMap(int w, int h){
 
 }
 
-int pfMap::PrintMap(){
+void pfMap::PrintMap(){
   std::array<int,2> pos;
   for(int j=height ; j>0 ; j--){
     for(int i=0 ; i<width ; i++){
@@ -47,8 +47,10 @@ int pfMap::PrintMap(){
 }
 
 pfNode* pfMap::GetNodeAt(int x, int y){
+  
   std::array<int,2> pos = {x,y};
   auto it = nodes.find(pos);
+
   if( it != nodes.end() ){
     return &(it->second) ;
   } else {

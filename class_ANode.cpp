@@ -15,4 +15,3 @@ void ANode::Seth(double _h){
 void ANode::Setf(double _f){
   f= _f;
 }
-

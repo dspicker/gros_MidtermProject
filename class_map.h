@@ -25,7 +25,7 @@ public:
   int GetNnodes(){ return width * height ; }
 
   // prints the map to std::cout
-  int PrintMap();
+  void PrintMap();
 
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
