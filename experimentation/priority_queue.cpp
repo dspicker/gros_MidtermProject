@@ -2,6 +2,7 @@
 #include <queue>
 #include <iostream>
 #include <array>
+#include <map>
 
 //TODO: https://stackoverflow.com/questions/649640/how-to-do-an-efficient-priority-update-in-stl-priority-queue
 //      -> just push the updated object and check if poped object is visited
@@ -26,6 +27,17 @@ void fillQ(T &q, int arr[]){
   }
 }
 
+typedef std::array<int,2> locArr;
+// function to add two locArrs
+locArr addLocArr(locArr &a, locArr &b){
+  locArr res;
+  for(int i=0; i<2;i++)
+    res[i] = a[i] + b[i];
+  for(auto e : res)
+    std::cout << "addLocArr" << e << '\n';
+  return res;
+}
+
 // compare functions
 bool compare(int a, int b){
   return a>b;
@@ -46,7 +58,6 @@ bool compArr2(std::array<int,2> a, std::array<int,2> b){
 typedef std::priority_queue<int, std::vector<int>, decltype(&compare)> intPQ;
 typedef std::priority_queue< int*, std::vector<int*>,decltype(&compArr) > arrPQ;
 typedef std::priority_queue< std::array<int,2>, std::vector<std::array<int,2>>,decltype(&compArr2) > arrPQ2;
-
 
 
 // main
@@ -98,6 +109,7 @@ int main(){
   // using lirbrary arrays
   std::array<int,2> libArr {1,2};
   std::array<int,2> libArr2 {2,2};
+  std::array<std::array<int,2>, 2> libArrMatrix {{{1,1}, {3,3}}};  // possible error..
 
   // using lambda
   auto compArrLambda = [libArr](std::array<int,2> a, std::array<int,2> b){
@@ -117,6 +129,15 @@ int main(){
   libArrPQ.push(libArr);
   std::cout << libArrPQ.top()[0] << " " << libArrPQ.top()[1] << '\n';
 
-  //std::array<int,2> test = libArr - libArr2;
+  std::array<int,2> test = addLocArr(libArr, libArr2);
+  std::cout << test[0] << " " << test[1] << '\n';
+
+  // test behaviour of map::operator[] for nonexistent entry
+  std::map<char, int> letter_counts {{'a', 27}, {'b', 3}, {'c', 1}};
+  std::cout << letter_counts['a'] << std::endl;
+  std::cout << letter_counts['d'] << std::endl;
+  std::cout << letter_counts.count('a') << std::endl;
+  std::cout << letter_counts.count('d') << std::endl;
+  std::cout << letter_counts.count('e') << std::endl;
 
 }
