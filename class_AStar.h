@@ -4,41 +4,35 @@
 
 #include "class_node.h"
 #include "class_map.h"
+#include "class_ANode.h"
+
+#include <iostream>
 #include <map>
 #include <array>
-
+#include <vector>
 
 class pfAStar {
 
  private:
-  const pfMap map;
-  const std::array<int,2> StartCoord;
-  const std::array<int,2> TargetCoord;
 
-  openlist;
-  closedlist;
+  const pfMap map;
+
+  std::vector<ANode> allNodes; 
+
+  //openlist;
+  //closedlist;
   
  public:
 
   //Constructors
- pfAStar(pfMap _map, std::array<int,2> _start, std::array<int,2> _target)
-   : map, StartCoord, TargetCoord {
-  }
+ pfAStar(pfMap &_map): map(_map) {};
   
-   //Functions:
-
-   //Heuristic:
-   double h( std::array<int,2> ) {
-
-
- }
+  //Functions:
+  void SetNodes();
   
+  //Heuristic:
+  //double h( std::array<int,2> ) {
 
 
-
-
-
-
-
-
-}
+};
+#endif

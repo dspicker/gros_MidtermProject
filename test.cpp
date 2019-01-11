@@ -4,7 +4,7 @@
 
 int main(){
 
-
+  /*
   ANode node(3);
     
   node.Setg(11.11);
@@ -20,10 +20,10 @@ int main(){
   std::cout << ">>>Node2 g: " << node2.Getg() << std::endl;
 
   
-  node2.Setparent(&node);
-  std::cout << ">>>Node2P Weight: " << node2.Getparent()->GetWeight() << std::endl;
-  std::cout << ">>>Node2P g: " << node2.Getparent()->Getg() << std::endl;
-
+  node2.SetParent(&node);
+  std::cout << ">>>Node2P Weight: " << node2.GetParent()->GetWeight() << std::endl;
+  std::cout << ">>>Node2P g: " << node2.GetParent()->Getg() << std::endl;
+  */
   
   
   return 0;

@@ -1,7 +1,6 @@
 #include "class_ANode.h"
 #include <iostream>
 
-
 void ANode::Setg(double _g){
   g= _g;
 }
@@ -16,6 +15,6 @@ void ANode::Setf(double _f){
   f= _f;
 }
 
-void ANode::Setparent(ANode *(_parent)){
-  parent= _parent;
+void ANode::SetParent(ANode *(_parent)){
+  Parent= _parent;
 }

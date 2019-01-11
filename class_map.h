@@ -20,10 +20,10 @@ public:
   void SetWidth(int w) ;
   void SetHeight(int h) ;
 
-  int GetWidth(){ return width; }
-  int GetHeigth(){ return height; }
-  int GetNnodes(){ return width * height ; }
-
+  int GetWidth()  const { return width; }
+  int GetHeigth() const { return height; }
+  int GetNnodes() const { return width * height ; }
+  
   // prints the map to std::cout
   void PrintMap();
 
