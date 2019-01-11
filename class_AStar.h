@@ -15,7 +15,7 @@ class pfAStar {
 
  private:
 
-  const pfMap map;
+  pfMap map;
 
   std::vector<ANode> allNodes; 
 
@@ -25,11 +25,15 @@ class pfAStar {
  public:
 
   //Constructors
- pfAStar(pfMap &_map): map(_map) {};
+ pfAStar(pfMap &_map): map(_map) {
+    SetNodes();
+  };
   
   //Functions:
   void SetNodes();
-  
+  pfMap* GetMap() {return &map;};
+   
+
   //Heuristic:
   //double h( std::array<int,2> ) {
 

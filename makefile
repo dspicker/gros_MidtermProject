@@ -37,6 +37,10 @@ class_AStar.o: class_node.h class_map.h
 test.o: test.cpp class_ANode.h
 		g++ $(CFLAGS) -c test.cpp 
 
+
+test2.o: test2.cpp class_map.h class_node.h class_ANode.h class_AStar.h
+		g++ $(CFLAGS) -c test2.cpp 
+
 main.o: class_node.h class_map.h
 		g++ $(CFLAGS) -c main.cpp 
 

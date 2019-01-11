@@ -24,7 +24,7 @@ class ANode : public pfNode{
   
   // Constructor
   //ANode(std::array<int,2> _position, int i) : pfNode(i),  Position(_position) {};
- ANode(std::array<int,2> _position, pfNode &_node) : pfNode(_node.GetType() ), Position(_position) {};
+ ANode(std::array<int,2> _position, pfNode *_node) : pfNode(_node->GetType() ), Position(_position) {};
 
   // ANode(int i) : pfNode(i) {};
   // ANode(pfNode &_node) : pfNode(_node.GetType()) {};
