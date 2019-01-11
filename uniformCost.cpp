@@ -21,7 +21,18 @@ calculated is smaller than assigned).
 */
 
 /* TODO
-    - draw path onto map!
+    - fix history!
+      - Does the setHistory function work as intended? -> not at all
+      - Why is it so fucked up?! (see DEBUG (drawPath) ...)
+        -> It does not save the history of neigbors, but rather the history of
+           unvisitedPQ
+           FIX: track neighbors in history (but than i can't be used to checked
+           if visited before -> new way to keep track of that is needed..)
+           Use map<locArr, array<int,4> nodeInfo {loc[0], loc[1], cumCost, visited(1 or 0)} ??
+    - check if path is as expected..!
+    - check border cases
+      - target not reachable
+      - forest maze
     - add functionality to messure time taken to find the targetLoc
     - add function to pfMap class to set start and target locations ALSO
       in the varialbes start_loc and target_loc of pfMap
@@ -35,29 +46,59 @@ calculated is smaller than assigned).
 */
 
 // helper functions
-bool wasVisited(std::map<locArr, locArr> history, locArr loc){
-  return history.count(loc);
+bool wasVisited(std::map<locArr, locArr> myHistory, locArr loc){
+  return myHistory.count(loc);
 }
 bool isWall(pfMap map, locArr loc){
   return (map.GetNodeAt(loc)->GetWeight() == -1);
 }
-void setHistory(std::map<locArr, locArr> &myMap, locArr current, locArr previous){
-  myMap[current] = previous;
+void setHistory(std::map<locArr, locArr> &myHistory, locArr current, locArr previous){
+  myHistory[current] = previous;
 }
-void setCumCost(std::map<locArr, int> &myMap, locArr loc, int cost){
+void setCumCost(std::map<locArr, int> &myCumCostMap, locArr loc, int cost){
   // change to only set cumCost, if there is no (lower) value saved already??
-  myMap[loc] = cost;
+  myCumCostMap[loc] = cost;
 }
-int  getCumCost(std::map<locArr, int> &myMap, locArr loc){
-  return myMap.at(loc);
+int  getCumCost(std::map<locArr, int> &myCumCostMap, locArr loc){
+  return myCumCostMap.at(loc);
 }
 locArr addLocArr(locArr &a, locArr &b){
   locArr res;
-  for(int i=0; i<2;i++)
-    res[i] = a[i] + b[i];
+  res[0] = a[0] + b[0];
+  res[1] = a[1] + b[1];
   return res;
 }
 
+void drawPath(pfMap &map, std::map<locArr, locArr> &myHistory){
+  locArr targetLoc = map.GetTargetLoc();
+  locArr startLoc  = map.GetStartLoc();
+  locArr currentLoc = targetLoc;
+  locArr previousLoc;
+
+  // draw loop through linked locations starting at target location
+  while(true){
+    previousLoc = myHistory.at(currentLoc);
+    if(debug){
+      std::cout << "DEBUG (drawPath): currentLoc:  " << currentLoc[0] << "," << currentLoc[1] << '\n';
+      std::cout << "DEBUG (drawPath): previousLoc: " << previousLoc[0] << "," << previousLoc[1] << '\n';
+      std::cout << std::endl;
+    }
+    if(previousLoc == startLoc)
+      break;
+    map.GetNodeAt(previousLoc)->SetPath();
+    currentLoc = previousLoc;
+  }
+  map.PrintMap();
+}
+void drawVisited(pfMap &map, std::map<locArr, locArr> &myHistory){
+  locArr startLoc  = map.GetStartLoc();
+  for(auto const &it : myHistory){
+    locArr loc = it.second;
+    if(loc != startLoc)
+      map.GetNodeAt(loc)->SetPath();
+  }
+  map.PrintMap();
+}
 
 //algorithm
 pfMap* uniformCost(pfMap &map){
@@ -67,7 +108,7 @@ pfMap* uniformCost(pfMap &map){
   std::map<locArr, locArr> history;   // link visited location to predecessor
   // using lamda expression: https://en.cppreference.com/w/cpp/language/lambda
   auto cheapest = [&cumCostMap](locArr a, locArr b){
-    /* on unweighted map:
+    /* (on unweighted map):
     using '>' : similar to breadthfirst algorithm (slow, optimal path)
     using '<' : similar to depthfirst algorithm (fast, suboptimal path)
     */
@@ -77,6 +118,7 @@ pfMap* uniformCost(pfMap &map){
   std::array<locArr,4> directions {{{0,1},{1,0},{0,-1},{-1,0}}}; // to loop through neigbors
 
   // initializing varialbes
+  bool targetFound = false;
   locArr startLoc = map.GetStartLoc();
   locArr targetLoc = map.GetTargetLoc();
   locArr currentLoc;
@@ -84,7 +126,7 @@ pfMap* uniformCost(pfMap &map){
   locArr previousLoc;
   int neighborCumCost;
   int currentCumCost;
-  bool targetFound = false;
+  int iterationCount = 0; // only for debugging!
 
   // set cumCost for start node, push into PQ
   setCumCost(cumCostMap, startLoc, 0);
@@ -96,8 +138,11 @@ pfMap* uniformCost(pfMap &map){
   while(!unvisitedPQ.empty()){
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();
-    if(wasVisited(history,currentLoc))  // abourt iteration if already visited
+    if(wasVisited(history, currentLoc)){
+      if(debug){iterationCount+=1;}  // check if it skips already visited nodes as intended
+      // abourt iteration if already visited (needed here because of duplicates in unvisitedPQ!!)
       continue;
+    }
     history[currentLoc] = previousLoc;
     previousLoc = currentLoc;
     if (currentLoc == targetLoc){        // end loop if target is found
@@ -105,8 +150,9 @@ pfMap* uniformCost(pfMap &map){
       targetFound = true;
       break;
     }
+
     // check neigbors of current node
-    if(debug){std::cout << "DEBUG: current: " << currentLoc[0] << "," << currentLoc[1] << '\n';}
+    if(debug){std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';}
     for(auto direction : directions){
       neighborLoc = addLocArr(currentLoc, direction);
       if(isWall(map, neighborLoc) | wasVisited(history, neighborLoc))  // reduncandy
@@ -132,16 +178,24 @@ pfMap* uniformCost(pfMap &map){
         unvisitedPQ.push(neighborLoc);
       }
       if(debug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
-    }
-  }
+    } // end of for loop through neighbors
+
+  } // end of while loop through unvisitedPQ
+
   if(!targetFound){
     if(debug){std::cout << "DEBUG: target not reachable!: " << '\n';}
   }
+  if(debug & targetFound){std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';}
+  drawPath(map, history);
 
-  if(debug){std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';}
-  map.PrintMap();
+  if(debug){
+    std::cout << "DEBUG: nodes visited: " << history.size() << '\n';
+    std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
+
+
+    drawVisited(map, history);
+  }
+  drawVisited(map, history);
+  //map.PrintMap();
   return &map;
 }
-
-// function to draw path into Object of pfMap
-void drawPath();
