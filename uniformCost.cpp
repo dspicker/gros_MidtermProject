@@ -1,15 +1,17 @@
 #include "class_map.h"
-
 #include <iostream>
 #include <vector>
 #include <array>
 #include <queue>
 #include <map>
-// #include <climit> // INT_MAX for
 
 typedef std::array<int,2> locArr;
+bool debug = false;  // display test output at different stages of algorithm
 
-bool debug = true;  // display test output at different stages of algorithm
+/*  definitions/abbriviations:
+    - cumCost: cumulative cost to reach location (includes own weigt)
+    -
+*/
 
 /* some thoughts regarding the class pfNodes:
 A variable 'int cumCost' of pfNode would be usefull to boost performance of
@@ -21,14 +23,6 @@ calculated is smaller than assigned).
 */
 
 /* TODO
-    - fix history!
-      - Does the setHistory function work as intended? -> not at all
-      - Why is it so fucked up?! (see DEBUG (drawPath) ...)
-        -> It does not save the history of neigbors, but rather the history of
-           unvisitedPQ
-           FIX: track neighbors in history (but than i can't be used to checked
-           if visited before -> new way to keep track of that is needed..)
-           Use map<locArr, array<int,4> nodeInfo {loc[0], loc[1], cumCost, visited(1 or 0)} ??
     - check if path is as expected..!
     - check border cases
       - target not reachable
@@ -38,22 +32,22 @@ calculated is smaller than assigned).
       in the varialbes start_loc and target_loc of pfMap
       (otherwise it is impossible to set them..)
     - test with small random maps! (especially case with no path)
-    - optimize time by minimizing use of maps history and cumCostMap
-      in loop through neighbors
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
-    - introduce boolean varialbe targetFound to handle impossible case ?
 */
 
 // helper functions
 bool wasVisited(std::map<locArr, locArr> myHistory, locArr loc){
   return myHistory.count(loc);
 }
+bool isKnown(std::map<locArr, int> &myCumCostMap, locArr loc){
+  return myCumCostMap.count(loc);
+}
 bool isWall(pfMap map, locArr loc){
   return (map.GetNodeAt(loc)->GetWeight() == -1);
 }
-void setHistory(std::map<locArr, locArr> &myHistory, locArr current, locArr previous){
-  myHistory[current] = previous;
+void setHistory(std::map<locArr, locArr> &myHistory, locArr neighbor, locArr current){
+  myHistory[neighbor] = current;
 }
 void setCumCost(std::map<locArr, int> &myCumCostMap, locArr loc, int cost){
   // change to only set cumCost, if there is no (lower) value saved already??
@@ -90,11 +84,12 @@ void drawPath(pfMap &map, std::map<locArr, locArr> &myHistory){
   }
   map.PrintMap();
 }
-void drawVisited(pfMap &map, std::map<locArr, locArr> &myHistory){
+void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
   locArr startLoc  = map.GetStartLoc();
+  locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
-    locArr loc = it.second;
-    if(loc != startLoc)
+    locArr loc = it.first;
+    if(loc != startLoc & loc != targetLoc)
       map.GetNodeAt(loc)->SetPath();
   }
   map.PrintMap();
@@ -123,7 +118,6 @@ pfMap* uniformCost(pfMap &map){
   locArr targetLoc = map.GetTargetLoc();
   locArr currentLoc;
   locArr neighborLoc;
-  locArr previousLoc;
   int neighborCumCost;
   int currentCumCost;
   int iterationCount = 0; // only for debugging!
@@ -132,56 +126,41 @@ pfMap* uniformCost(pfMap &map){
   setCumCost(cumCostMap, startLoc, 0);
   unvisitedPQ.push(startLoc);
   if (debug){std::cout << "DEBUG: start:    " << startLoc[0] << "," << startLoc[1] << '\n';}
-  previousLoc = startLoc; // handle border case of first iteration where ther is no previousLoc
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
+    // drawKnown(map, history); // poor man's animation (works though!)
+    iterationCount+=1;
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();
-    if(wasVisited(history, currentLoc)){
-      if(debug){iterationCount+=1;}  // check if it skips already visited nodes as intended
-      // abourt iteration if already visited (needed here because of duplicates in unvisitedPQ!!)
-      continue;
-    }
-    history[currentLoc] = previousLoc;
-    previousLoc = currentLoc;
     if (currentLoc == targetLoc){        // end loop if target is found
       if(debug){std::cout << "DEBUG: target reached!" << '\n';}
       targetFound = true;
       break;
     }
 
-    // check neigbors of current node
     if(debug){std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';}
+
+    // check neigbors of current node
     for(auto direction : directions){
       neighborLoc = addLocArr(currentLoc, direction);
-      if(isWall(map, neighborLoc) | wasVisited(history, neighborLoc))  // reduncandy
-        /* reduncandy!:
-           remove reduncandy because this is also checked at start of while-loop
-           maybe try to check value and handly error if key invalid?
-
-           An alternavive would be to not check wasVisited at all here
-           because cumCost wouldn't be updated then anyways..
-        */
+      if(isWall(map, neighborLoc) | isKnown(cumCostMap, neighborLoc))
         continue;
-      /* IMPORTANT: make sure NOT to overwrite a smaller cumCost already entered in cumCostMap!!!*/
+
       currentCumCost = getCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
 
-      // This is not optimal ATM (works though..)
-      if( !cumCostMap.count(neighborLoc)){
-        setCumCost(cumCostMap, neighborLoc, neighborCumCost); // <- does not work as intended!
-        unvisitedPQ.push(neighborLoc);
-      }
-      else if(getCumCost(cumCostMap,neighborLoc) > neighborCumCost){
-        setCumCost(cumCostMap, neighborLoc, neighborCumCost); // <- does not work as intended!
-        unvisitedPQ.push(neighborLoc);
-      }
+      setCumCost(cumCostMap, neighborLoc, neighborCumCost);
+      setHistory(history, neighborLoc, currentLoc);
+
+      unvisitedPQ.push(neighborLoc);
       if(debug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
     } // end of for loop through neighbors
 
   } // end of while loop through unvisitedPQ
 
+
+  // rest mainly for testing:
   if(!targetFound){
     if(debug){std::cout << "DEBUG: target not reachable!: " << '\n';}
   }
@@ -189,13 +168,11 @@ pfMap* uniformCost(pfMap &map){
   drawPath(map, history);
 
   if(debug){
-    std::cout << "DEBUG: nodes visited: " << history.size() << '\n';
+    std::cout << "DEBUG: nodes known  : " << history.size() << '\n';
     std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
-
-
-    drawVisited(map, history);
+    drawKnown(map, history);
   }
-  drawVisited(map, history);
+  //drawKnown(map, history);
   //map.PrintMap();
   return &map;
 }
