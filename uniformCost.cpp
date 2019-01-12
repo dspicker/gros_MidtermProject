@@ -114,7 +114,7 @@ pfMap* uniformCost(pfMap &map){
     return (cumCostMap.at(a) > cumCostMap.at(b));
   };
   std::priority_queue<locArr, std::vector<locArr>, decltype(cheapest)> unvisitedPQ(cheapest);
-  std::array<locArr,4> directions {{{1,0},{-1,0},{0,1},{0,-1}}}; // to loop through neigbors
+  std::array<locArr,4> directions {{{0,1},{1,0},{0,-1},{-1,0}}}; // to loop through neigbors
 
   // initializing varialbes
   bool targetFound = false;
