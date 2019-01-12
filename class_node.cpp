@@ -35,6 +35,16 @@ void pfNode::SetPath(){
   type = 6;
 }
 
+// additional types to visualize visited/checked nodes (Felix) :
+void pfNode::setType(int t){
+  type = t;
+}
+void pfNode::getType(int t){
+  type = t;
+}
+
+// end of additons (Felix)
+
 std::string pfNode::GetTypeName(){
   switch (type) {
     case 1 :         // Wall
@@ -49,8 +59,14 @@ std::string pfNode::GetTypeName(){
       return "Target-Node" ;
     case 6 :        // target-node
       return "Path-Node" ;
+// additional types to visualize visited/checked nodes (Felix) :
+    case 7 :        // visited/checked grass
+      return "visited Grass" ;
+    case 8 :        // visited/checked forest
+      return "visited Forest" ;
     default :
       return "Undefined" ;
+// end of additions (Felix)
   }
 
 }
@@ -76,6 +92,15 @@ void pfNode::Print(){
     case 6 :       // target
       color = {255, 51, 204};
       break;
+// additional types to visualize visited/checked nodes (Felix) :
+    case 7 :      // visited Grass
+      color = {101, 204, 101};
+      break;
+    case 8 :      // visited forest
+      color = {50, 153, 101};
+      break;
+// end of additions (Felix)
+
   }
   char buffer1[50];
   sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);

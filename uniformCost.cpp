@@ -86,8 +86,14 @@ void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
   locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
     locArr loc = it.first;
-    if(loc != startLoc & loc != targetLoc)  // ignore start and target locations
-      map.GetNodeAt(loc)->SetPath();
+    if(loc != startLoc & loc != targetLoc){  // ignore start and target locations
+      if(map.GetNodeAt(loc)->GetType() == 2){
+        map.SetTypeAt(loc[0], loc[1], 7);
+      }
+      if(map.GetNodeAt(loc)->GetType() == 3){
+        map.SetTypeAt(loc[0], loc[1], 8);
+      }
+    }
   }
   map.PrintMap();
 }
@@ -108,7 +114,7 @@ pfMap* uniformCost(pfMap &map){
     return (cumCostMap.at(a) > cumCostMap.at(b));
   };
   std::priority_queue<locArr, std::vector<locArr>, decltype(cheapest)> unvisitedPQ(cheapest);
-  std::array<locArr,4> directions {{{0,1},{1,0},{0,-1},{-1,0}}}; // to loop through neigbors
+  std::array<locArr,4> directions {{{1,0},{-1,0},{0,1},{0,-1}}}; // to loop through neigbors
 
   // initializing varialbes
   bool targetFound = false;
@@ -165,6 +171,7 @@ pfMap* uniformCost(pfMap &map){
       drawKnown(map, history);
     }
     drawPath(map, history);
+    drawKnown(map, history);
   }
   else
     std::cout << "target not reachable! " << '\n';

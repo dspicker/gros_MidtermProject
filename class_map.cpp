@@ -73,7 +73,12 @@ void pfMap::SetTypeAt(int x, int y, int t){
   if( t==6 ) {
     curr->SetPath();
   }
+// additional types to visualize visited/checked nodes (Felix) :
+  if( t==7 | t==8){
+    curr->setType(t);
+  }
 }
+// end of additons (Felix)
 
 std::array<int,2> pfMap::GetStartLoc(){
   return start_loc;

@@ -53,7 +53,6 @@ public:
   // loads a map from a csv-file. creates new map object and returns pointer to it.
   static pfMap* LoadMap(std::string filename);
 
-
 };
 
 

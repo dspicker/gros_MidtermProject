@@ -50,7 +50,7 @@ pt_map2->SetTypeAt(map2_w-2, map2_h-2, 5);
 
 std::cout << "starting uniformCost" << '\n';
 // test uniformCost algorithm
-//uniformCost(*map1);
+uniformCost(*map1);
 uniformCost(*pt_map2);
 
 
