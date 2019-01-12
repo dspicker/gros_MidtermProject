@@ -23,14 +23,10 @@ calculated is smaller than assigned).
 */
 
 /* TODO
-    - check if path is as expected..!
-    - check border cases
-      - target not reachable
-    - add functionality to messure time taken to find the targetLoc
+    - add functionality to measure time taken to find the targetLoc
     - add function to pfMap class to set start and target locations ALSO
       in the varialbes start_loc and target_loc of pfMap
       (otherwise it is impossible to set them..)
-    - test with small random maps! (especially case with no path)
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
 */
@@ -103,9 +99,9 @@ pfMap* uniformCost(pfMap &map){
   map.PrintMap(); // temporary!
 
   // initializing containers
-  std::map<locArr, int> cumCostMap;
+  std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
-  // using lamda expression: https://en.cppreference.com/w/cpp/language/lambda
+  // using lamda expression (https://en.cppreference.com/w/cpp/language/lambda):
   auto cheapest = [&cumCostMap](locArr a, locArr b){
     /* (on unweighted map):
     using '>' : similar to breadthfirst algorithm (slow, optimal path)
@@ -114,7 +110,7 @@ pfMap* uniformCost(pfMap &map){
     return (cumCostMap.at(a) > cumCostMap.at(b));
   };
   std::priority_queue<locArr, std::vector<locArr>, decltype(cheapest)> unvisitedPQ(cheapest);
-  std::array<locArr,4> directions {{{0,1},{1,0},{0,-1},{-1,0}}}; // to loop through neigbors
+  std::array<locArr,4> directions {{{0,1},{1,0},{0,-1},{-1,0}}}; // to loop through neighbors
 
   // initializing varialbes
   bool targetFound = false;
@@ -142,10 +138,9 @@ pfMap* uniformCost(pfMap &map){
       targetFound = true;
       break;
     }
-
     if(debug){std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';}
 
-    // check neigbors of current node
+    // check neighbors of current node
     for(auto direction : directions){
       neighborLoc = addLocArr(currentLoc, direction);
       if(isWall(map, neighborLoc) | isKnown(cumCostMap, neighborLoc))
@@ -165,7 +160,7 @@ pfMap* uniformCost(pfMap &map){
   // rest mainly for testing:
   if(targetFound){
     if(debug){
-      std::cout << "DEBUG: nodes known  : " << history.size() << '\n';
+      std::cout << "DEBUG: size of history: " << history.size() << '\n';
       std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
       std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';
       drawKnown(map, history);
