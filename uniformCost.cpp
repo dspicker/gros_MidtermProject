@@ -26,7 +26,6 @@ calculated is smaller than assigned).
     - check if path is as expected..!
     - check border cases
       - target not reachable
-      - forest maze
     - add functionality to messure time taken to find the targetLoc
     - add function to pfMap class to set start and target locations ALSO
       in the varialbes start_loc and target_loc of pfMap
@@ -62,14 +61,12 @@ locArr addLocArr(locArr &a, locArr &b){
   res[1] = a[1] + b[1];
   return res;
 }
-
 void drawPath(pfMap &map, std::map<locArr, locArr> &myHistory){
   locArr targetLoc = map.GetTargetLoc();
   locArr startLoc  = map.GetStartLoc();
   locArr currentLoc = targetLoc;
   locArr previousLoc;
-
-  // draw loop through linked locations starting at target location
+  // loop through linked locations starting at target location
   while(true){
     previousLoc = myHistory.at(currentLoc);
     if(debug){
@@ -89,7 +86,7 @@ void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
   locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
     locArr loc = it.first;
-    if(loc != startLoc & loc != targetLoc)
+    if(loc != startLoc & loc != targetLoc)  // ignore start and target locations
       map.GetNodeAt(loc)->SetPath();
   }
   map.PrintMap();
@@ -97,6 +94,7 @@ void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
 
 //algorithm
 pfMap* uniformCost(pfMap &map){
+  map.PrintMap(); // temporary!
 
   // initializing containers
   std::map<locArr, int> cumCostMap;
@@ -156,23 +154,20 @@ pfMap* uniformCost(pfMap &map){
       unvisitedPQ.push(neighborLoc);
       if(debug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
     } // end of for loop through neighbors
-
   } // end of while loop through unvisitedPQ
 
-
   // rest mainly for testing:
-  if(!targetFound){
-    if(debug){std::cout << "DEBUG: target not reachable!: " << '\n';}
+  if(targetFound){
+    if(debug){
+      std::cout << "DEBUG: nodes known  : " << history.size() << '\n';
+      std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
+      std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';
+      drawKnown(map, history);
+    }
+    drawPath(map, history);
   }
-  if(debug & targetFound){std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';}
-  drawPath(map, history);
+  else
+    std::cout << "target not reachable! " << '\n';
 
-  if(debug){
-    std::cout << "DEBUG: nodes known  : " << history.size() << '\n';
-    std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
-    drawKnown(map, history);
-  }
-  //drawKnown(map, history);
-  //map.PrintMap();
   return &map;
 }

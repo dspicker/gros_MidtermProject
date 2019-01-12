@@ -38,20 +38,20 @@ delete map2 ;     // delete map from the heap
 
 // create some maps
 pfMap* map1 = pfMap::LoadMap("map1.csv") ;
-int map2_w = 10;
-int map2_h = 10;
+int map2_w = 50;
+int map2_h = 50;
 pfMap map2(map2_w,map2_h);
 pfMap* pt_map2 = &map2;
+pt_map2->SetTypeAt(1, 1, 4);
+pt_map2->SetTypeAt(map2_w-2, map2_h-2, 5);
 
-// DOES NOT WORK! NEEDS TO BE A FUNCTION OF pfMap that sets start_loc or target_loc
-map2.GetNodeAt(1,1)->SetStart();
-map2.GetNodeAt(map2_w-2,map2_h-2)->SetTarget();
-map1->PrintMap();
+//map1->PrintMap();
 //pt_map2->PrintMap();
 
+std::cout << "starting uniformCost" << '\n';
 // test uniformCost algorithm
-uniformCost(*map1);
-//uniformCost(*pt_map2);
+//uniformCost(*map1);
+uniformCost(*pt_map2);
 
 
 
