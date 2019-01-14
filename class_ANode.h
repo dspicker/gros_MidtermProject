@@ -17,7 +17,7 @@ class ANode : public pfNode{
 
   std::vector<ANode*> Neighbours;
 
-  const std::array<int,2> Position;
+  std::array<int,2> Position;
   
   //-------------------------------------------------------------------------------------------------
  public:
@@ -35,7 +35,8 @@ class ANode : public pfNode{
   void Seth(double _h);
   void Setf(double _f);
   void SetParent(ANode *_parent);
-  
+  void SetNeighbour(ANode*);
+    
   // Getter:
   double Getg() const {return g;}
   double Geth() const {return h;}
@@ -43,6 +44,6 @@ class ANode : public pfNode{
   ANode* GetParent() const  {return Parent;}
   bool isVisited() const {return Viseted;}
   std::vector<ANode*> GetNeighbours() const {return Neighbours;}
-  
+  std::array<int,2> GetPosition() {return Position;}
 };
 #endif

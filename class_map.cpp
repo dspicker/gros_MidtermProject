@@ -31,8 +31,11 @@ pfMap::pfMap(int w, int h){
 }
 
 void pfMap::PrintMap(){
+  std::cout << std::endl;
   std::array<int,2> pos;
   for(int j=height ; j>0 ; j--){
+    std::cout << j-1 ;
+
     for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j-1;
@@ -41,9 +44,13 @@ void pfMap::PrintMap(){
         it->second.Print();
       }
     }
-    std::cout << std::endl ;
+    std::cout << std::endl;
   }
-  std::cout << std::endl ;
+  std::cout << " ";
+  for(int i=0; i<width; i++)
+    std::cout << "|" << i;
+  
+  std::cout << std::endl << std::endl ;
 }
 
 pfNode* pfMap::GetNodeAt(int x, int y){
