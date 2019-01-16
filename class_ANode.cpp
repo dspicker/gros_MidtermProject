@@ -10,14 +10,18 @@ void ANode::Seth(double _h){
   h= _h;
 }
 
-void ANode::Setf(double _f){
-  f= _f;
+void ANode::Setf(){
+  f= g+h;
 }
 
-void ANode::SetParent(ANode *(_parent)){
-  Parent= _parent;
+void ANode::SetParent(ANode &(_parent)){
+  Parent= &_parent;
 }
 
-void ANode::SetNeighbour(ANode* _neighbour){
-  Neighbours.push_back(_neighbour);
+void ANode::SetNeighbour(ANode &_neighbour){
+  Neighbours.push_back(&(_neighbour));
+}
+
+void ANode::SetVisited(){
+  Visited = true;
 }

@@ -21,7 +21,7 @@ public:
   void SetHeight(int h) ;
 
   int GetWidth()  const { return width; }
-  int GetHeigth() const { return height; }
+  int GetHeight() const { return height; }
   int GetNnodes() const { return width * height ; }
   
   // prints the map to std::cout

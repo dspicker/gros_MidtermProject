@@ -13,7 +13,7 @@ class ANode : public pfNode{
   double f; //global value
 
   ANode *Parent=NULL; 
-  bool Viseted=false;
+  bool Visited=false;
 
   std::vector<ANode*> Neighbours;
 
@@ -33,17 +33,24 @@ class ANode : public pfNode{
   // Setter:
   void Setg(double _g);
   void Seth(double _h);
-  void Setf(double _f);
-  void SetParent(ANode *_parent);
-  void SetNeighbour(ANode*);
+  void Setf();
+  void SetParent(ANode &_parent);
+  void SetNeighbour(ANode &_neighbour);
+  void SetVisited();
     
   // Getter:
-  double Getg() const {return g;}
-  double Geth() const {return h;}
-  double Getf() const {return f;}
+  double* Getg() {return &g;}
+  double* Geth() {return &h;}
+  double* Getf() {return &f;}
+  
   ANode* GetParent() const  {return Parent;}
-  bool isVisited() const {return Viseted;}
-  std::vector<ANode*> GetNeighbours() const {return Neighbours;}
+  bool* isVisited() {return &Visited;}
+  std::vector<ANode*>* GetNeighbours() {return &(Neighbours);}
   std::array<int,2> GetPosition() {return Position;}
+  std::array<int,2>* GetPositionRef() {return &Position;}
+
+  
+
+ 
 };
 #endif

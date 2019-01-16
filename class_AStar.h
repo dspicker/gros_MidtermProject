@@ -10,35 +10,54 @@
 #include <map>
 #include <array>
 #include <vector>
+#include <queue>
+
+
+typedef std::array<int,2> asLocation ;
+
+
+// Struct for comparing ANodes by their f value
+struct compare_asNodes{
+  bool operator()(ANode *left, ANode *right) const {
+    return left->Getf() < right->Getf();
+  }
+};
 
 class pfAStar {
 
  private:
 
-  pfMap map;
-
   // allNodes:
   // sorted by Coordinates <x,y>: <0,0>, <0,1>, ...., <1,0>, <1,1>, ...., <Width,0>, <Width,1>, .... <Width,Heigh>
   std::vector<ANode> allNodes; 
 
-  //openlist;
-  //closedlist;
+  // Start/Finish Coordinates
+  int START_INDEX, FINISH_INDEX;
   
- public:
-
-  //Constructors
- pfAStar(pfMap &_map): map(_map) {
-    SetNodes();  
-  };
-  
-  //Functions:
-  void SetNodes();
-  pfMap* GetMap() {return &map;}; //no const here! 
-  std::vector<ANode> GetNodes() {return allNodes;};
+  // Functions:
+  void SetNodes(pfMap &map);
 
   //Heuristic:
-  //double h( std::array<int,2> ) {
+  double Pythagoras( asLocation &Pos);
+  double Manhatten ( asLocation &Pos);
 
+  
+ public:
+  
+  //Constructors
+  pfAStar(pfMap &_map);
+  
+  // Getter:
+  std::vector<ANode> GetNodes() {return allNodes;};
+  int GetStartIndex() const {return START_INDEX;};
+  
+  // Functions:
+  // Actual A*-Algorythm
+  void solve(std::string HeuristicName);
+ 
+  // Lists:
+  std::priority_queue< ANode*, std::vector<ANode*>, compare_asNodes >  openList;
+  std::vector<ANode*> closedList;
 
 };
 #endif
