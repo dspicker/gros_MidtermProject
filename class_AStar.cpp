@@ -172,10 +172,14 @@ void pfAStar::solve(std::string HeuristicName){
     if(openList.empty()) break;
 
     if(FINISH_FOUND){
-      for( actualNode = &allNodes[FINISH_INDEX];
+
+      SHORTEST_PATH_FOUND = true;
+      break;
+      
+      /* for( actualNode = &allNodes[FINISH_INDEX];
 	   actualNode->GetType() != 4;
 	   actualNode = actualNode->GetParent()){
-
+	
 	if(*actualNode->Getf() > *allNodes[FINISH_INDEX].Getf()){
 	  SHORTEST_PATH_FOUND = true;
 	  DEBUGMOD std::cout << ">>> SHORTEST_PATH_FOUND!" << std::endl;
@@ -184,7 +188,7 @@ void pfAStar::solve(std::string HeuristicName){
       }
 
       if(SHORTEST_PATH_FOUND)
-	break; 
+      break; */
     }// if(FINISH_FOUND)
     
     actualNode = openList.top();
@@ -275,14 +279,23 @@ void pfAStar::solve(std::string HeuristicName){
 
 void pfAStar::UpdateMap(){
 
-  pfNode* NodePtr; 
+  pfNode* NodePtr;
+  
+  for( auto it : allNodes){
+
+    if( *it.isVisited() == true){
+
+      NodePtr = MapPtr->GetNodeAt( it.GetPosition()[0], it.GetPosition()[1]);
+      NodePtr->SetIsVisited();
+      NodePtr->Setf(*it.Getg()); 
+      
+    }
+  }
   
   for( auto it : PathNodes){
 
     NodePtr = MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]);
     NodePtr->SetIsPath();
-    NodePtr->Setf(*it->Getf()); 
-
   }
   
 }

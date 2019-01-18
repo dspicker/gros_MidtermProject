@@ -24,9 +24,11 @@ pfMap::pfMap(int w, int h){
         int rnd_type = random(gen) ;
 
 	// DEBUG -- No Walls in Map
-	if(rnd_type == 1){
-	  j--;
-	  continue;
+	if(0){
+	  if(rnd_type == 1){
+	    j--;
+	    continue;
+	  }
 	}
 	
         if(rnd_type == 4 ){ rnd_type = 2; }
@@ -55,7 +57,7 @@ void pfMap::PrintMap(){
   }
   std::cout << " ";
   for(int i=0; i<width; i++)
-    std::cout << "|" << i%10;
+    printf("|%.2d", i);
   
   std::cout << std::endl << std::endl ;
 }
