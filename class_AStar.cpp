@@ -165,10 +165,27 @@ void pfAStar::solve(std::string HeuristicName){
   closedList.push_back(&allNodes[FINISH_INDEX]);
 
   bool FINISH_FOUND = false;
+  bool SHORTEST_PATH_FOUND = false; 
   
   while(1){
 
-    if(openList.empty()) break; 
+    if(openList.empty()) break;
+
+    if(FINISH_FOUND){
+      for( actualNode = &allNodes[FINISH_INDEX];
+	   actualNode->GetType() != 4;
+	   actualNode = actualNode->GetParent()){
+
+	if(*actualNode->Getf() > *allNodes[FINISH_INDEX].Getf()){
+	  SHORTEST_PATH_FOUND = true;
+	  DEBUGMOD std::cout << ">>> SHORTEST_PATH_FOUND!" << std::endl;
+	  break; 
+	}
+      }
+
+      if(SHORTEST_PATH_FOUND)
+	break; 
+    }// if(FINISH_FOUND)
     
     actualNode = openList.top();
     openList.pop();
@@ -258,9 +275,13 @@ void pfAStar::solve(std::string HeuristicName){
 
 void pfAStar::UpdateMap(){
 
+  pfNode* NodePtr; 
+  
   for( auto it : PathNodes){
 
-    MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]) -> SetIsPath();
+    NodePtr = MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]);
+    NodePtr->SetIsPath();
+    NodePtr->Setf(*it->Getf()); 
 
   }
   

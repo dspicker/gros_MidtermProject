@@ -37,6 +37,14 @@ void pfNode::SetIsPath(){
   isPath = true;
 }
 
+void pfNode::SetIsVisited(){
+  isVisited = true;
+}
+
+void pfNode::Setf(double _f){
+  f = _f;
+}
+
 std::string pfNode::GetTypeName()const{
   switch (type) {
     case 1 :         // Wall
@@ -75,14 +83,15 @@ void pfNode::Print(){
       break;
   }
 
+  char buffer1[50];
+  
   if(isPath){
     color[0] = 254 - color[0]; 
     color[1] = 254 - color[1];
     color[2] = 254 - color[2];
-  }
-    
-  
-  char buffer1[50];
-  sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    sprintf(buffer1, "\033[48;2;%u;%u;%um%.0f\033[0m", color[0],color[1],color[2],f );
+  }else
+    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+
   std::cout << buffer1 ;
 }

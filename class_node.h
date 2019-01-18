@@ -10,7 +10,10 @@ protected:
   int weight;  // depends on the type. grass 1, forest 5, wall -1
 
   bool isPath = false; 
+  bool isVisited = false;
 
+  double f; 
+  
 public:
   // Constructor:
   // Should be used for initializing pfNode
@@ -31,6 +34,8 @@ public:
   void SetStart();
   void SetTarget();
   void SetIsPath();
+  void SetIsVisited();
+  void Setf(double _f);
   
   // prints the node to std::cout with an rgb colored whitespace
   void Print();

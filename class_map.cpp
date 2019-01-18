@@ -22,6 +22,13 @@ pfMap::pfMap(int w, int h){
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(1) ) );
       } else {
         int rnd_type = random(gen) ;
+
+	// DEBUG -- No Walls in Map
+	if(rnd_type == 1){
+	  j--;
+	  continue;
+	}
+	
         if(rnd_type == 4 ){ rnd_type = 2; }
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(rnd_type) ) );
       }
