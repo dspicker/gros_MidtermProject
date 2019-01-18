@@ -34,7 +34,7 @@ void pfMap::PrintMap(){
   std::cout << std::endl;
   std::array<int,2> pos;
   for(int j=height ; j>0 ; j--){
-    std::cout << j-1 ;
+    printf("%.2d", j-1);
 
     for(int i=0 ; i<width ; i++){
       pos[0] = i;
@@ -48,7 +48,7 @@ void pfMap::PrintMap(){
   }
   std::cout << " ";
   for(int i=0; i<width; i++)
-    std::cout << "|" << i;
+    std::cout << "|" << i%10;
   
   std::cout << std::endl << std::endl ;
 }

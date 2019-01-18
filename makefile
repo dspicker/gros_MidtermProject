@@ -6,7 +6,7 @@
 # VARIABLES 
 CFLAGS = -Wall -W -O -std=c++11
 
-# EVERY FILE INSERTED HERE WILL BE BUILD
+# EVERY FILE INSERTED HERE WILL BE BUILD IN EXACT THIS ORDER
 all: class_node.o class_map.o class_ANode.o test.o test main.o main test2 clean
 
 # EXECUTABLES

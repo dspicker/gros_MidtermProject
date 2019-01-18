@@ -33,6 +33,10 @@ void pfNode::SetTarget(){
   weight = 1;
 }
 
+void pfNode::SetIsPath(){
+  isPath = true;
+}
+
 std::string pfNode::GetTypeName()const{
   switch (type) {
     case 1 :         // Wall
@@ -70,6 +74,14 @@ void pfNode::Print(){
       color = {0, 51, 204};
       break;
   }
+
+  if(isPath){
+    color[0] = 254 - color[0]; 
+    color[1] = 254 - color[1];
+    color[2] = 254 - color[2];
+  }
+    
+  
   char buffer1[50];
   sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
   std::cout << buffer1 ;

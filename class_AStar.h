@@ -19,7 +19,7 @@ typedef std::array<int,2> asLocation ;
 // Struct for comparing ANodes by their f value
 struct compare_asNodes{
   bool operator()(ANode *left, ANode *right) const {
-    return left->Getf() < right->Getf();
+    return *left->Getf() > *right->Getf();
   }
 };
 
@@ -31,19 +31,24 @@ class pfAStar {
   // sorted by Coordinates <x,y>: <0,0>, <0,1>, ...., <1,0>, <1,1>, ...., <Width,0>, <Width,1>, .... <Width,Heigh>
   std::vector<ANode> allNodes; 
 
-  // Start/Finish Coordinates
+  // Index of Start/Finish in allNodes
   int START_INDEX, FINISH_INDEX;
   
   // Functions:
-  void SetNodes(pfMap &map);
+  void SetNodes(pfMap &map); // Needed for Initialisation
 
-  //Heuristic:
+  //Heuristics:
   double Pythagoras( asLocation &Pos);
   double Manhatten ( asLocation &Pos);
 
+  asLocation FINISH_COORD;
+
+  std::vector<ANode*> PathNodes;
+
+  pfMap* MapPtr; 
   
  public:
-  
+
   //Constructors
   pfAStar(pfMap &_map);
   
@@ -54,7 +59,8 @@ class pfAStar {
   // Functions:
   // Actual A*-Algorythm
   void solve(std::string HeuristicName);
- 
+  void UpdateMap();
+  
   // Lists:
   std::priority_queue< ANode*, std::vector<ANode*>, compare_asNodes >  openList;
   std::vector<ANode*> closedList;

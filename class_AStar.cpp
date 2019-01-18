@@ -9,8 +9,13 @@
 #include <math.h>
 #include <algorithm>
 
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>
+
+#include <stdlib.h> //exit
+
 //Constructors
-pfAStar::pfAStar(pfMap &_map){
+pfAStar::pfAStar(pfMap &_map) : MapPtr(&_map){
   SetNodes(_map);  
 };
 
@@ -36,8 +41,11 @@ void pfAStar::SetNodes(pfMap &map){
 	START_INDEX = x*map.GetHeight() + y;
  
       // Set Index of Finish Node
-      else if(map.GetNodeAt(x,y)->GetType() == 5)
+      else if(map.GetNodeAt(x,y)->GetType() == 5){
 	FINISH_INDEX = x*map.GetHeight() + y;
+	FINISH_COORD[0] = x;
+	FINISH_COORD[1] = y; 
+      }
     }
   }
 
@@ -116,12 +124,15 @@ double pfAStar::Pythagoras( asLocation &Pos){
 }
 
 double pfAStar::Manhatten( asLocation &Pos){
-  return Pos[0] + Pos[1];
+  return std::abs(Pos[0]-FINISH_COORD[0]) + std::abs(Pos[1]-FINISH_COORD[1]);
 }
 
 
 
 void pfAStar::solve(std::string HeuristicName){
+
+  // Set DEBUGMOD if(1) for getting Debugging Massages
+#define DEBUGMOD if(0)
   
   // Set chosen Heuristic
   typedef double (pfAStar::*Fptr_heuristic_double)(asLocation &Pos);
@@ -142,7 +153,9 @@ void pfAStar::solve(std::string HeuristicName){
   // Set Start Node
   ANode *actualNode = &(allNodes[START_INDEX]);
   actualNode->Setg(0);
-  actualNode->Seth( Pythagoras( *(actualNode->GetPositionRef()) ) );
+  actualNode->Seth( Manhatten( *(actualNode->GetPositionRef()) ) );
+  actualNode->Setf();
+  actualNode->SetVisited();
 
   // Set Neighbours of Start Node
   std::vector<ANode*> *actualNeighbours = actualNode->GetNeighbours();
@@ -150,58 +163,106 @@ void pfAStar::solve(std::string HeuristicName){
   // Fill openList with Start Node
   openList.push(actualNode);
   closedList.push_back(&allNodes[FINISH_INDEX]);
-  
-	    	    
-  while( !openList.empty() ){
 
-    if(std::binary_search(closedList.begin(), closedList.end(), actualNode)) continue; 
+  bool FINISH_FOUND = false;
+  
+  while(1){
+
+    if(openList.empty()) break; 
     
+    actualNode = openList.top();
+    openList.pop();
+    closedList.push_back(actualNode);
+    actualNeighbours = actualNode->GetNeighbours();
+    
+    //DEBUGMOD std::this_thread::sleep_for (std::chrono::milliseconds(500));
+    
+    DEBUGMOD std::cout << std::endl <<  ">>> closedList: ";
+
+    for(auto it : closedList){
+      DEBUGMOD std::cout << "(" << it->GetPosition()[0]
+			 << "|" << it->GetPosition()[1] << "), ";
+
+    }
+
+    DEBUGMOD std::cout << std::endl;
+    
+    DEBUGMOD std::cout << actualNode->GetPosition()[0] << "|"
+		       << actualNode->GetPosition()[1] << "("
+		       << *actualNode->Geth() << ", "
+		       << *actualNode->Getg() << ", "
+		       << *actualNode->Getf() << ")" 
+		       << " : " << std::endl;
+
     for(auto it : *actualNeighbours){
 
+      DEBUGMOD std::cout << "\t"
+			 << "<" << it->GetPosition()[0]
+			 << "|" << it->GetPosition()[1] << ">";
+	       
+   
       // If Node was not visited before, set Parameters for the 1st time
       if(!*it->isVisited()){
-	it->Seth( Pythagoras( *(it->GetPositionRef()) ));
+	DEBUGMOD std::cout << "N(" ;
+	
+	it->Seth( Manhatten( *(it->GetPositionRef()) ));
 	it->Setg( *actualNode->Getg() + it->GetWeight() );
 	it->Setf();
 	it->SetParent(*actualNode);
 	it->SetVisited();
 	openList.push(it);
       }
-      // If 
-      else if(std::find(closedList.begin(), closedList.end(), it) == closedList.end()){
-	//else if(!std::binary_search(closedList.begin(), closedList.end(), it)){
-      	
-	if( *actualNode->Getg() + it->GetWeight() ){
-	  it->Setg( *actualNode->Getg() + it->GetWeight() );
-	  it->Setf();
-	  it->SetParent(*actualNode);
-	}
-
+      else if( *(actualNode->Getg()) + it->GetWeight() < *(it->Getg()) ){
+	DEBUGMOD std::cout << "O(";
 	
-      }// else 
-    }// for it:*actualNeighbours
-    
-    closedList.push_back(actualNode);
-    //std::sort(closedList.begin(), closedList.end(), compare_asNodes);
+	it->Setg( *(actualNode->Getg()) + it->GetWeight() );
+	it->Setf();
+	it->SetParent(*actualNode);
+      }	
+      else
+	DEBUGMOD std::cout << " (";
 
-    openList.pop();
-    actualNode = openList.top();
-    actualNeighbours = actualNode->GetNeighbours(); 
-    
-  }// while
-
-
-  actualNode=&allNodes[FINISH_INDEX];
-  
-  while(actualNode->GetType() != 4){
-
-    std::cout << actualNode->GetParent()->GetPosition()[0] << "|"
-	      << actualNode->GetParent()->GetPosition()[1] << ">>";
-
-    actualNode=actualNode->GetParent();
+      if( it->GetType() == 5)
+	FINISH_FOUND = true;
+      
+      DEBUGMOD std::cout << *it->Geth() << ", "
+			 << *it->Getg() << ", "
+			 << *it->Getf() << ")" << std::endl;
       
 
-  }
+    }// for it:*actualNeighbours
+  }// while
 
+  if(FINISH_FOUND){
+    std::cout << ">>>FINISH FOUND!" << std::endl;
+
+    for( actualNode = &allNodes[FINISH_INDEX], std::cout <<  actualNode->GetPosition()[0] << "|" << actualNode->GetPosition()[1];
+	 actualNode->GetType() != 4;
+	 actualNode=actualNode->GetParent()){
+
+      DEBUGMOD std::cout << " >> "
+			 << actualNode->GetParent()->GetPosition()[0] << "|"
+			 << actualNode->GetParent()->GetPosition()[1];
+
+
+      PathNodes.push_back(actualNode);
+   
+    
+    }
+    std::cout << std::endl << std::endl;
+  }
+}
+
+
+
+
+void pfAStar::UpdateMap(){
+
+  for( auto it : PathNodes){
+
+    MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]) -> SetIsPath();
+
+  }
+  
 }
 

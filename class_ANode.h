@@ -49,8 +49,6 @@ class ANode : public pfNode{
   std::array<int,2> GetPosition() {return Position;}
   std::array<int,2>* GetPositionRef() {return &Position;}
 
-  
-
  
 };
 #endif
