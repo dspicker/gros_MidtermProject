@@ -15,7 +15,6 @@
 
 typedef std::array<int,2> asLocation ;
 
-
 // Struct for comparing ANodes by their f value
 struct compare_asNodes{
   bool operator()(ANode *left, ANode *right) const {
@@ -38,8 +37,11 @@ class pfAStar {
   void SetNodes(pfMap &map); // Needed for Initialisation
 
   //Heuristics:
-  double Pythagoras( asLocation &Pos);
+  double Supremum  ( asLocation &Pos);
   double Manhatten ( asLocation &Pos);
+  double Euklid    ( asLocation &Pos);
+  
+  
 
   asLocation FINISH_COORD;
 

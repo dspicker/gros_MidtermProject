@@ -16,10 +16,12 @@ private:
 public:
   // constructor to initialise the map with random nodes
   pfMap(int w, int h);
-
+    
   void SetWidth(int w) ;
   void SetHeight(int h) ;
-
+  void ResetMap();
+  
+  
   int GetWidth()  const { return width; }
   int GetHeight() const { return height; }
   int GetNnodes() const { return width * height ; }
@@ -30,6 +32,7 @@ public:
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
 
+  
 };
 
 

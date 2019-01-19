@@ -35,10 +35,14 @@ public:
   void SetTarget();
   void SetIsPath();
   void SetIsVisited();
+  void ResetIsVisited();
   void Setf(double _f);
+
   
   // prints the node to std::cout with an rgb colored whitespace
   void Print();
+
+  
 
 };
 

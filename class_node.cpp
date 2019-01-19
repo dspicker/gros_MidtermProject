@@ -41,6 +41,10 @@ void pfNode::SetIsVisited(){
   isVisited = true;
 }
 
+void pfNode::ResetIsVisited(){
+  isVisited = false;
+}
+
 void pfNode::Setf(double _f){
   f = _f;
 }

@@ -39,6 +39,7 @@ pfMap::pfMap(int w, int h){
 
 }
 
+
 void pfMap::PrintMap(){
   std::cout << std::endl;
   std::array<int,2> pos;
@@ -55,7 +56,7 @@ void pfMap::PrintMap(){
     }
     std::cout << std::endl;
   }
-  std::cout << " ";
+  std::cout << "  ";
   for(int i=0; i<width; i++)
     printf("|%.2d", i);
   
@@ -72,5 +73,12 @@ pfNode* pfMap::GetNodeAt(int x, int y){
   } else {
     std::cerr << "\033[38;2;255;0;0m"<< "Error in GetNodeAt: Node not found!" << "\033[0m" << std::endl ;
     return NULL;
+  }
+}
+
+
+void pfMap::ResetMap(){
+  for(auto it : nodes){
+    it.second.ResetIsVisited();
   }
 }

@@ -7,7 +7,7 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY FILE INSERTED HERE WILL BE BUILD IN EXACT THIS ORDER
-all: class_node.o class_map.o class_ANode.o test.o test main.o main test2 clean
+all: class_node.o class_map.o class_ANode.o test.o test main.o main test2 test3 clean
 
 # EXECUTABLES
 test: test.o class_node.o class_ANode.o
@@ -15,6 +15,10 @@ test: test.o class_node.o class_ANode.o
 
 test2: test2.o class_node.o class_ANode.o class_map.o class_AStar.o
 		g++ $(CFLAGS) -o test2 test2.o class_node.o class_ANode.o class_map.o class_AStar.o
+
+test3: test3.o class_node.o class_ANode.o class_map.o class_AStar.o
+		g++ $(CFLAGS) -o test3 test3.o class_node.o class_ANode.o class_map.o class_AStar.o
+
 
 main: main.o class_node.o class_map.o
 		g++ $(CFLAGS) -o main main.o class_node.o class_map.o
@@ -39,7 +43,11 @@ test.o: test.cpp class_ANode.h
 
 
 test2.o: test2.cpp class_map.h class_node.h class_ANode.h class_AStar.h
-		g++ $(CFLAGS) -c test2.cpp 
+		g++ $(CFLAGS) -c test2.cpp
+
+test3.o: test3.cpp class_map.h class_node.h class_ANode.h class_AStar.h
+		g++ $(CFLAGS) -c test3.cpp
+
 
 main.o: class_node.h class_map.h
 		g++ $(CFLAGS) -c main.cpp 
