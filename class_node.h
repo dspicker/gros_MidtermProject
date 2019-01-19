@@ -28,6 +28,11 @@ public:
   // prints the node to std::cout with an rgb colored whitespace
   void Print();
 
+// additional types to visualize visited/checked nodes (Felix) :
+  void setType(int type);
+  void getType(int type);
+// end of additions (Felix)
+
 
 };
 

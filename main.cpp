@@ -2,8 +2,8 @@
 
 #include "class_node.h"
 #include "class_map.h"
+#include "uniformCost.cpp"
 
-#include "breadthfirst.cpp"
 
 
 
@@ -22,8 +22,7 @@ std::cout << n3.GetTypeName() << std::endl ;
 /*
 pfMap map1(50,20);      // create map on stack
 map1.PrintMap();        // print the map to the console
-//map1.GetNodeAt(3,3)->SetStart() ;   // change something
-
+map1.GetNodeAt(3,3)->SetStart() ;   // change something
 
 pfMap* map2 = new pfMap(30,30);   // create another map on the heap
 map2->PrintMap();                 // print this one
@@ -37,29 +36,27 @@ pfMap map4(map1);   // create a copy of map1
 delete map2 ;     // delete map from the heap
 */
 
+// create some maps
+pfMap* map1 = pfMap::LoadMap("map1.csv") ;
+int map2_w = 50;
+int map2_h = 50;
+pfMap map2(map2_w,map2_h);
+pfMap* pt_map2 = &map2;
+pt_map2->SetTypeAt(1, 1, 4);
+pt_map2->SetTypeAt(map2_w-2, map2_h-2, 5);
 
-pfMap* map5 = pfMap::LoadMap("map1.csv") ;
-map5->PrintMap();
+//map1->PrintMap();
+//pt_map2->PrintMap();
 
-auto flow = Breadthfirst(*map5);
-bfDrawPath(flow,*map5);
-map5->PrintMap();
+std::cout << "starting uniformCost" << '\n';
+// test uniformCost algorithm
+uniformCost(*map1);
+uniformCost(*pt_map2);
 
-delete map5 ;
 
 
-/*
-int n = 20;
-pfMap map1(n,n,0);
-map1.SetTypeAt(2,2,4);
-map1.SetTypeAt(n-3,n-3,5);
-map1.PrintMap();
+// delete map(s) created on heap
+delete map1;
 
-auto flow = Breadthfirst(map1);
-
-bfDrawPath(flow,map1);
-
-map1.PrintMap();
-*/
 return 0;
 }
