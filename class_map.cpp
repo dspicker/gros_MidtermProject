@@ -37,9 +37,11 @@ pfMap::pfMap(int w, int h, bool weighted){
     }
   }
 
+  start_loc[0] = 0;
+  start_loc[1] = 0;
+  target_loc[0] = 0;
+  target_loc[1] = 0;
 }
-
-
 
 // copy constructor
 pfMap::pfMap(pfMap &old){
@@ -48,18 +50,52 @@ pfMap::pfMap(pfMap &old){
 
   nodes = std::map< std::array<int,2>, pfNode >(old.nodes) ;
   // this is copy constructor of std::map
+
+  start_loc = old.start_loc;
+  target_loc = old.start_loc;
 }
 
+
+void pfMap::SetTypeAt(int x, int y, int t){
+  // TODO: check if start and target have already been set.
+  if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
+  pfNode* curr = GetNodeAt(x,y) ;
+  if ( t==4 ){
+    curr->SetStart();
+    start_loc[0] = x;
+    start_loc[1] = y;
+  }
+  if( t==5 ) {
+    curr->SetTarget();
+    target_loc[0] = x;
+    target_loc[1] = y;
+  }
+  if( t==6 ) {
+    curr->SetPath();
+  }
+}
+
+std::array<int,2> pfMap::GetStartLoc(){
+  return start_loc;
+}
+
+std::array<int,2> pfMap::GetTargetLoc(){
+  std::array<int,2> ret;
+  ret[0] = target_loc[0];
+  ret[1] = target_loc[1];
+  //std::cout << ret[0] << " gettar " << ret[1] << std::endl ;
+  return ret;
+}
+
+
+// prints the map to std::cout
 int pfMap::PrintMap(){
   std::array<int,2> pos;
-  for(int j=0 ; j<height ; j++){
+  for(int j=height-1 ; j>=0 ; j--){
     for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
-      auto it = nodes.find(pos);
-      if( it != nodes.end() ){
-        it->second.Print();
-      }
+      nodes.at(pos).Print();
     }
     std::cout << std::endl ;
   }
@@ -76,6 +112,10 @@ pfNode* pfMap::GetNodeAt(int x, int y){
     return NULL;
   }
 }
+pfNode* pfMap::GetNodeAt(std::array<int,2> pos){
+  return &( nodes.at(pos) );
+}
+
 
 // loads a map from a csv-file. creates new map object and returns pointer to it.
 pfMap* pfMap::LoadMap(std::string filename){
@@ -98,6 +138,7 @@ pfMap* pfMap::LoadMap(std::string filename){
     std::string instr = str ;
     lines.push_back(instr) ;
   }
+  std::reverse(lines.begin(), lines.end() ); // needed for correct insertion of nodes
   //std::cout <<  lines[0].size() << std::endl ;
   pfMap* m0 = new pfMap();
   int w = lines[0].size() ;
@@ -105,10 +146,18 @@ pfMap* pfMap::LoadMap(std::string filename){
   m0->width = w ;
   m0->height = h ;
 
-  for(int i=h-1 ; i>=0 ; i--){   // lines, beginning at last and then backwards
+  for(int i=0 ; i<h ; i++){   // lines
     for(int j=0 ; j<w ; j++){
       int newtype = std::stoi( lines[i].substr(j,1) ) ;
       m0->nodes.insert( std::make_pair( std::array<int,2>{j,i}, pfNode( newtype ) ) );
+      if( newtype==4 ){
+        m0->start_loc[0] = j;
+        m0->start_loc[1] = i;
+      }
+      if( newtype==5 ){
+        m0->target_loc[0] = j;
+        m0->target_loc[1] = i;
+      }
     }
   }
 
