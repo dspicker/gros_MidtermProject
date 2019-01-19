@@ -52,7 +52,7 @@ pfMap::pfMap(pfMap &old){
   // this is copy constructor of std::map
 
   start_loc = old.start_loc;
-  target_loc = old.start_loc;
+  target_loc = old.target_loc;
 }
 
 
@@ -74,7 +74,7 @@ void pfMap::SetTypeAt(int x, int y, int t){
     curr->SetPath();
   }
 // additional types to visualize visited/checked nodes (Felix) :
-  if( t==7 | t==8){
+  if( t==7 || t==8){
     curr->setType(t);
   }
 }
