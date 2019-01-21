@@ -30,6 +30,15 @@ pfMap::pfMap(int w, int h, bool weighted){
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(1) ) );
       } else {
         int rnd_type = random(gen) ;
+
+	// DEBUG -- No Walls in Map
+	if(0){
+	  if(rnd_type == 1){
+	    j--;
+	    continue;
+	  }
+	}
+
         if(rnd_type == 4 ){ rnd_type = 2; }
         if( !weighted && rnd_type==3 ){rnd_type=2;}
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(rnd_type) ) );
@@ -94,22 +103,30 @@ std::array<int,2> pfMap::GetTargetLoc(){
 
 
 // prints the map to std::cout
-int pfMap::PrintMap(){
+void pfMap::PrintMap(){
+  std::cout << std::endl;
   std::array<int,2> pos;
-  for(int j=height-1 ; j>=0 ; j--){
+  for(int j=height ; j>0 ; j--){
+    printf("%.2d", j-1);
     for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
       nodes.at(pos).Print();
     }
-    std::cout << std::endl ;
+    std::cout << std::endl;
   }
-  std::cout << std::endl ;
+  std::cout << "  ";
+  for(int i=0; i<width; i++)
+    printf("|%.2d", i);
+
+  std::cout << std::endl << std::endl ;
 }
 
 pfNode* pfMap::GetNodeAt(int x, int y){
+
   std::array<int,2> pos = {x,y};
   auto it = nodes.find(pos);
+
   if( it != nodes.end() ){
     return &(it->second) ;
   } else {
@@ -167,4 +184,11 @@ pfMap* pfMap::LoadMap(std::string filename){
   }
 
   return m0 ;
+
+// TODO: kann raus.
+void pfMap::ResetMap(){
+  for(auto it : nodes){
+    it.second.ResetIsVisited();
+    it.second.ResetIsPath();
+  }
 }

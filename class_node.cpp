@@ -45,7 +45,27 @@ void pfNode::getType(int t){
 
 // end of additons (Felix)
 
-std::string pfNode::GetTypeName(){
+void pfNode::SetIsPath(){
+  isPath = true;
+}
+
+void pfNode::ResetIsPath(){
+  isPath = false;
+}
+
+void pfNode::SetIsVisited(){
+  isVisited = true;
+}
+
+void pfNode::ResetIsVisited(){
+  isVisited = false;
+}
+
+void pfNode::Setf(double _f){
+  f = _f;
+}
+
+std::string pfNode::GetTypeName()const{
   switch (type) {
     case 1 :         // Wall
       return "Wall" ;
@@ -102,7 +122,23 @@ void pfNode::Print(){
 // end of additions (Felix)
 
   }
+
   char buffer1[50];
-  sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+  
+  if(isPath){
+    color[0] = 254-  color[0]; 
+    color[1] = 254 - color[1];
+    color[2] = 254 - color[2];
+    sprintf(buffer1, "\033[48;2;%u;%u;%um%.3d\033[0m", color[0],color[1],color[2],(int)f );
+  }
+  else if(isVisited){
+    for(int n=0; n<3; n++)
+      color[n] += 30;
+    
+    sprintf(buffer1, "\033[48;2;%u;%u;%um%.3d\033[0m", color[0],color[1],color[2],(int)f );
+  }
+  else
+    sprintf(buffer1, "\033[48;2;%u;%u;%um   \033[0m", color[0],color[1],color[2]);
+
   std::cout << buffer1 ;
 }

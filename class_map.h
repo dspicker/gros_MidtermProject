@@ -44,7 +44,7 @@ public:
   std::array<int,2> GetTargetLoc() ;
 
   // prints the map to std::cout
-  int PrintMap();
+  void PrintMap();
 
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
@@ -52,6 +52,7 @@ public:
 
   // loads a map from a csv-file. creates new map object and returns pointer to it.
   static pfMap* LoadMap(std::string filename);
+
 
 };
 
