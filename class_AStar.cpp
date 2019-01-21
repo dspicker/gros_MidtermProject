@@ -2,7 +2,7 @@
 
 #include "class_node.h"
 #include "class_map.h"
-#include "class_ANode.h"
+#include "class_asNode.h"
 
 #include <map>
 #include <array>
@@ -12,10 +12,10 @@
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>
 
-#include <stdlib.h> //exit
 
 //Constructors
 pfAStar::pfAStar(pfMap &_map) : MapPtr(&_map){
+  //MapPtr = &_map;
   SetNodes(_map);
 };
 
@@ -34,7 +34,7 @@ void pfAStar::SetNodes(pfMap &map){
   for(int x=0; x<map.GetWidth(); x++){
     for(int y=0; y<map.GetHeight(); y++){
       coord = {x,y};
-      allNodes.push_back(ANode(coord, map.GetNodeAt(x,y)));
+      allNodes.push_back(asNode(coord, map.GetNodeAt(x,y)));
 
       // Set Index of Start Node
       if(map.GetNodeAt(x,y)->GetType() == 4)
@@ -57,7 +57,7 @@ void pfAStar::SetNodes(pfMap &map){
 					    { 0,-1}}};
 
 
-  // Set Neighbours of allNodes
+  // Set Neighbors of allNodes
   // You can choose between two Methods:
   // Option1: if(0) or Option 2: if(1)
 
@@ -70,19 +70,19 @@ void pfAStar::SetNodes(pfMap &map){
 
       // pos+(1,0)
       size_t n = i + map.GetHeight();
-      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbour( (allNodes[n]) );
+      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbor( (allNodes[n]) );
 
       // pos+(-1,0)
       n = i - map.GetHeight();
-      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbour( (allNodes[n]) );
+      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbor( (allNodes[n]) );
 
       // pos+(0,1)
       n = i+1;
-      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbour( (allNodes[n]) );
+      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbor( (allNodes[n]) );
 
       // pos+(0,-1)
       n = i-1;
-      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbour( (allNodes[n]) );
+      if(allNodes[n].GetType() != 1) allNodes[i].SetNeighbor( (allNodes[n]) );
     } // for
 
   } else {
@@ -102,10 +102,10 @@ void pfAStar::SetNodes(pfMap &map){
 	     && allNodes[j].GetPosition()[1] == allNodes[i].GetPosition()[1] + DIRECTIONS[i][1]){
 
 	    if(debug)
-	      std::cout << ">>> Neighbour found! " ;
+	      std::cout << ">>> Neighbor found! " ;
 
 	    if(allNodes[j].GetType() == 1) continue; //if Node is 'Wall' -> no connection
-	    allNodes[i].SetNeighbour(allNodes[j]);
+	    allNodes[i].SetNeighbor(allNodes[j]);
 	  }
 	}
 	if(debug)
@@ -118,12 +118,12 @@ void pfAStar::SetNodes(pfMap &map){
 
 
 
-//Heuristic:
+// Heuristics:
 
 double pfAStar::Supremum( asLocation &Pos){
   
   bool comp = std::abs(Pos[0]-FINISH_COORD[0]) > std::abs(Pos[1]-FINISH_COORD[1]);
-  
+
   return  comp?  std::abs(Pos[0]-FINISH_COORD[0]) : std::abs(Pos[1]-FINISH_COORD[1]);
 }
 
@@ -137,67 +137,62 @@ double pfAStar::Euklid( asLocation &Pos){
 
 
 
+/************************************
+ *  This is the actual A*-Algorithm *
+ ************************************/
+
 void pfAStar::solve(std::string HeuristicName){
 
+  
   // Set DEBUGMOD if(1) for getting Debugging Massages
 #define DEBUGMOD if(0)
 
-  // Set chosen Heuristic
+  // Set chosen Heuristic via a Function-Pointer
   typedef double (pfAStar::*Fptr_heuristic_double)(asLocation &Pos);
- Fptr_heuristic_double HEURISTIC_PTR;
+  Fptr_heuristic_double HEURISTIC_PTR;
 
- if      (HeuristicName == "Supremum")  HEURISTIC_PTR = &pfAStar::Supremum;
- else if (HeuristicName == "Euklid")    HEURISTIC_PTR = &pfAStar::Euklid;
- else if (HeuristicName == "Manhatten") HEURISTIC_PTR = &pfAStar::Manhatten;
+  if      (HeuristicName == "Supremum")  HEURISTIC_PTR = &pfAStar::Supremum;
+  else if (HeuristicName == "Euklid")    HEURISTIC_PTR = &pfAStar::Euklid;
+  else if (HeuristicName == "Manhatten") HEURISTIC_PTR = &pfAStar::Manhatten;
 
- else{ // If User gives unknown Heuristic, it ends the function
+  else{ // If User gives unknown Heuristic, it ends the function
     std::cout << ">>> ERROR: '" << HeuristicName << "' is no known Heuristic!" << std::endl;
     return;
   }
 
 
   // Set Start Node
-  ANode *actualNode = &(allNodes[START_INDEX]);
+  asNode *actualNode = &(allNodes[START_INDEX]);
   actualNode->Setg(0);
   actualNode->Seth( (this->* HEURISTIC_PTR)( *actualNode->GetPositionRef() ) );
   actualNode->Setf();
   actualNode->SetVisited();
 
-  // Set Neighbours of Start Node
-  std::vector<ANode*> *actualNeighbours = actualNode->GetNeighbours();
+  // Set Neighbors of Start Node
+  std::vector<asNode*> *actualNeighbors = actualNode->GetNeighbors();
 
   // Fill openList with Start Node
   openList.push(actualNode);
-  closedList.push_back(&allNodes[FINISH_INDEX]);
 
   bool FINISH_FOUND = false;
-  bool SHORTEST_PATH_FOUND = false;
 
-  while(1){
+  // Start looping over the openList.
+  // if openList is empty    => no Path could be found
+  // if FINISH_FOUND == true => shortest Path is found
+  while(!openList.empty() && !FINISH_FOUND){
 
-    if(openList.empty()) break;
-
-    if(FINISH_FOUND){
-      SHORTEST_PATH_FOUND = true;
-      break;
-    }// if(FINISH_FOUND)
-
+    // Set new Node getting viewed
     actualNode = openList.top();
+
+    // Pop it out the List, so it can not get viewed again
     openList.pop();
-    closedList.push_back(actualNode);
-    actualNeighbours = actualNode->GetNeighbours();
 
+    // Set Neighbors of actualNode
+    actualNeighbors = actualNode->GetNeighbors();
+
+
+    // DEBUG-CODE
     //DEBUGMOD std::this_thread::sleep_for (std::chrono::milliseconds(500));
-
-    DEBUGMOD std::cout << std::endl <<  ">>> closedList: ";
-
-    for(auto it : closedList){
-      DEBUGMOD std::cout << "(" << it->GetPosition()[0]
-			 << "|" << it->GetPosition()[1] << "), ";
-
-    }
-
-    DEBUGMOD std::cout << std::endl;
 
     DEBUGMOD std::cout << actualNode->GetPosition()[0] << "|"
 		       << actualNode->GetPosition()[1] << "("
@@ -206,60 +201,72 @@ void pfAStar::solve(std::string HeuristicName){
 		       << *actualNode->Getf() << ")"
 		       << " : " << std::endl;
 
-    for(auto it : *actualNeighbours){
+    // Loop over all Neighbors of actual Node
+    for(auto Neig_It : *actualNeighbors){
 
       DEBUGMOD std::cout << "\t"
-			 << "<" << it->GetPosition()[0]
-			 << "|" << it->GetPosition()[1] << ">";
+			  << "<" << Neig_It->GetPosition()[0]
+			  << "|" << Neig_It->GetPosition()[1] << ">";
 
 
-      // If Node was not visited before, set Parameters for the 1st time
-      if(!*it->isVisited()){
+      // If Node was not visited before, set Parameters for the 1st time and add it to the openList.
+      // This Formulation implements the closedList of the A*-Algorithm indirectly.
+      // The advantage is, that the Node does not has to be searched in a List, that scales
+      // with the size of the Map.
+      // So this implementation should be faster, espacially for big Maps.
+      if(!*Neig_It->isVisited()){
 	DEBUGMOD std::cout << "N(" ;
 	
-	it->Seth( (this->* HEURISTIC_PTR)( *it->GetPositionRef() ) );
-	it->Setg( *actualNode->Getg() + it->GetWeight() );
-	it->Setf();
-	it->SetParent(*actualNode);
-	it->SetVisited();
-	openList.push(it);
+	Neig_It->Seth( (this->* HEURISTIC_PTR)( *Neig_It->GetPositionRef() ) );
+	Neig_It->Setg( *actualNode->Getg() + Neig_It->GetWeight() );
+	Neig_It->Setf();
+	Neig_It->SetParent(*actualNode);
+	Neig_It->SetVisited();
+	openList.push(Neig_It);
       }
-      else if( *(actualNode->Getg()) + it->GetWeight() < *(it->Getg()) ){
+      // If Node was visited befor, just test, wheather a shorter Path to this Node was found
+      // and update it, if it is true.
+      else if( *(actualNode->Getg()) + Neig_It->GetWeight() < *(Neig_It->Getg()) ){
 	DEBUGMOD std::cout << "O(";
 
-	it->Setg( *(actualNode->Getg()) + it->GetWeight() );
-	it->Setf();
-	it->SetParent(*actualNode);
+	Neig_It->Setg( *(actualNode->Getg()) + Neig_It->GetWeight() );
+	Neig_It->Setf();
+	Neig_It->SetParent(*actualNode);
       }
       else
 	DEBUGMOD std::cout << " (";
 
-      if( it->GetType() == 5)
+      // Memmorize if Finish is found => Loop breaks
+      if( Neig_It->GetType() == 5)
 	FINISH_FOUND = true;
 
-      DEBUGMOD std::cout << *it->Geth() << ", "
-			 << *it->Getg() << ", "
-			 << *it->Getf() << ")" << std::endl;
+      DEBUGMOD std::cout << *Neig_It->Geth() << ", "
+			 << *Neig_It->Getg() << ", "
+			 << *Neig_It->Getf() << ")" << std::endl;
 
 
-    }// for it:*actualNeighbours
+    }// for Neig_It:*actualNeighbors
   }// while
 
+  
+  // If a FinishNodes was reached, Set Path form Finish- to Start-Node.
   if(FINISH_FOUND){
-    std::cout << ">>>FINISH FOUND!" << std::endl;
-
-    for( actualNode = &allNodes[FINISH_INDEX], std::cout <<  actualNode->GetPosition()[0] << "|" << actualNode->GetPosition()[1];
+    DEBUGMOD std::cout << ">>>FINISH FOUND!" << std::endl;
+    
+    // Reserve Space for PathNodes.
+    // Smalles Number of PathNodes correspondes to Manhatten Norm
+    PathNodes.reserve( Manhatten(*allNodes[START_INDEX].GetPositionRef()) );
+    
+    for( actualNode = &allNodes[FINISH_INDEX];
 	 actualNode->GetType() != 4;
 	 actualNode=actualNode->GetParent()){
 
-      DEBUGMOD std::cout << " >> "
-			 << actualNode->GetParent()->GetPosition()[0] << "|"
-			 << actualNode->GetParent()->GetPosition()[1];
-
+      //std::cout <<  actualNode->GetPosition()[0] << "|" << actualNode->GetPosition()[1];
+      std::cout << " >> "
+		<< actualNode->GetParent()->GetPosition()[0] << "|"
+		<< actualNode->GetParent()->GetPosition()[1];
 
       PathNodes.push_back(actualNode);
-
-
     }
     std::cout << std::endl << std::endl;
   }
@@ -267,7 +274,7 @@ void pfAStar::solve(std::string HeuristicName){
 
 
 
-
+// Just a Update-Function so the Path can be plotted with the given PrintFunction in pfMap.
 void pfAStar::UpdateMap(){
 
   pfNode* NodePtr;
@@ -278,13 +285,12 @@ void pfAStar::UpdateMap(){
 
       NodePtr = MapPtr->GetNodeAt( it.GetPosition()[0], it.GetPosition()[1]);
       NodePtr->SetIsVisited();
-      NodePtr->Setf(*it.Geth());
+      NodePtr->Setf(*it.Getf());
 
     }
   }
 
   for( auto it : PathNodes){
-
     NodePtr = MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]);
     NodePtr->SetIsPath();
   }

@@ -35,6 +35,7 @@ public:
   void SetTarget();
   void SetIsPath();
   void SetIsVisited();
+  void ResetIsPath();
   void ResetIsVisited();
   void Setf(double _f);
 

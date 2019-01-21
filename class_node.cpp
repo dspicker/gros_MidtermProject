@@ -37,6 +37,10 @@ void pfNode::SetIsPath(){
   isPath = true;
 }
 
+void pfNode::ResetIsPath(){
+  isPath = false;
+}
+
 void pfNode::SetIsVisited(){
   isVisited = true;
 }
@@ -90,7 +94,7 @@ void pfNode::Print(){
   char buffer1[50];
   
   if(isPath){
-    color[0] = 254 - color[0]; 
+    color[0] = 254-  color[0]; 
     color[1] = 254 - color[1];
     color[2] = 254 - color[2];
     sprintf(buffer1, "\033[48;2;%u;%u;%um%.3d\033[0m", color[0],color[1],color[2],(int)f );
@@ -98,6 +102,7 @@ void pfNode::Print(){
   else if(isVisited){
     for(int n=0; n<3; n++)
       color[n] += 30;
+    
     sprintf(buffer1, "\033[48;2;%u;%u;%um%.3d\033[0m", color[0],color[1],color[2],(int)f );
   }
   else

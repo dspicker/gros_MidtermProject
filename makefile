@@ -6,22 +6,16 @@
 # VARIABLES 
 CFLAGS = -Wall -W -O -std=c++11
 
-# EVERY FILE INSERTED HERE WILL BE BUILD IN EXACT THIS ORDER
-all: class_node.o class_map.o class_ANode.o test.o test main.o main test2 test3 clean
+# EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
+all: class_node.o class_map.o class_asNode.o class_AStar.o testAStar clean
 
-# EXECUTABLES
-test: test.o class_node.o class_ANode.o
-		g++ $(CFLAGS) -o test test.o class_node.o class_ANode.o
-
-test2: test2.o class_node.o class_ANode.o class_map.o class_AStar.o
-		g++ $(CFLAGS) -o test2 test2.o class_node.o class_ANode.o class_map.o class_AStar.o
-
-test3: test3.o class_node.o class_ANode.o class_map.o class_AStar.o
-		g++ $(CFLAGS) -o test3 test3.o class_node.o class_ANode.o class_map.o class_AStar.o
+# EXECUTABLES (GETTING LINKED)
+testAStar: testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
+		g++ $(CFLAGS) -o testAStar testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 
 
-main: main.o class_node.o class_map.o
-		g++ $(CFLAGS) -o main main.o class_node.o class_map.o
+#main: main.o class_node.o class_map.o
+#		g++ $(CFLAGS) -o main main.o class_node.o class_map.o
 
 
 
@@ -32,31 +26,25 @@ class_node.o: class_node.cpp class_node.h
 class_map.o: class_node.h
 		g++ $(CFLAGS) -c class_map.cpp
 
-class_ANode.o:  class_node.h class_ANode.h class_ANode.cpp
-		g++ $(CFLAGS) -c class_ANode.cpp
+class_asNode.o:  class_node.h class_asNode.h class_asNode.cpp
+		g++ $(CFLAGS) -c class_asNode.cpp
 
 class_AStar.o: class_node.h class_map.h
 		g++ $(CFLAGS) -c class_AStar.cpp
 
-test.o: test.cpp class_ANode.h
-		g++ $(CFLAGS) -c test.cpp 
+testAStar.o: testAStar.cpp class_AStar.h class_map.h
+		g++ $(CFLAGS) -c testAStar.cpp
 
 
-test2.o: test2.cpp class_map.h class_node.h class_ANode.h class_AStar.h
-		g++ $(CFLAGS) -c test2.cpp
-
-test3.o: test3.cpp class_map.h class_node.h class_ANode.h class_AStar.h
-		g++ $(CFLAGS) -c test3.cpp
-
-
-main.o: class_node.h class_map.h
-		g++ $(CFLAGS) -c main.cpp 
+#main.o: class_node.h class_map.h
+#		g++ $(CFLAGS) -c main.cpp 
 
 
 # CLEAR REPOSITORY AFTER MAKE
+# 'rm -f' (=force) -> no error if no matching file is found
+# '-' -> makefile does not break after error occurs 
+
 clean:
-		# 'rm -f' (=force) -> no error if no matching file is found
-		# '-' -> makefile does not break after error occurs 
 		-rm -f core *.o
 		-rm -f *~
 		-rm -f *.gch

@@ -80,5 +80,6 @@ pfNode* pfMap::GetNodeAt(int x, int y){
 void pfMap::ResetMap(){
   for(auto it : nodes){
     it.second.ResetIsVisited();
+    it.second.ResetIsPath();
   }
 }
