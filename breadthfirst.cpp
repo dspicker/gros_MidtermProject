@@ -1,3 +1,8 @@
+/*  Breadthfirst Algorithm
+**  for the Pathfinder Project
+**  D.Spicker , Jan 2019
+*/
+
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -24,6 +29,7 @@ std::vector< bfLocation > bfNeighbours( bfLocation id ){
   return result;
 }
 
+// main algorithm
 std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
   std::queue< bfLocation > search_queue ;           // the queue of the algorithm
   // get target node from map. this algorithm starts at the target
@@ -64,7 +70,7 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
   return search_result;
 }
 
-
+// modifies the map to draw the resulting path. call only after Breadthfirst
 void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
   bfLocation start = Map.GetStartLoc() ;
   bfLocation target = Map.GetTargetLoc() ;

@@ -75,7 +75,7 @@ void drawPath(pfMap &map, std::map<locArr, locArr> &myHistory){
     map.GetNodeAt(previousLoc)->SetPath();
     currentLoc = previousLoc;
   }
-  map.PrintMap();
+  //map.PrintMap();
 }
 void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
   locArr startLoc  = map.GetStartLoc();
@@ -91,12 +91,12 @@ void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
       }
     }
   }
-  map.PrintMap();
+  //map.PrintMap();
 }
 
 //algorithm
 pfMap* uniformCost(pfMap &map){
-  map.PrintMap(); // temporary!
+  //map.PrintMap(); // temporary!
 
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
