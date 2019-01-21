@@ -43,7 +43,6 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
   // it stores, from which neighbour of the first argument (key) the algorithm came from
   std::map< bfLocation , bfLocation > search_result ;
 
-std::cout << "breadthfirst before while." << '\n';
   // actual algorithm
   while ( !search_queue.empty() ) {
     // take an element out of the queue
@@ -55,10 +54,8 @@ std::cout << "breadthfirst before while." << '\n';
 
     // loop trough all neighbours of current element
     for (bfLocation next : bfNeighbours(current) ) {
-      std::cout << "next neighbour" << '\n';
       // if the neighbour "next" is not in "search_result" i.e. if "next" has not been visited yet:
       if ( search_result.find(next) == search_result.end() ) {
-        std::cout << "neighbour unvisited" << '\n';
         // check if neighbour "next" is a wall:
         if( Map.GetNodeAt(next)->GetWeight() != -1 ) {
           //then, put "next" into the queue
@@ -78,10 +75,15 @@ void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
   bfLocation start = Map.GetStartLoc() ;
   bfLocation target = Map.GetTargetLoc() ;
 
+  if( flow.find(start) == flow.end() ){
+    std::cout << "Breadthfirst: No Path found!" << '\n';
+    return ;
+  }
+
   bfLocation next = flow[start] ;
-  //for(int i=0; i<20 ; i++) {
-  while ( next != target ) {
-    Map.SetTypeAt(next[0],next[1],6);
-    next = flow[next];
+    //for(int i=0; i<20 ; i++) {
+    while ( next != target ) {
+      Map.SetTypeAt(next[0],next[1],6);
+      next = flow[next];
   }
 }
