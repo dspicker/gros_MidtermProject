@@ -37,7 +37,7 @@ public:
   void SetTypeAt(int x, int y, int t);
 
   int GetWidth(){ return width; }
-  int GetHeigth(){ return height; }
+  int GetHeight(){ return height; }
   int GetNnodes(){ return width * height ; }
 
   std::array<int,2> GetStartLoc() ;
@@ -53,6 +53,7 @@ public:
   // loads a map from a csv-file. creates new map object and returns pointer to it.
   static pfMap* LoadMap(std::string filename);
 
+  void ResetMap();
 
 };
 

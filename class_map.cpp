@@ -82,7 +82,7 @@ void pfMap::SetTypeAt(int x, int y, int t){
   if( t==6 ) {
     curr->SetPath();
   }
-// additional types to visualize visited/checked nodes (Felix) :
+  // additional types to visualize visited/checked nodes (Felix) :
   if( t==7 || t==8){
     curr->setType(t);
   }
@@ -154,12 +154,12 @@ pfMap* pfMap::LoadMap(std::string filename){
   std::string str;
   std::vector<std::string> lines ;
   while (std::getline(file, str))
-  {
-    str.erase(std::remove(str.begin(), str.end(), ';'), str.end());
-    //std::cout << str.substr(1,1) << std::endl ;
-    std::string instr = str ;
-    lines.push_back(instr) ;
-  }
+    {
+      str.erase(std::remove(str.begin(), str.end(), ';'), str.end());
+      //std::cout << str.substr(1,1) << std::endl ;
+      std::string instr = str ;
+      lines.push_back(instr) ;
+    }
   std::reverse(lines.begin(), lines.end() ); // needed for correct insertion of nodes
   //std::cout <<  lines[0].size() << std::endl ;
   pfMap* m0 = new pfMap();
@@ -184,11 +184,12 @@ pfMap* pfMap::LoadMap(std::string filename){
   }
 
   return m0 ;
+}
 
 // TODO: kann raus.
 void pfMap::ResetMap(){
   for(auto it : nodes){
     it.second.ResetIsVisited();
     it.second.ResetIsPath();
-  }
+    }
 }
