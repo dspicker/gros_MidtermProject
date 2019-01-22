@@ -50,11 +50,13 @@ int main(int argc, char** argv){
   map1.PrintMap();
   */
 
+
   pfMap* map1 = pfMap::LoadMap("map2.csv") ;
   //map1->PrintMap();
-
   pfMap* map5 = new pfMap(*map1) ;
-  map5->PrintMap();
+  std::cout << "test" << '\n';
+
+  //map5->PrintMap();
 
   std::cout << "starting breadthfirst" << '\n';
   auto flow2 = Breadthfirst(*map5);
@@ -66,7 +68,8 @@ int main(int argc, char** argv){
   pfMap* map2 = new pfMap(*map1) ;
   // test uniformCost algorithm
   std::cout << "starting uniformCost" << '\n';
-  uniformCost(*map2);
+  auto ucHistory = uniformCost(*map2);
+  ucDrawPath(ucHistory, *map2);
   delete map2;
 
   // delete map(s) created on heap

@@ -6,32 +6,15 @@
 #include <map>
 
 typedef std::array<int,2> locArr;
-bool debug = false;  // display test output at different stages of algorithm
-
-/*  definitions/abbriviations:
-    - cumCost: cumulative cost to reach location (includes own weigt)
-    -
-*/
-
-/* some thoughts regarding the class pfNodes:
-A variable 'int cumCost' of pfNode would be usefull to boost performance of
-uniformCost by reducing usage of slow std::maps to store cumCost
-AND
-to make use of a single comparison between already assigned cumCost and
-newly calculated cumCost (by starting with cumCost=INT_MAX and just checking if
-calculated is smaller than assigned).
-*/
+bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
     - add functionality to measure time taken to find the targetLoc
-    - add function to pfMap class to set start and target locations ALSO
-      in the varialbes start_loc and target_loc of pfMap
-      (otherwise it is impossible to set them..)
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
 */
 
-// helper functions
+// helper function (for easy adaptation to changes in pfMap and pfNode)
 bool wasVisited(std::map<locArr, locArr> myHistory, locArr loc){
   return myHistory.count(loc);
 }
@@ -48,7 +31,7 @@ void setCumCost(std::map<locArr, int> &myCumCostMap, locArr loc, int cost){
   // change to only set cumCost, if there is no (lower) value saved already??
   myCumCostMap[loc] = cost;
 }
-int  getCumCost(std::map<locArr, int> &myCumCostMap, locArr loc){
+int getCumCost(std::map<locArr, int> &myCumCostMap, locArr loc){
   return myCumCostMap.at(loc);
 }
 locArr addLocArr(locArr &a, locArr &b){
@@ -57,17 +40,24 @@ locArr addLocArr(locArr &a, locArr &b){
   res[1] = a[1] + b[1];
   return res;
 }
-void drawPath(pfMap &map, std::map<locArr, locArr> &myHistory){
+
+// functions for visualisation (call in main)
+void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   locArr targetLoc = map.GetTargetLoc();
   locArr startLoc  = map.GetStartLoc();
   locArr currentLoc = targetLoc;
   locArr previousLoc;
+  std::cout << "test" << '\n';
+  if(wasVisited(myHistory, targetLoc)){ // check if target found, abourt if not
+    std::cout << "UniformCost: Target not found!" << '\n';
+    return;
+  }
   // loop through linked locations starting at target location
   while(true){
     previousLoc = myHistory.at(currentLoc);
-    if(debug){
-      std::cout << "DEBUG (drawPath): currentLoc:  " << currentLoc[0] << "," << currentLoc[1] << '\n';
-      std::cout << "DEBUG (drawPath): previousLoc: " << previousLoc[0] << "," << previousLoc[1] << '\n';
+    if(ucDebug){
+      std::cout << "DEBUG (ucDrawPath): currentLoc:  " << currentLoc[0] << "," << currentLoc[1] << '\n';
+      std::cout << "DEBUG (ucDrawPath): previousLoc: " << previousLoc[0] << "," << previousLoc[1] << '\n';
       std::cout << std::endl;
     }
     if(previousLoc == startLoc)
@@ -75,14 +65,13 @@ void drawPath(pfMap &map, std::map<locArr, locArr> &myHistory){
     map.GetNodeAt(previousLoc)->SetPath();
     currentLoc = previousLoc;
   }
-  //map.PrintMap();
 }
-void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
+void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){
   locArr startLoc  = map.GetStartLoc();
   locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
     locArr loc = it.first;
-    if(loc != startLoc & loc != targetLoc){  // ignore start and target locations
+    if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
       if(map.GetNodeAt(loc)->GetType() == 2){
         map.SetTypeAt(loc[0], loc[1], 7);
       }
@@ -91,11 +80,12 @@ void drawKnown(pfMap &map, std::map<locArr, locArr> &myHistory){
       }
     }
   }
-  //map.PrintMap();
 }
 
-//algorithm
-pfMap* uniformCost(pfMap &map){
+// ---------
+// algorithm
+// ---------
+std::map<locArr, locArr> uniformCost(pfMap &map){
   //map.PrintMap(); // temporary!
 
   // initializing containers
@@ -103,10 +93,6 @@ pfMap* uniformCost(pfMap &map){
   std::map<locArr, locArr> history;   // link visited location to predecessor
   // using lamda expression (https://en.cppreference.com/w/cpp/language/lambda):
   auto cheapest = [&cumCostMap](locArr a, locArr b){
-    /* (on unweighted map):
-    using '>' : similar to breadthfirst algorithm (slow, optimal path)
-    using '<' : similar to depthfirst algorithm (fast, suboptimal path)
-    */
     return (cumCostMap.at(a) > cumCostMap.at(b));
   };
   std::priority_queue<locArr, std::vector<locArr>, decltype(cheapest)> unvisitedPQ(cheapest);
@@ -120,25 +106,26 @@ pfMap* uniformCost(pfMap &map){
   locArr neighborLoc;
   int neighborCumCost;
   int currentCumCost;
-  int iterationCount = 0; // only for debugging!
+  int iterationCount = 0; // only for ucDebugging!
 
   // set cumCost for start node, push into PQ
   setCumCost(cumCostMap, startLoc, 0);
   unvisitedPQ.push(startLoc);
-  if (debug){std::cout << "DEBUG: start:    " << startLoc[0] << "," << startLoc[1] << '\n';}
+  if (ucDebug){std::cout << "DEBUG: start:    " << startLoc[0] << "," << startLoc[1] << '\n';}
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
-    // drawKnown(map, history); // poor man's animation (works though!)
+    // ucDrawKnown(map, history); // poor man's animation (works though!)
+    // map.PrintMap();            //
     iterationCount+=1;
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();
     if (currentLoc == targetLoc){        // end loop if target is found
-      if(debug){std::cout << "DEBUG: target reached!" << '\n';}
+      if(ucDebug){std::cout << "DEBUG: target reached!" << '\n';}
       targetFound = true;
       break;
     }
-    if(debug){std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';}
+    if(ucDebug){std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';}
 
     // check neighbors of current node
     for(auto direction : directions){
@@ -153,23 +140,21 @@ pfMap* uniformCost(pfMap &map){
       setHistory(history, neighborLoc, currentLoc);
 
       unvisitedPQ.push(neighborLoc);
-      if(debug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
+      if(ucDebug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
     } // end of for loop through neighbors
   } // end of while loop through unvisitedPQ
 
-  // rest mainly for testing:
+  // rest mainly for testing
   if(targetFound){
-    if(debug){
+    if(ucDebug){
       std::cout << "DEBUG: size of history: " << history.size() << '\n';
       std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
       std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';
-      drawKnown(map, history);
     }
-    drawPath(map, history);
-    drawKnown(map, history);
+    //std::cout << "Target found!" << '\n';
   }
-  else
-    std::cout << "target not reachable! " << '\n';
-
-  return &map;
+  else{
+    //std::cout << "Target not found! " << '\n';
+  }
+  return history;
 }
