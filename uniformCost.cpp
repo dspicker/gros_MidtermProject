@@ -15,26 +15,23 @@ bool ucDebug = false;  // display test output at different stages of algorithm
 */
 
 // helper function (for easy adaptation to changes in pfMap and pfNode)
-bool wasVisited(std::map<locArr, locArr> myHistory, locArr loc){
-  return myHistory.count(loc);
-}
-bool isKnown(std::map<locArr, int> &myCumCostMap, locArr loc){
+bool ucIsKnown(std::map<locArr, int> &myCumCostMap, locArr loc){
   return myCumCostMap.count(loc);
 }
-bool isWall(pfMap map, locArr loc){
+bool ucIsWall(pfMap map, locArr loc){
   return (map.GetNodeAt(loc)->GetWeight() == -1);
 }
-void setHistory(std::map<locArr, locArr> &myHistory, locArr neighbor, locArr current){
+void ucSetHistory(std::map<locArr, locArr> &myHistory, locArr neighbor, locArr current){
   myHistory[neighbor] = current;
 }
-void setCumCost(std::map<locArr, int> &myCumCostMap, locArr loc, int cost){
+void ucSetCumCost(std::map<locArr, int> &myCumCostMap, locArr loc, int cost){
   // change to only set cumCost, if there is no (lower) value saved already??
   myCumCostMap[loc] = cost;
 }
-int getCumCost(std::map<locArr, int> &myCumCostMap, locArr loc){
+int ucGetCumCost(std::map<locArr, int> &myCumCostMap, locArr loc){
   return myCumCostMap.at(loc);
 }
-locArr addLocArr(locArr &a, locArr &b){
+locArr ucAddLocArr(locArr &a, locArr &b){
   locArr res;
   res[0] = a[0] + b[0];
   res[1] = a[1] + b[1];
@@ -47,8 +44,7 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   locArr startLoc  = map.GetStartLoc();
   locArr currentLoc = targetLoc;
   locArr previousLoc;
-  std::cout << "test" << '\n';
-  if(wasVisited(myHistory, targetLoc)){ // check if target found, abourt if not
+  if( myHistory.find(targetLoc) == myHistory.end() ){ // check if target found, abourt if not
     std::cout << "UniformCost: Target not found!" << '\n';
     return;
   }
@@ -85,9 +81,8 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){
 // ---------
 // algorithm
 // ---------
-std::map<locArr, locArr> uniformCost(pfMap &map){
-  //map.PrintMap(); // temporary!
 
+std::map<locArr, locArr> uniformCost(pfMap &map){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
@@ -109,7 +104,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map){
   int iterationCount = 0; // only for ucDebugging!
 
   // set cumCost for start node, push into PQ
-  setCumCost(cumCostMap, startLoc, 0);
+  ucSetCumCost(cumCostMap, startLoc, 0);
   unvisitedPQ.push(startLoc);
   if (ucDebug){std::cout << "DEBUG: start:    " << startLoc[0] << "," << startLoc[1] << '\n';}
 
@@ -129,27 +124,27 @@ std::map<locArr, locArr> uniformCost(pfMap &map){
 
     // check neighbors of current node
     for(auto direction : directions){
-      neighborLoc = addLocArr(currentLoc, direction);
-      if(isWall(map, neighborLoc) | isKnown(cumCostMap, neighborLoc))
+      neighborLoc = ucAddLocArr(currentLoc, direction);
+      if(ucIsWall(map, neighborLoc) || ucIsKnown(cumCostMap, neighborLoc))
         continue;
 
-      currentCumCost = getCumCost(cumCostMap, currentLoc);
+      currentCumCost = ucGetCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
 
-      setCumCost(cumCostMap, neighborLoc, neighborCumCost);
-      setHistory(history, neighborLoc, currentLoc);
+      ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
+      ucSetHistory(history, neighborLoc, currentLoc);
 
       unvisitedPQ.push(neighborLoc);
       if(ucDebug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
     } // end of for loop through neighbors
   } // end of while loop through unvisitedPQ
 
-  // rest mainly for testing
+  // rest only for testing
   if(targetFound){
     if(ucDebug){
       std::cout << "DEBUG: size of history: " << history.size() << '\n';
       std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
-      std::cout << "DEBUG: cumCost of target: " << getCumCost(cumCostMap, targetLoc) << '\n';
+      std::cout << "DEBUG: cumCost of target: " << ucGetCumCost(cumCostMap, targetLoc) << '\n';
     }
     //std::cout << "Target found!" << '\n';
   }

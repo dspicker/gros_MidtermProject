@@ -107,7 +107,7 @@ void pfMap::PrintMap(){
   std::cout << std::endl;
   std::array<int,2> pos;
   for(int j=height-1 ; j>=0 ; j--){
-    printf("%.2d", j-1);
+    printf("%.2d", j);
     for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
