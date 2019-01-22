@@ -4,7 +4,7 @@
 #include "class_map.h"
 #include "uniformCost.cpp"
 #include "breadthfirst.cpp"
-
+#include "class_AStar.h"
 
 
 
