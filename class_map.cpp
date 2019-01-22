@@ -187,9 +187,11 @@ pfMap* pfMap::LoadMap(std::string filename){
 }
 
 // TODO: kann raus.
-void pfMap::ResetMap(){
+/*
+  void pfMap::ResetMap(){
   for(auto it : nodes){
     it.second.ResetIsVisited();
     it.second.ResetIsPath();
     }
-}
+    }
+*/

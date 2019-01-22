@@ -162,17 +162,17 @@ void pfAStar::solve(std::string HeuristicName){
 
 
   // Set Start Node
-  asNode *actualNode = &(allNodes[START_INDEX]);
-  actualNode->Setg(0);
-  actualNode->Seth( (this->* HEURISTIC_PTR)( *actualNode->GetPositionRef() ) );
-  actualNode->Setf();
-  actualNode->SetVisited();
+  asNode *currentNode = &(allNodes[START_INDEX]);
+  currentNode->Setg(0);
+  currentNode->Seth( (this->* HEURISTIC_PTR)( *currentNode->GetPositionRef() ) );
+  currentNode->Setf();
+  currentNode->SetVisited();
 
   // Set Neighbors of Start Node
-  std::vector<asNode*> *actualNeighbors = actualNode->GetNeighbors();
+  std::vector<asNode*> *currentNeighbors = currentNode->GetNeighbors();
 
   // Fill openList with Start Node
-  openList.push(actualNode);
+  openList.push(currentNode);
 
   bool FINISH_FOUND = false;
 
@@ -182,27 +182,27 @@ void pfAStar::solve(std::string HeuristicName){
   while(!openList.empty() && !FINISH_FOUND){
 
     // Set new Node getting viewed
-    actualNode = openList.top();
+    currentNode = openList.top();
 
     // Pop it out the List, so it can not get viewed again
     openList.pop();
 
-    // Set Neighbors of actualNode
-    actualNeighbors = actualNode->GetNeighbors();
+    // Set Neighbors of currentNode
+    currentNeighbors = currentNode->GetNeighbors();
 
 
     // DEBUG-CODE
     //DEBUGMOD std::this_thread::sleep_for (std::chrono::milliseconds(500));
 
-    DEBUGMOD std::cout << actualNode->GetPosition()[0] << "|"
-		       << actualNode->GetPosition()[1] << "("
-		       << *actualNode->Geth() << ", "
-		       << *actualNode->Getg() << ", "
-		       << *actualNode->Getf() << ")"
+    DEBUGMOD std::cout << currentNode->GetPosition()[0] << "|"
+		       << currentNode->GetPosition()[1] << "("
+		       << *currentNode->Geth() << ", "
+		       << *currentNode->Getg() << ", "
+		       << *currentNode->Getf() << ")"
 		       << " : " << std::endl;
 
-    // Loop over all Neighbors of actual Node
-    for(auto Neig_It : *actualNeighbors){
+    // Loop over all Neighbors of current Node
+    for(auto Neig_It : *currentNeighbors){
 
       DEBUGMOD std::cout << "\t"
 			  << "<" << Neig_It->GetPosition()[0]
@@ -218,20 +218,20 @@ void pfAStar::solve(std::string HeuristicName){
 	DEBUGMOD std::cout << "N(" ;
 	
 	Neig_It->Seth( (this->* HEURISTIC_PTR)( *Neig_It->GetPositionRef() ) );
-	Neig_It->Setg( *actualNode->Getg() + Neig_It->GetWeight() );
+	Neig_It->Setg( *currentNode->Getg() + Neig_It->GetWeight() );
 	Neig_It->Setf();
-	Neig_It->SetParent(*actualNode);
+	Neig_It->SetParent(*currentNode);
 	Neig_It->SetVisited();
 	openList.push(Neig_It);
       }
       // If Node was visited befor, just test, wheather a shorter Path to this Node was found
       // and update it, if it is true.
-      else if( *(actualNode->Getg()) + Neig_It->GetWeight() < *(Neig_It->Getg()) ){
+      else if( *(currentNode->Getg()) + Neig_It->GetWeight() < *(Neig_It->Getg()) ){
 	DEBUGMOD std::cout << "O(";
 
-	Neig_It->Setg( *(actualNode->Getg()) + Neig_It->GetWeight() );
+	Neig_It->Setg( *(currentNode->Getg()) + Neig_It->GetWeight() );
 	Neig_It->Setf();
-	Neig_It->SetParent(*actualNode);
+	Neig_It->SetParent(*currentNode);
       }
       else
 	DEBUGMOD std::cout << " (";
@@ -245,7 +245,7 @@ void pfAStar::solve(std::string HeuristicName){
 			 << *Neig_It->Getf() << ")" << std::endl;
 
 
-    }// for Neig_It:*actualNeighbors
+    }// for Neig_It:*currentNeighbors
   }// while
 
   
@@ -257,16 +257,18 @@ void pfAStar::solve(std::string HeuristicName){
     // Smalles Number of PathNodes correspondes to Manhatten Norm
     PathNodes.reserve( Manhatten(*allNodes[START_INDEX].GetPositionRef()) );
     
-    for( actualNode = &allNodes[FINISH_INDEX];
-	 actualNode->GetType() != 4;
-	 actualNode=actualNode->GetParent()){
+    for( currentNode = &allNodes[FINISH_INDEX];
+	 currentNode->GetType() != 4;
+	 currentNode=currentNode->GetParent()){
 
-      //std::cout <<  actualNode->GetPosition()[0] << "|" << actualNode->GetPosition()[1];
-      std::cout << " >> "
-		<< actualNode->GetParent()->GetPosition()[0] << "|"
-		<< actualNode->GetParent()->GetPosition()[1];
+      //std::cout <<  currentNode->GetPosition()[0] << "|" << currentNode->GetPosition()[1];
+      DEBUGMOD {
+	std::cout << " >> "
+		  << currentNode->GetParent()->GetPosition()[0] << "|"
+		  << currentNode->GetParent()->GetPosition()[1];
+      }//DEBUGMOD
 
-      PathNodes.push_back(actualNode);
+      PathNodes.push_back(currentNode);
     }
     std::cout << std::endl << std::endl;
   }
@@ -285,7 +287,7 @@ void pfAStar::UpdateMap(){
 
       NodePtr = MapPtr->GetNodeAt( it.GetPosition()[0], it.GetPosition()[1]);
       NodePtr->SetIsVisited();
-      NodePtr->Setf(*it.Getf());
+      NodePtr->Setf(*it.Getg());
 
     }
   }
