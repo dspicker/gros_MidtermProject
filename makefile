@@ -7,11 +7,12 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
-all: class_node.o class_map.o class_asNode.o class_AStar.o testAStar clean
+all: class_node.o class_map.o class_asNode.o class_AStar.o testAStar main clean
 
-main: main.cpp breadthfirst.cpp uniformCost.cpp
-		g++ $(CFLAGS) -c main.cpp
 # EXECUTABLES (GETTING LINKED)
+main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o
+		g++ $(CFLAGS) -o main main.o class_node.o class_map.o
+
 testAStar: testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 		g++ $(CFLAGS) -o testAStar testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 
@@ -31,9 +32,8 @@ class_AStar.o: class_node.h class_map.h
 testAStar.o: testAStar.cpp class_AStar.h class_map.h
 		g++ $(CFLAGS) -c testAStar.cpp
 
-
-#main.o: class_node.h class_map.h
-#		g++ $(CFLAGS) -c main.cpp
+main.o: main.cpp breadthfirst.cpp uniformCost.cpp class_AStar.h class_node.h class_map.h
+		g++ $(CFLAGS) -c main.cpp
 
 
 # CLEAR REPOSITORY AFTER MAKE
