@@ -54,8 +54,6 @@ int main(int argc, char** argv){
   pfMap* map1 = pfMap::LoadMap("map2.csv") ;
   //map1->PrintMap();
   pfMap* map5 = new pfMap(*map1) ;
-  std::cout << "test" << '\n';
-
   //map5->PrintMap();
 
   std::cout << "starting breadthfirst" << '\n';
@@ -67,9 +65,11 @@ int main(int argc, char** argv){
 
   pfMap* map2 = new pfMap(*map1) ;
   // test uniformCost algorithm
+  pfMap* map1_b = pfMap::LoadMap("map1_b.csv");
   std::cout << "starting uniformCost" << '\n';
-  auto ucHistory = uniformCost(*map2);
-  ucDrawPath(ucHistory, *map2);
+  auto ucHistory = uniformCost(*map1_b);
+  ucDrawPath(ucHistory, *map1_b);
+  map1_b->PrintMap();
   delete map2;
 
   // delete map(s) created on heap

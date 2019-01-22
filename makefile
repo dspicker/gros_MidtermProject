@@ -11,7 +11,7 @@ all: class_node.o class_map.o class_asNode.o class_AStar.o testAStar main clean
 
 # EXECUTABLES (GETTING LINKED)
 main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o
-		g++ $(CFLAGS) -o main main.o class_node.o class_map.o
+		g++ $(CFLAGS) -o pathfinder main.o class_node.o class_map.o
 
 testAStar: testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 		g++ $(CFLAGS) -o testAStar testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
