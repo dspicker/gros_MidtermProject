@@ -9,14 +9,20 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
+    - store pointer to node instead of locations
+    - store pointer to node in usDrawKnown
+    - write setter funciton for f
+    - use variable f to store cumCost
+    - remove cumCostMap
     - add functionality to measure time taken to find the targetLoc
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
 */
 
 // helper function (for easy adaptation to changes in pfMap and pfNode)
-bool ucIsKnown(std::map<locArr, int> &myCumCostMap, locArr loc){
-  return myCumCostMap.count(loc);
+bool ucIsKnown(std::map<locArr, locArr> &myHistory, locArr loc){
+  std::cout << myHistory.count(loc) << '\n';
+  return myHistory.count(loc);
 }
 bool ucIsWall(pfMap map, locArr loc){
   return (map.GetNodeAt(loc)->GetWeight() == -1);
@@ -58,7 +64,7 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
     }
     if(previousLoc == startLoc)
       break;
-    map.GetNodeAt(previousLoc)->SetPath();
+    map.GetNodeAt(previousLoc)->SetIsPath();
     currentLoc = previousLoc;
   }
 }
@@ -68,12 +74,9 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){
   for(auto const &it : myHistory){
     locArr loc = it.first;
     if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
-      if(map.GetNodeAt(loc)->GetType() == 2){
-        map.SetTypeAt(loc[0], loc[1], 7);
-      }
-      if(map.GetNodeAt(loc)->GetType() == 3){
-        map.SetTypeAt(loc[0], loc[1], 8);
-      }
+      pfNode* pt2Node = map.GetNodeAt(loc);
+      pt2Node->SetIsVisited();
+      pt2Node->SetIsVisited();
     }
   }
 }
@@ -125,9 +128,10 @@ std::map<locArr, locArr> uniformCost(pfMap &map){
     // check neighbors of current node
     for(auto direction : directions){
       neighborLoc = ucAddLocArr(currentLoc, direction);
-      if(ucIsWall(map, neighborLoc) || ucIsKnown(cumCostMap, neighborLoc))
+      if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc))
         continue;
 
+      //pfNode* pt2Node = map.GetNodeAt(neighborLoc)
       currentCumCost = ucGetCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
 
