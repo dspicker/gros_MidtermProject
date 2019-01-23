@@ -120,14 +120,17 @@ void pfAStar::SetNodes(pfMap &map){
 
 // Heuristics:
 
-double pfAStar::Supremum( asLocation &Pos){
-  
-  bool comp = std::abs(Pos[0]-FINISH_COORD[0]) > std::abs(Pos[1]-FINISH_COORD[1]);
-
+double pfAStar::Minimum( asLocation &Pos){
+  bool comp = std::abs(Pos[0]-FINISH_COORD[0]) < std::abs(Pos[1]-FINISH_COORD[1]);
   return  comp?  std::abs(Pos[0]-FINISH_COORD[0]) : std::abs(Pos[1]-FINISH_COORD[1]);
 }
 
-double pfAStar::Manhatten( asLocation &Pos){
+double pfAStar::Supremum( asLocation &Pos){
+  bool comp = std::abs(Pos[0]-FINISH_COORD[0]) > std::abs(Pos[1]-FINISH_COORD[1]);
+  return  comp?  std::abs(Pos[0]-FINISH_COORD[0]) : std::abs(Pos[1]-FINISH_COORD[1]);
+}
+
+double pfAStar::Manhattan( asLocation &Pos){
   return std::abs(Pos[0]-FINISH_COORD[0]) + std::abs(Pos[1]-FINISH_COORD[1]);
 }
 
@@ -151,9 +154,10 @@ void pfAStar::solve(std::string HeuristicName){
   typedef double (pfAStar::*Fptr_heuristic_double)(asLocation &Pos);
   Fptr_heuristic_double HEURISTIC_PTR;
 
-  if      (HeuristicName == "Supremum")  HEURISTIC_PTR = &pfAStar::Supremum;
+  if      (HeuristicName == "Minimum")   HEURISTIC_PTR = &pfAStar::Minimum;
+  else if (HeuristicName == "Supremum")  HEURISTIC_PTR = &pfAStar::Supremum;
   else if (HeuristicName == "Euklid")    HEURISTIC_PTR = &pfAStar::Euklid;
-  else if (HeuristicName == "Manhatten") HEURISTIC_PTR = &pfAStar::Manhatten;
+  else if (HeuristicName == "Manhattan") HEURISTIC_PTR = &pfAStar::Manhattan;
 
   else{ // If User gives unknown Heuristic, it ends the function
     std::cout << ">>> ERROR: '" << HeuristicName << "' is no known Heuristic!" << std::endl;
@@ -254,8 +258,8 @@ void pfAStar::solve(std::string HeuristicName){
     DEBUGMOD std::cout << ">>>FINISH FOUND!" << std::endl;
     
     // Reserve Space for PathNodes.
-    // Smalles Number of PathNodes correspondes to Manhatten Norm
-    PathNodes.reserve( Manhatten(*allNodes[START_INDEX].GetPositionRef()) );
+    // Smalles Number of PathNodes correspondes to Manhattan Norm
+    PathNodes.reserve( Manhattan(*allNodes[START_INDEX].GetPositionRef()) );
     
     for( currentNode = &allNodes[FINISH_INDEX];
 	 currentNode->GetType() != 4;

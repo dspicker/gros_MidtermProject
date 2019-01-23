@@ -43,8 +43,9 @@ class pfAStar {
   std::vector<asNode*> PathNodes;
   
   //Heuristics:
+  double Minimum  ( asLocation &Pos);
   double Supremum  ( asLocation &Pos);
-  double Manhatten ( asLocation &Pos);
+  double Manhattan ( asLocation &Pos);
   double Euklid    ( asLocation &Pos);
 
   // Save Input Map by reference, hence it can be updated for plotting.

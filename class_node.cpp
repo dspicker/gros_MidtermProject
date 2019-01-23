@@ -125,9 +125,9 @@ void pfNode::Print(){
 
   char buffer1[50];
   if(isPath && type!=4 && type!=5){
-    color[0] = 254-  color[0]; 
-    color[1] = 254 - color[1];
-    color[2] = 254 - color[2];
+    color[0] = color[1] + 50; 
+    color[1] = color[1] + 50;
+    color[2] = 0;
     sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
   }
   else if(isVisited &&type!=4 && type!=5){

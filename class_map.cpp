@@ -107,8 +107,13 @@ void pfMap::PrintMap(){
   std::cout << std::endl;
   std::array<int,2> pos;
   for(int j=height-1 ; j>=0 ; j--){
-    printf("%.2d", j);
-    for(int i=0 ; i<width ; i++){
+    
+    if(j%2==0)
+      printf("%.2d", j);
+    else
+      printf("\033[48;2;%u;%u;%um%.2d\033[0m", 200, 200, 200, j);
+    
+  for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
       nodes.at(pos).Print();
@@ -116,8 +121,12 @@ void pfMap::PrintMap(){
     std::cout << std::endl;
   }
   std::cout << "  ";
-  for(int i=0; i<width; i++)
-    printf("|%.2d", i);
+  for(int i=0; i<width; i++){
+    if(i%2==0)
+      printf("%.2d", i);
+    else
+      printf("\033[48;2;%u;%u;%um%.2d\033[0m", 200, 200, 200, i);
+  }
 
   std::cout << std::endl << std::endl ;
 }
