@@ -65,6 +65,12 @@ void pfNode::Setf(double _f){
   f = _f;
 }
 
+  void pfNode::setDirection(int dir){
+    if( dir>=0 && dir<=4 )
+      direction = dir ;
+  }
+
+
 std::string pfNode::GetTypeName()const{
   switch (type) {
     case 1 :         // Wall
@@ -123,21 +129,31 @@ void pfNode::Print(){
 
   }
 
+  char rep[] = "  " ;
+  if(direction != 0){
+    //sprintf(rep," %d ", direction );
+    if( direction == 1 ) sprintf(rep," >");
+    if( direction == 2 ) sprintf(rep," ^");
+    if( direction == 3 ) sprintf(rep," <");
+    if( direction == 4 ) sprintf(rep," v");
+  }
+
   char buffer1[50];
   if(isPath && type!=4 && type!=5){
-    color[0] = 254-  color[0]; 
+    color[0] = 254-  color[0];
     color[1] = 254 - color[1];
     color[2] = 254 - color[2];
-    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    sprintf(buffer1, "\033[48;2;%u;%u;%um%s\033[0m", color[0],color[1],color[2],rep);
   }
   else if(isVisited &&type!=4 && type!=5){
     color[0] += 80;
     color[2] += 80;
-    
-    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+
+    sprintf(buffer1, "\033[48;2;%u;%u;%um%s\033[0m", color[0],color[1],color[2],rep);
   }
   else
-    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    sprintf(buffer1, "\033[48;2;%u;%u;%um%s\033[0m", color[0],color[1],color[2],rep);
+
 
   std::cout << buffer1 ;
 }

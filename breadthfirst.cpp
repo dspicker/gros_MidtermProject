@@ -70,6 +70,27 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
   return search_result;
 }
 
+// returns in which direction the flow field points to at the current node
+int bfDirection( bfLocation curr, bfLocation next ){
+  int dx = next[0] - curr[0] ;
+  int dy = next[1] - curr[1] ;
+
+  if( dy == 0){
+    if(dx > 0) return 1 ;
+    if(dx < 0) return 3 ;
+    return 0;
+  }
+  else if( dx == 0 ){
+    if(dy > 0) return 2 ;
+    if(dy < 0) return 4 ;
+    return 0;
+  }
+  else {
+    return 0 ;
+  }
+
+}
+
 // modifies the map to draw the resulting path. call only after Breadthfirst
 void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
   bfLocation start = Map.GetStartLoc() ;
@@ -86,4 +107,12 @@ void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
       Map.SetTypeAt(next[0],next[1],6);
       next = flow[next];
   }
+
+  for(auto &it : flow ){
+    bfLocation cur = it.first;
+    bfLocation nxt = it.second;
+    int dir = bfDirection(cur,nxt) ;
+    Map.SetDirAt(cur[0],cur[1],dir);
+  }
+
 }
