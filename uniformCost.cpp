@@ -69,7 +69,7 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
 }
 void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
   locArr startLoc  = map.GetStartLoc();
-  locArr targetLoc = map.GetTargetLoc();
+  locArr targetLoc = map.GetTargetLoc(); 
   for(auto const &it : myHistory){
     locArr loc = it.first;
     if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
