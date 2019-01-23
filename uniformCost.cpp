@@ -9,11 +9,11 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
-    - store pointer to node instead of locations
+    - delete ucDrawKnown
+    - write setter funciton for f in pfNode.cpp
+    - use f of pfNodes to store cumCost instead of cumCostMap?
+    - get rid of cumCostMap? <- make up for performance reduction of altering map!
     - store pointer to node in usDrawKnown
-    - write setter funciton for f
-    - use variable f to store cumCost
-    - remove cumCostMap
     - add functionality to measure time taken to find the targetLoc
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
@@ -21,7 +21,6 @@ bool ucDebug = false;  // display test output at different stages of algorithm
 
 // helper function (for easy adaptation to changes in pfMap and pfNode)
 bool ucIsKnown(std::map<locArr, locArr> &myHistory, locArr loc){
-  std::cout << myHistory.count(loc) << '\n';
   return myHistory.count(loc);
 }
 bool ucIsWall(pfMap map, locArr loc){
@@ -68,14 +67,13 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
     currentLoc = previousLoc;
   }
 }
-void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){
+void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
   locArr startLoc  = map.GetStartLoc();
   locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
     locArr loc = it.first;
     if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
       pfNode* pt2Node = map.GetNodeAt(loc);
-      pt2Node->SetIsVisited();
       pt2Node->SetIsVisited();
     }
   }
@@ -85,7 +83,7 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){
 // algorithm
 // ---------
 
-std::map<locArr, locArr> uniformCost(pfMap &map){
+std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool animate = false){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
@@ -113,31 +111,38 @@ std::map<locArr, locArr> uniformCost(pfMap &map){
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
-    // ucDrawKnown(map, history); // poor man's animation (works though!)
-    // map.PrintMap();            //
-    iterationCount+=1;
+    if(animate){
+    // poor man's animation (works though!)
+    //ucDrawKnown(map, history); // 'animation'
+    map.PrintMap(); // 'animation'
+  }
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();
+    if(modifyMap || animate){map.GetNodeAt(currentLoc)->SetIsVisited();}
     if (currentLoc == targetLoc){        // end loop if target is found
       if(ucDebug){std::cout << "DEBUG: target reached!" << '\n';}
       targetFound = true;
       break;
     }
-    if(ucDebug){std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';}
+    if(ucDebug){
+      std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';
+      iterationCount+=1;
+    }
 
     // check neighbors of current node
     for(auto direction : directions){
       neighborLoc = ucAddLocArr(currentLoc, direction);
+      //pfNode* pt2Node = map.GetNodeAt(neighborLoc); // store pointer to neighbor node
+
       if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc))
         continue;
 
-      //pfNode* pt2Node = map.GetNodeAt(neighborLoc)
       currentCumCost = ucGetCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
 
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
       ucSetHistory(history, neighborLoc, currentLoc);
-
+      if(modifyMap || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       unvisitedPQ.push(neighborLoc);
       if(ucDebug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
     } // end of for loop through neighbors
