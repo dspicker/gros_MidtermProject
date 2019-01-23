@@ -192,6 +192,8 @@ pfMap* pfMap::LoadMap(std::string filename){
     }
   }
 
+  file.close();
+
   return m0 ;
 }
 

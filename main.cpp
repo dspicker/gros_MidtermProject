@@ -51,7 +51,7 @@ int main(int argc, char** argv){
   */
 
 
-  pfMap* map1 = pfMap::LoadMap("maps/map2.csv") ;
+  pfMap* map1 = pfMap::LoadMap("maps/map1_b.csv") ;
   //map1->PrintMap();
   pfMap* map5 = new pfMap(*map1) ;
   //map5->PrintMap();
