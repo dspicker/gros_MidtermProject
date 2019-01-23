@@ -9,6 +9,7 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
+    - animation in terminal
     - delete ucDrawKnown
     - write setter funciton for f in pfNode.cpp
     - use f of pfNodes to store cumCost instead of cumCostMap?
@@ -69,7 +70,7 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
 }
 void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
   locArr startLoc  = map.GetStartLoc();
-  locArr targetLoc = map.GetTargetLoc(); 
+  locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
     locArr loc = it.first;
     if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
@@ -107,6 +108,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool an
   // set cumCost for start node, push into PQ
   ucSetCumCost(cumCostMap, startLoc, 0);
   unvisitedPQ.push(startLoc);
+  if(animate){map.PrintMap();}
   if (ucDebug){std::cout << "DEBUG: start:    " << startLoc[0] << "," << startLoc[1] << '\n';}
 
   // central loop (algorithm)
@@ -114,7 +116,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool an
     if(animate){
     // poor man's animation (works though!)
     //ucDrawKnown(map, history); // 'animation'
-    map.PrintMap(); // 'animation'
+    map.ReprintMap(); // 'animation'
   }
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();

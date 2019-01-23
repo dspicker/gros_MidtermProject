@@ -67,7 +67,7 @@ int main(int argc, char** argv){
   // test uniformCost algorithm
   pfMap* map1_b = pfMap::LoadMap("maps/map1_b.csv");
   std::cout << "starting uniformCost" << '\n';
-  auto ucHistory = uniformCost(*map1_b);
+  auto ucHistory = uniformCost(*map1_b,0,1);
   ucDrawPath(ucHistory, *map1_b);
   map1_b->PrintMap();
   delete map2;
