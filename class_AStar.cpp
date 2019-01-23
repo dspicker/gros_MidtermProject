@@ -144,7 +144,7 @@ double pfAStar::Euklid( asLocation &Pos){
  *  This is the actual A*-Algorithm *
  ************************************/
 
-void pfAStar::solve(std::string HeuristicName){
+void pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
   
   // Set DEBUGMOD if(1) for getting Debugging Massages
@@ -240,7 +240,7 @@ void pfAStar::solve(std::string HeuristicName){
       else
 	DEBUGMOD std::cout << " (";
 
-      // Memmorize if Finish is found => Loop breaks
+      // Memmorize if Finish is found => Loop breaks => Path gets set
       if( Neig_It->GetType() == 5)
 	FINISH_FOUND = true;
 
@@ -252,7 +252,7 @@ void pfAStar::solve(std::string HeuristicName){
     }// for Neig_It:*currentNeighbors
   }// while
 
-  
+  /*
   // If a FinishNodes was reached, Set Path form Finish- to Start-Node.
   if(FINISH_FOUND){
     DEBUGMOD std::cout << ">>>FINISH FOUND!" << std::endl;
@@ -274,8 +274,8 @@ void pfAStar::solve(std::string HeuristicName){
 
       PathNodes.push_back(currentNode);
     }
-    std::cout << std::endl << std::endl;
-  }
+    DEBUGMOD std::cout << std::endl << std::endl;
+    }*/
 }
 
 
