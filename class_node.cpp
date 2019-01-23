@@ -95,7 +95,7 @@ void pfNode::Print(){
   std::array<int,3> color = {0,0,0};
   switch (type) {
     case 1 :         // Wall
-      color = {115,115,115};
+      color = {100,100,100};
       break;
     case 2 :        // Grass
       color = {51, 204, 51};
@@ -124,21 +124,20 @@ void pfNode::Print(){
   }
 
   char buffer1[50];
-  
-  if(isPath){
+  if(isPath && type!=4 && type!=5){
     color[0] = 254-  color[0]; 
     color[1] = 254 - color[1];
     color[2] = 254 - color[2];
-    sprintf(buffer1, "\033[48;2;%u;%u;%um%.3d\033[0m", color[0],color[1],color[2],(int)f );
+    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
   }
-  else if(isVisited){
-    for(int n=0; n<3; n++)
-      color[n] += 30;
+  else if(isVisited &&type!=4 && type!=5){
+    color[0] += 80;
+    color[2] += 80;
     
-    sprintf(buffer1, "\033[48;2;%u;%u;%um%.3d\033[0m", color[0],color[1],color[2],(int)f );
+    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
   }
   else
-    sprintf(buffer1, "\033[48;2;%u;%u;%um   \033[0m", color[0],color[1],color[2]);
+    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
 
   std::cout << buffer1 ;
 }
