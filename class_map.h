@@ -43,8 +43,12 @@ public:
   std::array<int,2> GetStartLoc() ;
   std::array<int,2> GetTargetLoc() ;
 
+  // function moveCursor from lecture ( needed for ReprintMap() )
+  void moveCursor(int deltaX, int deltaY);
+
   // prints the map to std::cout
   void PrintMap();
+  void ReprintMap();
 
   // returns pointer to the node at the given position
   pfNode* GetNodeAt(int x, int y);
