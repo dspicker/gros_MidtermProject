@@ -144,7 +144,7 @@ double pfAStar::Euklid( asLocation &Pos){
  *  This is the actual A*-Algorithm *
  ************************************/
 
-void pfAStar::solve(std::string HeuristicName = "Manhattan"){
+int pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
   
   // Set DEBUGMOD if(1) for getting Debugging Massages
@@ -161,7 +161,7 @@ void pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
   else{ // If User gives unknown Heuristic, it ends the function
     std::cout << ">>> ERROR: '" << HeuristicName << "' is no known Heuristic!" << std::endl;
-    return;
+    return 0;
   }
 
 
@@ -275,7 +275,10 @@ void pfAStar::solve(std::string HeuristicName = "Manhattan"){
       PathNodes.push_back(currentNode);
     }
     DEBUGMOD std::cout << std::endl << std::endl;
+    return 1;
   }
+
+  return 0;
 }
 
 
