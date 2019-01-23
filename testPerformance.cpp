@@ -7,7 +7,9 @@
 #include "class_AStar.h"
 
 #include <chrono> 
-
+#include <string>
+#include <sstream>
+#include <stdio.h>
 
 int main(int argc, char** argv){
 
@@ -23,6 +25,12 @@ int main(int argc, char** argv){
   std::chrono::duration<double> duration_uniform;
   std::chrono::duration<double> duration_star;
 
+  std::vector<double> vBreadth, vUniform, vStar;
+  std::vector<int> vNodes;
+
+
+  size_t int_duration_breadth, int_duration_uniform, int_duration_star;
+  
   int width  = 10;
   int height = 10;
   
@@ -64,15 +72,43 @@ int main(int argc, char** argv){
       duration_star += t2_star-t1_star;
     }
 
+    int_duration_breadth = std::chrono::duration_cast<std::chrono::microseconds> (duration_breadth).count();
+    int_duration_uniform = std::chrono::duration_cast<std::chrono::microseconds> (duration_uniform).count();
+    int_duration_star = std::chrono::duration_cast<std::chrono::microseconds>    (duration_star).count();
+        
+    vBreadth.push_back(int_duration_breadth);
+    vUniform.push_back(int_duration_uniform);
+    vStar.push_back(int_duration_star);
+    vNodes.push_back(width*height); 
+
     std::cout << "\n>>>" << m << "x" << m << " nodes:" 
-	      << "\nBreadth: " << duration_breadth.count()
-	      << "\nUniform: " << duration_uniform.count()
-	      << "\nStar   : " << duration_star.count()
+	      << "\nBreadth: " << int_duration_breadth
+	      << "\nUniform: " << int_duration_uniform
+	      << "\nStar   : " << int_duration_star
 	      << std::endl;
 		   
   }
 
 
+      FILE *pipeGnu = popen("gnuplot", "w");
 
-  return 0;
+    std::stringstream ss;
+    std::string dataName = "NAME"; 
+
+    ss << dataName << " << " << "EOD\n";
+
+    for(size_t i=0; i<vBreadth.size()-1; i++){
+      ss << vNodes[i] << " " << vBreadth[i] << std::endl;
+    }
+    ss << "EOD\n";
+
+    
+    fprintf(pipeGnu, "set xrange [0:100]\n");
+    fprintf(pipeGnu, "set yrange [0:200000]\n");
+
+    fprintf(pipeGnu, "%s\n", ss.str().c_str());
+    
+    fprintf(pipeGnu, "plot \"%s\" w lines lw 10\n", dataName.c_str() );
+    
+      return 0;
 }
