@@ -51,7 +51,7 @@ int main(int argc, char** argv){
   */
 
 
-  pfMap* map1 = pfMap::LoadMap("map2.csv") ;
+  pfMap* map1 = pfMap::LoadMap("maps/map2.csv") ;
   //map1->PrintMap();
   pfMap* map5 = new pfMap(*map1) ;
   //map5->PrintMap();
@@ -65,7 +65,7 @@ int main(int argc, char** argv){
 
   pfMap* map2 = new pfMap(*map1) ;
   // test uniformCost algorithm
-  pfMap* map1_b = pfMap::LoadMap("map1_b.csv");
+  pfMap* map1_b = pfMap::LoadMap("maps/map1_b.csv");
   std::cout << "starting uniformCost" << '\n';
   auto ucHistory = uniformCost(*map1_b);
   ucDrawPath(ucHistory, *map1_b);
