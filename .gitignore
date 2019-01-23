@@ -2,3 +2,4 @@
 *.o
 pathfinder
 testAStar
+testPerformance
