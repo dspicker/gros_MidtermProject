@@ -11,6 +11,26 @@
 #include <sstream>
 #include <stdio.h>
 
+
+
+std::string toGnuplot(std::vector<int> &x, std::vector<double> &y, std::string dataName){
+    
+  std::stringstream ss;
+    
+  ss << dataName << " << " << "EOD\n";
+
+  for(size_t i=0; i<x.size()-1; i++){
+    ss << x[i] << " " << y[i] << std::endl;
+  }
+
+  ss << "EOD\n";
+    
+  return ss.str();
+}
+
+
+
+
 int main(int argc, char** argv){
 
   typedef std::array<int,2> Location ;
@@ -34,7 +54,7 @@ int main(int argc, char** argv){
   int width  = 10;
   int height = 10;
   
-  for(int m=10; m<=100; m=m+10){
+  for(int m=10; m<=80; m=m+10){
 
     width = m;
     height = m;
@@ -54,8 +74,6 @@ int main(int argc, char** argv){
       pfMap map_AStar(map);
       pfAStar star(map);
   
-      //map.PrintMap();
-    
       t1_breadth = std::chrono::high_resolution_clock::now();
       std::map< Location, Location > Breadth = Breadthfirst(map_breadth);
       t2_breadth = std::chrono::high_resolution_clock::now();
@@ -74,7 +92,7 @@ int main(int argc, char** argv){
 
     int_duration_breadth = std::chrono::duration_cast<std::chrono::microseconds> (duration_breadth).count();
     int_duration_uniform = std::chrono::duration_cast<std::chrono::microseconds> (duration_uniform).count();
-    int_duration_star = std::chrono::duration_cast<std::chrono::microseconds>    (duration_star).count();
+    int_duration_star    = std::chrono::duration_cast<std::chrono::microseconds>    (duration_star).count();
         
     vBreadth.push_back(int_duration_breadth);
     vUniform.push_back(int_duration_uniform);
@@ -90,25 +108,42 @@ int main(int argc, char** argv){
   }
 
 
+
       FILE *pipeGnu = popen("gnuplot", "w");
+    
+    fprintf(pipeGnu, "set xrange [0:10000]\n");
+    //fprintf(pipeGnu, "set yrange [1:500000]\n");
+    fprintf(pipeGnu, "set logscale y\n");
 
-    std::stringstream ss;
-    std::string dataName = "NAME"; 
+ 
+    std::string dataToPlot;
+    std::string Name;
 
-    ss << dataName << " << " << "EOD\n";
+    Name = "$Breadthfirst";
+    dataToPlot = toGnuplot(vNodes, vBreadth, Name);
 
-    for(size_t i=0; i<vBreadth.size()-1; i++){
-      ss << vNodes[i] << " " << vBreadth[i] << std::endl;
-    }
-    ss << "EOD\n";
+    fprintf(pipeGnu, "%s\n",dataToPlot.c_str()); 
+    fprintf(pipeGnu, "plot \"%s\" w lines lw 3\n", Name.c_str() );
 
     
-    fprintf(pipeGnu, "set xrange [0:100]\n");
-    fprintf(pipeGnu, "set yrange [0:200000]\n");
+    Name = "$UniformCost";
+    dataToPlot = toGnuplot(vNodes, vUniform, Name);
 
-    fprintf(pipeGnu, "%s\n", ss.str().c_str());
+    fprintf(pipeGnu, "%s\n",dataToPlot.c_str()); 
+    fprintf(pipeGnu, "replot \"%s\" w lines lw 3\n", Name.c_str() );
+
+
+    Name = "$AStar";
+    dataToPlot = toGnuplot(vNodes, vStar, Name);
+
+    fprintf(pipeGnu, "%s\n",dataToPlot.c_str()); 
+    fprintf(pipeGnu, "replot \"%s\" w lines lw 3\n", Name.c_str() );
+
     
-    fprintf(pipeGnu, "plot \"%s\" w lines lw 10\n", dataName.c_str() );
+    fflush(pipeGnu);
     
-      return 0;
+    std::cin >> Name;
+    
+    return 0;
 }
+

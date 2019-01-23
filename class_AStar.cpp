@@ -252,7 +252,7 @@ void pfAStar::solve(std::string HeuristicName = "Manhattan"){
     }// for Neig_It:*currentNeighbors
   }// while
 
-  /*
+  
   // If a FinishNodes was reached, Set Path form Finish- to Start-Node.
   if(FINISH_FOUND){
     DEBUGMOD std::cout << ">>>FINISH FOUND!" << std::endl;
@@ -275,7 +275,7 @@ void pfAStar::solve(std::string HeuristicName = "Manhattan"){
       PathNodes.push_back(currentNode);
     }
     DEBUGMOD std::cout << std::endl << std::endl;
-    }*/
+  }
 }
 
 
