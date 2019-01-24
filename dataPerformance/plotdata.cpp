@@ -6,7 +6,7 @@
 
 int main(){
 
-  std::fstream inFile("test.dat");
+  std::fstream inFile("dataPerformance.gnu");
 
   std::string line;
   std::stringstream  sstream ;

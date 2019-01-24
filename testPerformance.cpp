@@ -18,7 +18,7 @@ std::string toGnuplot(std::vector<int> &x, std::vector<double> &y, std::string d
   std::stringstream ss;
   ss << dataName << " << " << "EOD\n";
 
-  for(size_t i=0; i<x.size()-1; i++){
+  for(size_t i=0; i<x.size(); i++){
     ss << x[i] << " " << y[i] << std::endl;
   }
   ss << "EOD\n";
@@ -29,7 +29,7 @@ std::string toGnuplot(std::vector<int> &x, std::vector<double> &y, std::string d
 
 
 
-int main(int argc, char** argv){
+int main(){
 
   typedef std::array<int,2> Location ;
   typedef std::array<int,2> locArr;
@@ -49,8 +49,8 @@ int main(int argc, char** argv){
   int width  = 10;
   int height = 10;
 
-  int sampleSize = 1000; // use to calculate average time in the end?
-  int maxMapSize = 100;
+  int sampleSize = 400; // use to calculate average time in the end?
+  int maxMapSize = 20;
 
   for(int m=10; m<=maxMapSize; m+=10){
 
@@ -88,9 +88,9 @@ int main(int argc, char** argv){
       duration_star += (t2_star-t1_star);
     }
 
-    int_duration_breadth = std::chrono::duration_cast<std::chrono::microseconds> (duration_breadth).count();
-    int_duration_uniform = std::chrono::duration_cast<std::chrono::microseconds> (duration_uniform).count();
-    int_duration_star    = std::chrono::duration_cast<std::chrono::microseconds>    (duration_star).count();
+    int_duration_breadth = std::chrono::duration_cast<std::chrono::microseconds> (duration_breadth).count()/sampleSize;
+    int_duration_uniform = std::chrono::duration_cast<std::chrono::microseconds> (duration_uniform).count()/sampleSize;
+    int_duration_star    = std::chrono::duration_cast<std::chrono::microseconds>    (duration_star).count()/sampleSize;
 
     vBreadth.push_back(int_duration_breadth);
     vUniform.push_back(int_duration_uniform);
@@ -109,7 +109,7 @@ int main(int argc, char** argv){
 
   //FILE *pipeGnu = popen("gnuplot", "w");
 
-  FILE *pipeGnu = fopen("./dataPerformance/test.dat","w");
+  FILE *pipeGnu = fopen("./dataPerformance/dataPerformance.gnu","w");
       
   fprintf(pipeGnu, "set xrange [0:10000]\n");
   //fprintf(pipeGnu, "set yrange [1:500000]\n");
