@@ -35,9 +35,6 @@ int main(int argc, char** argv){
   typedef std::array<int,2> locArr;
 
 
-
-  //  std::chrono::high_resolution_clock
-
   std::chrono::high_resolution_clock::time_point t1_breadth, t2_breadth, t1_uniform, t2_uniform, t1_star, t2_star;
   std::chrono::duration<double> duration_breadth;
   std::chrono::duration<double> duration_uniform;
@@ -52,9 +49,10 @@ int main(int argc, char** argv){
   int width  = 10;
   int height = 10;
 
-  int sampleSize = 10; // use to calculate average time in the end?
+  int sampleSize = 1000; // use to calculate average time in the end?
+  int maxMapSize = 100;
 
-  for(int m=10; m<=70; m+=10){
+  for(int m=10; m<=maxMapSize; m+=10){
 
     width = m;
     height = m;
@@ -109,13 +107,17 @@ int main(int argc, char** argv){
 
 
 
-  FILE *pipeGnu = popen("gnuplot", "w");
-    
+  //FILE *pipeGnu = popen("gnuplot", "w");
+
+  FILE *pipeGnu = fopen("./dataPerformance/test.dat","w");
+      
   fprintf(pipeGnu, "set xrange [0:10000]\n");
   //fprintf(pipeGnu, "set yrange [1:500000]\n");
   fprintf(pipeGnu, "set logscale y\n");
-
-
+  fprintf(pipeGnu, "set xlabel \"Number of Nodes\"\n");
+  fprintf(pipeGnu, "set ylabel \"t [ms]\"\n");
+  fprintf(pipeGnu, "set title \"Performance comparison\"\n");
+  
   std::string dataToPlot;
   std::string Name;
 
@@ -141,8 +143,6 @@ int main(int argc, char** argv){
 
 
   fflush(pipeGnu);
-
-  std::cin >> Name;
 
   return 0;
 }
