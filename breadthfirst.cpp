@@ -29,8 +29,11 @@ std::vector< bfLocation > bfNeighbours( bfLocation id ){
   return result;
 }
 
+// forward definition to use for animation:
+void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map);
+
 // main algorithm
-std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
+std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map, bool animate=false){
   std::queue< bfLocation > search_queue ;           // the queue of the algorithm
   // get target node from map. this algorithm starts at the target
   bfLocation search_begin = Map.GetTargetLoc() ;
@@ -43,11 +46,16 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
   // it stores, from which neighbour of the first argument (key) the algorithm came from
   std::map< bfLocation , bfLocation > search_result ;
 
+  if(animate){Map.PrintMap();}
   // actual algorithm
   while ( !search_queue.empty() ) {
     // take an element out of the queue
     bfLocation current = search_queue.front();
     search_queue.pop();
+    if(animate){
+      Map.GetNodeAt(current)->SetIsVisited();
+      Map.ReprintMap();
+    }
 
     // early exit as soon as start node is reached.
     if( current == goal ) break ;
@@ -66,6 +74,10 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map){
       }
     }
   }
+  if(animate){
+    bfDrawPath(search_result, Map);
+    Map.ReprintMap();
+  }
 
   return search_result;
 }
@@ -83,7 +95,8 @@ void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
   bfLocation next = flow[start] ;
     //for(int i=0; i<20 ; i++) {
     while ( next != target ) {
-      Map.SetTypeAt(next[0],next[1],6);
+      //Map.SetTypeAt(next[0],next[1],6);
+      Map.GetNodeAt(next)->SetIsPath();
       next = flow[next];
   }
 }
