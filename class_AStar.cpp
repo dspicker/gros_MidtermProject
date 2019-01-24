@@ -144,9 +144,10 @@ double pfAStar::Euklid( asLocation &Pos){
  *  This is the actual A*-Algorithm *
  ************************************/
 
-void pfAStar::solve(std::string HeuristicName){
+void pfAStar::solve(std::string HeuristicName, bool animate){
 
-  
+  if(animate){MapPtr->PrintMap();}
+
   // Set DEBUGMOD if(1) for getting Debugging Massages
 #define DEBUGMOD if(0)
 
@@ -191,6 +192,11 @@ void pfAStar::solve(std::string HeuristicName){
     // Pop it out the List, so it can not get viewed again
     openList.pop();
 
+    if(animate){  // position in loop might not be optimal
+      this->UpdateMap();
+      MapPtr->ReprintMap();
+    }
+
     // Set Neighbors of currentNode
     currentNeighbors = currentNode->GetNeighbors();
 
@@ -220,7 +226,7 @@ void pfAStar::solve(std::string HeuristicName){
       // So this implementation should be faster, espacially for big Maps.
       if(!*Neig_It->isVisited()){
 	DEBUGMOD std::cout << "N(" ;
-	
+
 	Neig_It->Seth( (this->* HEURISTIC_PTR)( *Neig_It->GetPositionRef() ) );
 	Neig_It->Setg( *currentNode->Getg() + Neig_It->GetWeight() );
 	Neig_It->Setf();
@@ -252,15 +258,15 @@ void pfAStar::solve(std::string HeuristicName){
     }// for Neig_It:*currentNeighbors
   }// while
 
-  
+
   // If a FinishNodes was reached, Set Path form Finish- to Start-Node.
   if(FINISH_FOUND){
     DEBUGMOD std::cout << ">>>FINISH FOUND!" << std::endl;
-    
+
     // Reserve Space for PathNodes.
     // Smalles Number of PathNodes correspondes to Manhattan Norm
     PathNodes.reserve( Manhattan(*allNodes[START_INDEX].GetPositionRef()) );
-    
+
     for( currentNode = &allNodes[FINISH_INDEX];
 	 currentNode->GetType() != 4;
 	 currentNode=currentNode->GetParent()){
@@ -273,6 +279,11 @@ void pfAStar::solve(std::string HeuristicName){
       }//DEBUGMOD
 
       PathNodes.push_back(currentNode);
+    }
+    
+    if(animate){  // position in loop might not be optimal
+      this->UpdateMap();
+      MapPtr->ReprintMap();
     }
     std::cout << std::endl << std::endl;
   }

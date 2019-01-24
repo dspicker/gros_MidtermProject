@@ -29,19 +29,19 @@ class pfAStar {
 
   // allNodes:
   // sorted by Coordinates <x,y>: <0,0>, <0,1>, ...., <1,0>, <1,1>, ...., <Width,0>, <Width,1>, .... <Width,Heigh>
-  std::vector<asNode> allNodes; 
+  std::vector<asNode> allNodes;
 
   // Index of Start/Finish in allNodes
   int START_INDEX, FINISH_INDEX;
   asLocation FINISH_COORD; //Also the Finish Coordinates, beacause calculating Heuristics gets easier
-  
+
   // Functions:
   void SetNodes(pfMap &map); // Needed for Initialisation
 
   // Lists:
   std::priority_queue< asNode*, std::vector<asNode*>, compare_asNodes >  openList;
   std::vector<asNode*> PathNodes;
-  
+
   //Heuristics:
   double Minimum  ( asLocation &Pos);
   double Supremum  ( asLocation &Pos);
@@ -50,21 +50,21 @@ class pfAStar {
 
   // Save Input Map by reference, hence it can be updated for plotting.
   pfMap* MapPtr;
-  
-  
+
+
  public:
 
   //Constructors
   pfAStar(pfMap &_map);
-  
+
   // Getter:
   // Just needed for Debugging
   std::vector<asNode> GetNodes() {return allNodes;};
   int GetStartIndex() const {return START_INDEX;};
-  
+
   // Functions:
-  void solve(std::string HeuristicName); // Actual A*-Algorithm
+  void solve(std::string HeuristicName, bool animate = false); // Actual A*-Algorithm
   void UpdateMap(); // For Updating and Plotting the Input Map
-  
+
 };
 #endif
