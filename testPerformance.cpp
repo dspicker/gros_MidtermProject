@@ -16,13 +16,11 @@
 std::string toGnuplot(std::vector<int> &x, std::vector<double> &y, std::string dataName){
 
   std::stringstream ss;
-
   ss << dataName << " << " << "EOD\n";
 
   for(size_t i=0; i<x.size()-1; i++){
     ss << x[i] << " " << y[i] << std::endl;
   }
-
   ss << "EOD\n";
 
   return ss.str();
@@ -56,7 +54,7 @@ int main(int argc, char** argv){
 
   int sampleSize = 10; // use to calculate average time in the end?
 
-  for(int m=10; m<=80; m=m+10){
+  for(int m=10; m<=70; m+=10){
 
     width = m;
     height = m;
@@ -111,40 +109,40 @@ int main(int argc, char** argv){
 
 
 
-    FILE *pipeGnu = popen("gnuplot", "w");
-
-    fprintf(pipeGnu, "set xrange [0:10000]\n");
-    //fprintf(pipeGnu, "set yrange [1:500000]\n");
-    fprintf(pipeGnu, "set logscale y\n");
-
-
-    std::string dataToPlot;
-    std::string Name;
-
-    Name = "$Breadthfirst";
-    dataToPlot = toGnuplot(vNodes, vBreadth, Name);
-
-    fprintf(pipeGnu, "%s\n",dataToPlot.c_str());
-    fprintf(pipeGnu, "plot \"%s\" w lines lw 3\n", Name.c_str() );
+  FILE *pipeGnu = popen("gnuplot", "w");
+    
+  fprintf(pipeGnu, "set xrange [0:10000]\n");
+  //fprintf(pipeGnu, "set yrange [1:500000]\n");
+  fprintf(pipeGnu, "set logscale y\n");
 
 
-    Name = "$UniformCost";
-    dataToPlot = toGnuplot(vNodes, vUniform, Name);
+  std::string dataToPlot;
+  std::string Name;
 
-    fprintf(pipeGnu, "%s\n",dataToPlot.c_str());
-    fprintf(pipeGnu, "replot \"%s\" w lines lw 3\n", Name.c_str() );
+  Name = "$Breadthfirst";
+  dataToPlot = toGnuplot(vNodes, vBreadth, Name);
 
-
-    Name = "$AStar";
-    dataToPlot = toGnuplot(vNodes, vStar, Name);
-
-    fprintf(pipeGnu, "%s\n",dataToPlot.c_str());
-    fprintf(pipeGnu, "replot \"%s\" w lines lw 3\n", Name.c_str() );
+  fprintf(pipeGnu, "%s\n",dataToPlot.c_str());
+  fprintf(pipeGnu, "plot \"%s\" w lines lw 3\n", Name.c_str() );
 
 
-    fflush(pipeGnu);
+  Name = "$UniformCost";
+  dataToPlot = toGnuplot(vNodes, vUniform, Name);
 
-    std::cin >> Name;
+  fprintf(pipeGnu, "%s\n",dataToPlot.c_str());
+  fprintf(pipeGnu, "replot \"%s\" w lines lw 3\n", Name.c_str() );
 
-    return 0;
+
+  Name = "$AStar";
+  dataToPlot = toGnuplot(vNodes, vStar, Name);
+
+  fprintf(pipeGnu, "%s\n",dataToPlot.c_str());
+  fprintf(pipeGnu, "replot \"%s\" w lines lw 3\n", Name.c_str() );
+
+
+  fflush(pipeGnu);
+
+  std::cin >> Name;
+
+  return 0;
 }
