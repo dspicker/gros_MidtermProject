@@ -129,7 +129,7 @@ void pfNode::Print(){
 
   }
 
-  char rep[] = "  " ;
+  char rep[] = "  " ; //representation of the nodes on the screen.
   if(direction != 0){
     //sprintf(rep," %d ", direction );
     if( direction == 1 ) sprintf(rep," >");
