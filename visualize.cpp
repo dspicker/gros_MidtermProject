@@ -34,11 +34,11 @@ int main(){
     return 1;
 
 
-  std::cout << "breadthfirst:" << '\n';
+  std::cout << "breadthfirst:";
   Breadthfirst(compare1BF,visualize, animate);
   if(!animate){compare1BF.PrintMap();}
 
-  std::cout << "uniform cost:" << '\n';
+  std::cout << "uniform cost:";
   uniformCost(compare1UC,visualize, animate);
   if(!animate)compare1UC.PrintMap();
 

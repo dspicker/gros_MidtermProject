@@ -155,7 +155,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
 
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
       ucSetHistory(history, neighborLoc, currentLoc);
-      if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
+      //if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       unvisitedPQ.push(neighborLoc);
       if(ucDebug){
         std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << ","
