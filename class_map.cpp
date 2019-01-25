@@ -83,13 +83,22 @@ void pfMap::SetTypeAt(int x, int y, int t){
   }
   if( t==6 ) {
     curr->SetPath();
+    curr->SetIsPath();
   }
   // additional types to visualize visited/checked nodes (Felix) :
   if( t==7 || t==8){
     curr->setType(t);
+    curr->SetIsVisited();
   }
 }
 // end of additons (Felix)
+
+void pfMap::SetDirAt(int x, int y, int d){
+  if ( x<=0 || y<=0 || x>=width-1 || y>=height-1 ){ return; }
+  pfNode* curr = GetNodeAt(x,y) ;
+  curr->setDirection(d);
+}
+
 
 std::array<int,2> pfMap::GetStartLoc(){
   return start_loc;
@@ -181,6 +190,8 @@ pfNode* pfMap::GetNodeAt(int x, int y){
     return NULL;
   }
 }
+
+
 pfNode* pfMap::GetNodeAt(std::array<int,2> pos){
   return &( nodes.at(pos) );
 }
