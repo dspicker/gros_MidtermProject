@@ -40,7 +40,7 @@ int main(){
 
   std::cout << "uniform cost:" << '\n';
   uniformCost(compare1UC,visualize, animate);
-  compare1UC.PrintMap();
+  if(!animate)compare1UC.PrintMap();
 
   std::cout << "A* (manhattan):";
   pfAStar ASMan(compare1ASMan);
