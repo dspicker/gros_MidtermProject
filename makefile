@@ -7,11 +7,13 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
-all: class_node.o class_map.o class_asNode.o class_AStar.o testPerformance.o testAStar main testPerformance testPerformanceAStar clean
+#all: class_node.o class_map.o class_asNode.o class_AStar.o testPerformance.o testAStar main testPerformance testPerformanceAStar clean
+all: main
 
 # EXECUTABLES (GETTING LINKED)
-main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o
-		g++ $(CFLAGS) -o pathfinder main.o class_node.o class_map.o
+#main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o
+main: main.o class_node.o class_map.o class_asNode.o class_AStar.o
+		g++ $(CFLAGS) -o pathfinder main.o class_node.o class_map.o class_asNode.o class_AStar.o
 
 testAStar: testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 		g++ $(CFLAGS) -o testAStar testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
@@ -23,7 +25,7 @@ testPerformanceAStar: testPerformanceAStar.o breadthfirst.cpp uniformCost.cpp cl
 		g++ $(CFLAGS) -o testPerformanceAStar testPerformanceAStar.o class_AStar.o class_node.o class_map.o  class_asNode.o
 
 
-# .O's - mashine language stuff
+# .O's - machine language stuff
 class_node.o: class_node.cpp class_node.h
 		g++ $(CFLAGS) -c class_node.cpp
 
@@ -39,7 +41,7 @@ class_AStar.o: 	class_node.h class_map.h class_asNode.h
 testAStar.o: testAStar.cpp class_AStar.h class_map.h
 		g++ $(CFLAGS) -c testAStar.cpp
 
-main.o: main.cpp breadthfirst.cpp uniformCost.cpp class_AStar.h class_node.h class_map.h
+main.o: main.cpp breadthfirst.cpp uniformCost.cpp greedyBestFirst.cpp class_AStar.h class_node.h class_map.h
 		g++ $(CFLAGS) -c main.cpp
 
 testPerformance.o: testPerformance.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp
