@@ -2,4 +2,4 @@
 *.o
 pathfinder
 testAStar
-compare
+visualize

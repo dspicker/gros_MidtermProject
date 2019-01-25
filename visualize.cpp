@@ -7,7 +7,7 @@
 #include "class_AStar.h"
 
 int main(){
-  pfMap compare1(*pfMap::LoadMap("maps/compare1.csv"));
+  pfMap compare1(*pfMap::LoadMap("maps/map1.csv"));
 
   // copy maps for all algorithms
   pfMap compare1BF(compare1);
