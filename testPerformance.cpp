@@ -32,7 +32,7 @@ std::string toGnuplot(std::vector<int> &x, std::vector<double> &y, std::string d
 
 int main(){
 
-  typedef std::array<int,2> locArr; // can be deleted?
+  //typedef std::array<int,2> locArr; // can be deleted?
 
   std::chrono::high_resolution_clock::time_point t1_breadth, t2_breadth,
                                                  t1_uniform, t2_uniform,
