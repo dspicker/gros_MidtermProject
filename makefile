@@ -7,7 +7,7 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
-all: class_node.o class_map.o class_asNode.o class_AStar.o testAStar main clean
+all: class_node.o class_map.o class_asNode.o class_AStar.o testAStar main compare clean
 
 # EXECUTABLES (GETTING LINKED)
 main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o
@@ -15,6 +15,9 @@ main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_m
 
 testAStar: testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 		g++ $(CFLAGS) -o testAStar testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
+
+compare: compare.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o class_asNode.o
+		g++ $(CFLAGS) -o compare compare.o class_AStar.o class_node.o class_map.o class_asNode.o
 
 # .O's - mashine language stuff
 class_node.o: class_node.cpp class_node.h
@@ -34,6 +37,9 @@ testAStar.o: testAStar.cpp class_AStar.h class_map.h
 
 main.o: main.cpp breadthfirst.cpp uniformCost.cpp class_AStar.h class_node.h class_map.h
 		g++ $(CFLAGS) -c main.cpp
+
+compare.o: compare.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp
+		g++ $(CFLAGS) -c compare.cpp
 
 
 # CLEAR REPOSITORY AFTER MAKE
