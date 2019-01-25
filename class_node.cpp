@@ -125,19 +125,26 @@ void pfNode::Print(){
 
   char buffer1[50];
   if(isPath && type!=4 && type!=5){
-    color[0] = color[1] + 50; 
+    color[0] = color[1] + 50;
     color[1] = color[1] + 50;
     color[2] = 0;
-    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+
+    // if f is not default(-1) it was set and the user probably wants to draw it into the map
+    if(f==-1) sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    else    sprintf(buffer1, "\033[48;2;%u;%u;%um%.2d\033[0m", color[0],color[1],color[2],(int)f%100); // %100, so that just the last two digites will printed
   }
   else if(isVisited &&type!=4 && type!=5){
     color[0] += 80;
     color[2] += 80;
-    
-    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
-  }
-  else
-    sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
 
+    if(f==-1) sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    else    sprintf(buffer1, "\033[48;2;%u;%u;%um%.2d\033[0m", color[0],color[1],color[2],(int)f%100); // %100, same here
+
+  }
+  else {
+    //sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    if(f==-1) sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
+    else    sprintf(buffer1, "\033[48;2;%u;%u;%um%.2d\033[0m", color[0],color[1],color[2],(int)f%100);
+  }
   std::cout << buffer1 ;
 }

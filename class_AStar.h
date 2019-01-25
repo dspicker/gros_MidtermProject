@@ -11,6 +11,7 @@
 #include <array>
 #include <vector>
 #include <queue>
+#include <string>
 
 
 typedef std::array<int,2> asLocation ;
@@ -58,13 +59,12 @@ class pfAStar {
   pfAStar(pfMap &_map);
 
   // Getter:
-  // Just needed for Debugging
-  std::vector<asNode> GetNodes() {return allNodes;};
-  int GetStartIndex() const {return START_INDEX;};
 
+  std::vector<asNode*> GetPathNodes() {return PathNodes;};
+  
   // Functions:
-  void solve(std::string HeuristicName,bool visualize=false, bool animate=false); // Actual A*-Algorithm
-  void UpdateMap(); // For Updating and Plotting the Input Map
-
+  int solve(std::string HeuristicName,bool visualize=false, bool animate=false); // Actual A*-Algorithm
+  void UpdateMap(std::string PRINT_VALUE_TYPE=" "); // For Updating and Plotting the Input Map
+  
 };
 #endif

@@ -4,14 +4,12 @@
 
 int main(){
 
-  /*
+  
   pfMap map1(60,20);
-  map1.GetNodeAt(1,1)->SetStart();
-  map1.GetNodeAt(58,18)->SetTarget();
-  */
-
-
-  pfMap map1(*pfMap::LoadMap("./maps/map1_b.csv"));
+  map1.GetNodeAt(1,10)->SetStart();
+  map1.GetNodeAt(55,10)->SetTarget();
+ 
+    //pfMap map1(*pfMap::LoadMap("./maps/map1.csv"));
 
   pfMap map2(map1);
   pfMap map3(map1);
@@ -24,17 +22,17 @@ int main(){
 
   
   star4.solve("Minimum");
-  star4.UpdateMap();
+  star4.UpdateMap("h");
   std::cout << "MINIMUM:" << std::endl; 
   map4.PrintMap();
 
   star1.solve("Supremum");
-  star1.UpdateMap();
+  star1.UpdateMap("f");
   std::cout << "SUPREMUM:" << std::endl; 
   map1.PrintMap();
   
   star2.solve("Manhattan");
-  star2.UpdateMap();
+  star2.UpdateMap("g");
   std::cout << "MANHATTEN:" << std::endl; 
   map2.PrintMap();
   

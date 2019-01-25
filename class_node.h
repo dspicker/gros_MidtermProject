@@ -14,7 +14,7 @@ protected:
   bool isPath = false;
   bool isVisited = false;
 
-  double f;
+  double f=-1;
 
 public:
   // Constructor:

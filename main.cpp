@@ -2,14 +2,15 @@
 
 #include "class_node.h"
 #include "class_map.h"
+#include "class_AStar.h"
 #include "uniformCost.cpp"
 #include "breadthfirst.cpp"
-#include "class_AStar.h"
+#include "greedyBestFirst.cpp"
 
 
 
-int main(int argc, char** argv){
-
+//int main(int argc, char** argv){
+int main(){
   /*
     pfNode n1(1) ;
     pfNode n2(2);
@@ -51,18 +52,26 @@ int main(int argc, char** argv){
   */
 
 
-  pfMap* map1 = pfMap::LoadMap("maps/map1_b.csv") ;
-  //map1->PrintMap();
-  pfMap* map5 = new pfMap(*map1) ;
+  pfMap* map2 = pfMap::LoadMap("maps/map1_b.csv") ;
+  int n = 50;
+  pfMap* map1 = new pfMap(n,n);
+  map1->SetTypeAt(2,2,4);
+  map1->SetTypeAt(n-3,n-3,5);
+
+
+  map1->PrintMap();
+  pfMap* map5 = new pfMap(*map2) ;
   //map5->PrintMap();
 
-  std::cout << "starting breadthfirst" << '\n';
-  auto flow2 = Breadthfirst(*map5);
-  bfDrawPath(flow2,*map5);
+  std::cout << "starting greedyBestFirst" << '\n';
+  auto flow = GreedyBestFirst(*map5);
+  ucDrawPath(flow,*map5) ;
   map5->PrintMap();
 
-  delete map5 ;
+  //map5->PrintMap();
 
+  delete map5 ;
+/*
   pfMap* map2 = new pfMap(*map1) ;
   // test uniformCost algorithm
   pfMap* map1_b = pfMap::LoadMap("maps/map1_b.csv");
@@ -71,7 +80,7 @@ int main(int argc, char** argv){
   ucDrawPath(ucHistory, *map1_b);
   map1_b->PrintMap();
   delete map2;
-
+*/
   // delete map(s) created on heap
   delete map1;
 

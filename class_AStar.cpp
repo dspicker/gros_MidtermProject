@@ -144,8 +144,8 @@ double pfAStar::Euklid( asLocation &Pos){
  *  This is the actual A*-Algorithm *
  ************************************/
 
-void pfAStar::solve(std::string HeuristicName,bool visualize, bool animate){
 
+int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool animate){
   if(animate){MapPtr->PrintMap();}
 
   // Set DEBUGMOD if(1) for getting Debugging Massages
@@ -162,7 +162,7 @@ void pfAStar::solve(std::string HeuristicName,bool visualize, bool animate){
 
   else{ // If User gives unknown Heuristic, it ends the function
     std::cout << ">>> ERROR: '" << HeuristicName << "' is no known Heuristic!" << std::endl;
-    return;
+    return 0;
   }
 
 
@@ -220,7 +220,7 @@ void pfAStar::solve(std::string HeuristicName,bool visualize, bool animate){
 
       // If Node was not visited before, set Parameters for the 1st time and add it to the openList.
       // This Formulation implements the closedList of the A*-Algorithm indirectly.
-      // The advantage is, that the Node does not has to be searched in a List, that scales
+      // The advantage is, that the Node does not has to be searched in a List, which scales
       // with the size of the Map.
       // So this implementation should be faster, espacially for big Maps.
       if(!*Neig_It->isVisited()){
@@ -245,7 +245,7 @@ void pfAStar::solve(std::string HeuristicName,bool visualize, bool animate){
       else
 	DEBUGMOD std::cout << " (";
 
-      // Memmorize if Finish is found => Loop breaks
+      // Memmorize if Finish is found => Loop breaks => Path gets set
       if( Neig_It->GetType() == 5)
 	FINISH_FOUND = true;
 
@@ -283,25 +283,39 @@ void pfAStar::solve(std::string HeuristicName,bool visualize, bool animate){
     if(animate || visualize){this->UpdateMap();}
     if(animate){MapPtr->ReprintMap();}
 
-    std::cout << std::endl << std::endl;
+    DEBUGMOD std::cout << std::endl << std::endl;
+    return 1;
   }
+
+  return 0;
 }
 
 
 
 // Just a Update-Function so the Path can be plotted with the given PrintFunction in pfMap.
-void pfAStar::UpdateMap(){
+void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
 
+  typedef double* (asNode::*Fptr_Get_Value)();
+  Fptr_Get_Value VALUE_PTR;
+
+
+  //User can choose which type should be printed in map
+  if     (PRINT_VALUE_TYPE == "f") VALUE_PTR = &asNode::Getf;
+  else if(PRINT_VALUE_TYPE == "g") VALUE_PTR = &asNode::Getg;
+  else if(PRINT_VALUE_TYPE == "h") VALUE_PTR = &asNode::Geth;
+  else                             VALUE_PTR = NULL;
+  
+  
   pfNode* NodePtr;
 
   for( auto it : allNodes){
 
     if( *it.isVisited() == true){
-
       NodePtr = MapPtr->GetNodeAt( it.GetPosition()[0], it.GetPosition()[1]);
       NodePtr->SetIsVisited();
-      NodePtr->Setf(*it.Getg());
 
+      // Print chosen value
+      if(VALUE_PTR != NULL) NodePtr->Setf( *(it.*VALUE_PTR)() );
     }
   }
 
