@@ -54,7 +54,7 @@ int main(){
   int height = 10;
 
   int sampleSize = 10; // use to calculate average time in the end?
-  int maxMapSize = 20;
+  int maxMapSize = 50;
 
   for(int m=10; m<=maxMapSize; m+=10){
 
@@ -93,7 +93,7 @@ int main(){
       t1_greedy = std::chrono::high_resolution_clock::now();
       GreedyBestFirst(map_greedy);
       t2_greedy = std::chrono::high_resolution_clock::now();
-      duration_uniform += (t2_greedy-t1_greedy);
+      duration_greedy += (t2_greedy-t1_greedy);
 
       t1_star = std::chrono::high_resolution_clock::now();
       star.solve("Manhattan");
@@ -127,9 +127,9 @@ int main(){
 
 
 
-  FILE *pipeGnu = popen("gnuplot", "w");  // plot directly
+  //FILE *pipeGnu = popen("gnuplot", "w");  // to plot directly ???
 
-  //FILE *pipeGnu = fopen("./dataPerformance/dataPerformance.gnu","w"); // create plot file
+  FILE *pipeGnu = fopen("./dataPerformance/dataPerformance.gnu","w"); // create plot file
 
   fprintf(pipeGnu, "set xrange [0:10000]\n");
   //fprintf(pipeGnu, "set yrange [1:500000]\n");
