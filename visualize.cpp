@@ -14,8 +14,34 @@ void enterToContinue(){
   std::cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
 }
 
+/*  NOTES:
+**
+**  The A* algorithm displays the f = g+h value, due to the limitation of two
+**  characters on the printed map this can not be displayed correctly on large
+**  maps.
+**
+**  This program can be uesed on all maps;
+**
+*/
+
 int main(){
-  pfMap compare1(*pfMap::LoadMap("maps/compare1.csv"));
+
+
+  // Use random generated map with specified dimensions:
+  int hight = 40;
+  int width = 40;
+  pfMap compare1(hight, width);
+
+  if(true){ // toggle to use random maps, change size if you want
+  compare1.SetTypeAt(2,2,4);  // set start
+  compare1.SetTypeAt(hight-2, width-2, 5);  // set target
+}
+
+// Use saved maps:
+//pfMap compare1(*pfMap::LoadMap("maps/compare1.csv"));
+//pfMap compare1(*pfMap::LoadMap("maps/map1.csv"));
+//pfMap compare1(*pfMap::LoadMap("maps/map2.csv"));
+
 
   // copy maps for all algorithms
   pfMap compare1BF(compare1);

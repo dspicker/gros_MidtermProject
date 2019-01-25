@@ -87,7 +87,7 @@ std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map, bool visualize=false, bool
       int w = Map.GetNodeAt(next)->GetWeight() ;
       if( w == -1 ) continue ;
       //dist = dist + (w-1) ; // take cost into account (can be commented out!)
-      //if(animate||visualize){Map.GetNodeAt(next)->Setf(w);} // toggle if needed
+      if(animate||visualize){Map.GetNodeAt(next)->Setf(dist);} // toggle if needed
       if( result.find(next) == result.end() ){
         search_queue.push( std::make_pair(next, dist) );
         result.insert( std::make_pair(next, dist) ) ;

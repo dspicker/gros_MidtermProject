@@ -193,7 +193,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool 
     openList.pop();
 
     // visualisation/animation, position in loop might not be optimal
-    if(animate || visualize){this->UpdateMap();}
+    if(animate || visualize){this->UpdateMap("f");}
     if(animate){MapPtr->ReprintMap();}
 
     // Set Neighbors of currentNode
@@ -280,7 +280,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool 
       PathNodes.push_back(currentNode);
     }
 
-    if(animate || visualize){this->UpdateMap();}
+    if(animate || visualize){this->UpdateMap("f");}
     if(animate){MapPtr->ReprintMap();}
 
     DEBUGMOD std::cout << std::endl << std::endl;
@@ -304,8 +304,8 @@ void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
   else if(PRINT_VALUE_TYPE == "g") VALUE_PTR = &asNode::Getg;
   else if(PRINT_VALUE_TYPE == "h") VALUE_PTR = &asNode::Geth;
   else                             VALUE_PTR = NULL;
-  
-  
+
+
   pfNode* NodePtr;
 
   for( auto it : allNodes){
