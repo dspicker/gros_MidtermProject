@@ -33,7 +33,7 @@ std::vector< bfLocation > bfNeighbours( bfLocation id ){
 void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map);
 
 // main algorithm
-std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map, bool animate=false){
+std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,bool visualize=false, bool animate=false){
   std::queue< bfLocation > search_queue ;           // the queue of the algorithm
   // get target node from map. this algorithm starts at the target
   bfLocation search_begin = Map.GetTargetLoc() ;
@@ -52,10 +52,9 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map, bool animate=false)
     // take an element out of the queue
     bfLocation current = search_queue.front();
     search_queue.pop();
-    if(animate){
-      Map.GetNodeAt(current)->SetIsVisited();
-      Map.ReprintMap();
-    }
+
+    if(animate || visualize){Map.GetNodeAt(current)->SetIsVisited();}
+    if(animate){Map.ReprintMap();}
 
     // early exit as soon as start node is reached.
     if( current == goal ) break ;
@@ -74,10 +73,9 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map, bool animate=false)
       }
     }
   }
-  if(animate){
-    bfDrawPath(search_result, Map);
-    Map.ReprintMap();
-  }
+
+  if(animate || visualize){bfDrawPath(search_result, Map);}
+  if(animate){Map.ReprintMap();}
 
   return search_result;
 }

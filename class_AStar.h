@@ -63,7 +63,7 @@ class pfAStar {
   int GetStartIndex() const {return START_INDEX;};
 
   // Functions:
-  void solve(std::string HeuristicName, bool animate = false); // Actual A*-Algorithm
+  void solve(std::string HeuristicName,bool visualize=false, bool animate=false); // Actual A*-Algorithm
   void UpdateMap(); // For Updating and Plotting the Input Map
 
 };

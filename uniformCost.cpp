@@ -88,7 +88,7 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!
 // ---------
 
 std::map<locArr, locArr> uniformCost(pfMap &map,
-                                     bool modifyMap = false,
+                                     bool visualize = false,
                                      bool animate = false){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
@@ -130,7 +130,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
   }
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();
-    if(modifyMap || animate){map.GetNodeAt(currentLoc)->SetIsVisited();}
+    if(visualize || animate){map.GetNodeAt(currentLoc)->SetIsVisited();}
     if (currentLoc == targetLoc){        // end loop if target is found
       if(ucDebug){std::cout << "DEBUG: target reached!" << '\n';}
       targetFound = true;
@@ -155,7 +155,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
 
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
       ucSetHistory(history, neighborLoc, currentLoc);
-      if(modifyMap || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
+      if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       unvisitedPQ.push(neighborLoc);
       if(ucDebug){
         std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << ","
@@ -172,10 +172,8 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
       std::cout << "DEBUG: cumCost of target: "
                 << ucGetCumCost(cumCostMap, targetLoc) << '\n';
     }
-    if(animate){
-      ucDrawPath(history, map);
-      map.ReprintMap();
-    }
+    if(animate || visualize){ucDrawPath(history, map);}
+    if(animate){map.ReprintMap();}
     //std::cout << "Target found!" << '\n';
   }
   else{

@@ -144,7 +144,7 @@ double pfAStar::Euklid( asLocation &Pos){
  *  This is the actual A*-Algorithm *
  ************************************/
 
-void pfAStar::solve(std::string HeuristicName, bool animate){
+void pfAStar::solve(std::string HeuristicName,bool visualize, bool animate){
 
   if(animate){MapPtr->PrintMap();}
 
@@ -192,10 +192,9 @@ void pfAStar::solve(std::string HeuristicName, bool animate){
     // Pop it out the List, so it can not get viewed again
     openList.pop();
 
-    if(animate){  // position in loop might not be optimal
-      this->UpdateMap();
-      MapPtr->ReprintMap();
-    }
+    // visualisation/animation, position in loop might not be optimal
+    if(animate || visualize){this->UpdateMap();}
+    if(animate){MapPtr->ReprintMap();}
 
     // Set Neighbors of currentNode
     currentNeighbors = currentNode->GetNeighbors();
@@ -280,11 +279,10 @@ void pfAStar::solve(std::string HeuristicName, bool animate){
 
       PathNodes.push_back(currentNode);
     }
-    
-    if(animate){  // position in loop might not be optimal
-      this->UpdateMap();
-      MapPtr->ReprintMap();
-    }
+
+    if(animate || visualize){this->UpdateMap();}
+    if(animate){MapPtr->ReprintMap();}
+
     std::cout << std::endl << std::endl;
   }
 }
