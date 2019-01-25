@@ -7,8 +7,8 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
-#all: class_node.o class_map.o class_asNode.o class_AStar.o testPerformance.o testAStar main testPerformance testPerformanceAStar clean
-all: main
+all: class_node.o class_map.o class_asNode.o class_AStar.o testPerformance.o testAStar main testPerformance testPerformanceAStar clean
+#all: main
 
 # EXECUTABLES (GETTING LINKED)
 #main: main.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o
@@ -44,7 +44,7 @@ testAStar.o: testAStar.cpp class_AStar.h class_map.h
 main.o: main.cpp breadthfirst.cpp uniformCost.cpp greedyBestFirst.cpp class_AStar.h class_node.h class_map.h
 		g++ $(CFLAGS) -c main.cpp
 
-testPerformance.o: testPerformance.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp
+testPerformance.o: testPerformance.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp greedyBestFirst.cpp
 		g++ $(CFLAGS) -c testPerformance.cpp
 
 
