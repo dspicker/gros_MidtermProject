@@ -23,6 +23,9 @@ public:
 
 typedef std::priority_queue< gbNode , std::vector<gbNode> , gbComp > gbQueue ;
 
+// forward declaration because used in GreedyBestFirst function
+void gbDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map);
+
 // returns a vector, that is filled with the direct neighbours of the node at the position of id
 std::vector< gbLoc > gbSuccessors( gbLoc id ){
   std::vector<gbLoc> result ;
@@ -53,23 +56,29 @@ double gbDistance( gbLoc loc1, gbLoc loc2){
 
 
 // main algorithm
-std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map){
+std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map, bool visualize=false, bool animate=false){
   std::map< gbLoc , double > result;
   std::map<gbLoc, gbLoc> history;
   gbQueue search_queue ;
+  bool targetFound = false;
 
   gbLoc end_loc = Map.GetTargetLoc() ;
   gbLoc begin_loc = Map.GetStartLoc();
   double dist = gbDistance(begin_loc,end_loc) ;
   search_queue.push( std::make_pair(begin_loc, dist) );
 
-  std::cout << "gBF before loop" << '\n';
+  if(animate){Map.PrintMap();}
+  //std::cout << "gBF before loop" << '\n';
   while ( !search_queue.empty() ) {
     gbNode curr = search_queue.top() ;
     search_queue.pop() ;
+    // move below neighbor loop?
+    if(animate || visualize){Map.GetNodeAt(curr.first)->SetIsVisited();}
+    if(animate){Map.ReprintMap();}
 
     if( curr.first == end_loc ) {
-      std::cout << "last distance: " << curr.second << '\n';
+      //std::cout << "last distance: " << curr.second << '\n';
+      targetFound = true;
       break ;
     }
 
@@ -77,7 +86,8 @@ std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map){
       dist = gbDistance(next, end_loc) ;
       int w = Map.GetNodeAt(next)->GetWeight() ;
       if( w == -1 ) continue ;
-      //dist = dist + (w-1) ;
+      //dist = dist + (w-1) ; // take cost into account (can be commented out!)
+      //if(animate||visualize){Map.GetNodeAt(next)->Setf(w);} // toggle if needed
       if( result.find(next) == result.end() ){
         search_queue.push( std::make_pair(next, dist) );
         result.insert( std::make_pair(next, dist) ) ;
@@ -88,11 +98,38 @@ std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map){
     } // end for
   } //end while
 
+  if(targetFound){
+    if(animate||visualize){gbDrawPath(history, Map);}
+    if(animate){Map.ReprintMap();}
+  }
+
   return history;
 }
 
 
-void gbDrawPath(std::map< gbLoc , double > dist_to_target, pfMap &Map){
+// copy of ucDrawPath:
+
+void gbDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
+  locArr targetLoc = map.GetTargetLoc();
+  locArr startLoc  = map.GetStartLoc();
+  locArr currentLoc = targetLoc;
+  locArr previousLoc;
+  if( myHistory.find(targetLoc) == myHistory.end() ){ // check if target found, abourt if not
+    std::cout << "UniformCost: Target not found!" << '\n';
+    return;
+  }
+  // loop through linked locations starting at target location
+  while(true){
+    previousLoc = myHistory.at(currentLoc);
+    if(previousLoc == startLoc)
+      break;
+    map.GetNodeAt(previousLoc)->SetIsPath();
+    currentLoc = previousLoc;
+  }
+}
+
+/*  redundant
+void gbDrawPathOld(std::map< gbLoc , double > dist_to_target, pfMap &Map){
   gbLoc end_loc = Map.GetTargetLoc() ;
   //gbLoc begin_loc = Map.GetStartLoc();
 
@@ -108,3 +145,4 @@ void gbDrawPath(std::map< gbLoc , double > dist_to_target, pfMap &Map){
   }
 
 }
+*/
