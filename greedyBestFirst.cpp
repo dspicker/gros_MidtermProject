@@ -41,7 +41,7 @@ std::vector< gbLoc > gbSuccessors( gbLoc id ){
 // returns the distance between loc1 and loc2 according to the p-norm.
 double gbDistance( gbLoc loc1, gbLoc loc2){
   // set p to the desired value. 1=manhattan-distance, 2=euclidian-dist, p>10=maximum-metric
-  const double p = 1;
+  const double p = 2;
   double result = 0;
   if( p>10.0 ){
     result = std::max( fabs(loc1[0]-loc2[0]), fabs(loc1[1]-loc2[1]) );
@@ -53,8 +53,9 @@ double gbDistance( gbLoc loc1, gbLoc loc2){
 
 
 // main algorithm
-std::map< gbLoc , double > GreedyBestFirst(pfMap &Map){
+std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map){
   std::map< gbLoc , double > result;
+  std::map<gbLoc, gbLoc> history;
   gbQueue search_queue ;
 
   gbLoc end_loc = Map.GetTargetLoc() ;
@@ -76,17 +77,18 @@ std::map< gbLoc , double > GreedyBestFirst(pfMap &Map){
       dist = gbDistance(next, end_loc) ;
       int w = Map.GetNodeAt(next)->GetWeight() ;
       if( w == -1 ) continue ;
-      dist = dist + (w-1) ;
+      //dist = dist + (w-1) ;
       if( result.find(next) == result.end() ){
         search_queue.push( std::make_pair(next, dist) );
         result.insert( std::make_pair(next, dist) ) ;
+        history[next] = curr.first;
       } else {
         if(result[next] > dist ) { result[next] = dist ;  }
       } // end if-else
     } // end for
   } //end while
 
-  return result;
+  return history;
 }
 
 
