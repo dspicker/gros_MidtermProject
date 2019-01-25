@@ -26,22 +26,23 @@ void enterToContinue(){
 
 int main(){
 
-
-  // Use random generated map with specified dimensions:
+  // change size of random map if you want
   int hight = 40;
   int width = 40;
-  pfMap compare1(hight, width);
 
-  if(true){ // toggle to use random maps, change size if you want
+  // Use saved maps:
+    pfMap compare1(*pfMap::LoadMap("maps/compare1.csv"));
+  //pfMap compare1(*pfMap::LoadMap("maps/map1.csv"));
+  //pfMap compare1(*pfMap::LoadMap("maps/map2.csv"));
+
+  // Use random generated map with specified dimensions:
+  // (be careful not to initiate compare1 twice)
+
+  //pfMap compare1(hight, width);
+  if(false){ // toggle if using random maps
   compare1.SetTypeAt(2,2,4);  // set start
   compare1.SetTypeAt(hight-2, width-2, 5);  // set target
 }
-
-// Use saved maps:
-//pfMap compare1(*pfMap::LoadMap("maps/compare1.csv"));
-//pfMap compare1(*pfMap::LoadMap("maps/map1.csv"));
-//pfMap compare1(*pfMap::LoadMap("maps/map2.csv"));
-
 
   // copy maps for all algorithms
   pfMap compare1BF(compare1);
