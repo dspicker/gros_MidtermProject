@@ -52,7 +52,7 @@ int main(){
   */
 
 
-  //pfMap* map1 = pfMap::LoadMap("maps/map1_b.csv") ;
+  pfMap* map2 = pfMap::LoadMap("maps/map1_b.csv") ;
   int n = 50;
   pfMap* map1 = new pfMap(n,n);
   map1->SetTypeAt(2,2,4);
@@ -60,12 +60,12 @@ int main(){
 
 
   map1->PrintMap();
-  pfMap* map5 = new pfMap(*map1) ;
+  pfMap* map5 = new pfMap(*map2) ;
   //map5->PrintMap();
 
   std::cout << "starting greedyBestFirst" << '\n';
   auto flow = GreedyBestFirst(*map5);
-  gbDrawPath(flow,*map5) ;
+  ucDrawPath(flow,*map5) ;
   map5->PrintMap();
 
   //map5->PrintMap();
