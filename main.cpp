@@ -52,7 +52,13 @@ int main(){
   */
 
 
-  pfMap* map1 = pfMap::LoadMap("maps/map1.csv") ;
+  //pfMap* map1 = pfMap::LoadMap("maps/map1_b.csv") ;
+  int n = 50;
+  pfMap* map1 = new pfMap(n,n);
+  map1->SetTypeAt(2,2,4);
+  map1->SetTypeAt(n-3,n-3,5);
+
+
   map1->PrintMap();
   pfMap* map5 = new pfMap(*map1) ;
   //map5->PrintMap();

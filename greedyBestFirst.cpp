@@ -74,6 +74,9 @@ std::map< gbLoc , double > GreedyBestFirst(pfMap &Map){
 
     for( gbLoc next : gbSuccessors(curr.first) ){
       dist = gbDistance(next, end_loc) ;
+      int w = Map.GetNodeAt(next)->GetWeight() ;
+      if( w == -1 ) continue ;
+      dist = dist + (w-1) ;
       if( result.find(next) == result.end() ){
         search_queue.push( std::make_pair(next, dist) );
         result.insert( std::make_pair(next, dist) ) ;
@@ -89,7 +92,7 @@ std::map< gbLoc , double > GreedyBestFirst(pfMap &Map){
 
 void gbDrawPath(std::map< gbLoc , double > dist_to_target, pfMap &Map){
   gbLoc end_loc = Map.GetTargetLoc() ;
-  gbLoc begin_loc = Map.GetStartLoc();
+  //gbLoc begin_loc = Map.GetStartLoc();
 
   if( dist_to_target.find(end_loc) == dist_to_target.end() ){
     std::cout << "GreedyBestFirst: No Path found!" << '\n';
