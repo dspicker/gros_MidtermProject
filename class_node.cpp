@@ -65,6 +65,12 @@ void pfNode::Setf(double _f){
   f = _f;
 }
 
+  void pfNode::setDirection(int dir){
+    if( dir>=0 && dir<=4 )
+      direction = dir ;
+  }
+
+
 std::string pfNode::GetTypeName()const{
   switch (type) {
     case 1 :         // Wall
@@ -112,39 +118,38 @@ void pfNode::Print(){
     case 6 :       // target
       color = {255, 51, 204};
       break;
-// additional types to visualize visited/checked nodes (Felix) :
+      // additional types. are they obsolete??
     case 7 :      // visited Grass
       color = {101, 204, 101};
       break;
     case 8 :      // visited forest
       color = {50, 153, 101};
       break;
-// end of additions (Felix)
+  }  // end switch
 
+  char rep[] = "  " ; //representation of the nodes on the screen.
+  if(direction != 0){  // if direction is not default, print it to the screen
+    //sprintf(rep," %d ", direction );
+    if( direction == 1 ) sprintf(rep," >");
+    if( direction == 2 ) sprintf(rep," ^");
+    if( direction == 3 ) sprintf(rep," <");
+    if( direction == 4 ) sprintf(rep," v");
+  }
+  if( f != -1){   // if f is not default(-1) it was set and the user probably wants to draw it into the map
+    sprintf(rep,"%.2d",(int)f%100); // %100, so that just the last two digits will print
   }
 
-  char buffer1[50];
   if(isPath && type!=4 && type!=5){
     color[0] = color[1] + 50;
     color[1] = color[1] + 50;
     color[2] = 0;
-
-    // if f is not default(-1) it was set and the user probably wants to draw it into the map
-    if(f==-1) sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
-    else    sprintf(buffer1, "\033[48;2;%u;%u;%um%.2d\033[0m", color[0],color[1],color[2],(int)f%100); // %100, so that just the last two digites will printed
   }
-  else if(isVisited &&type!=4 && type!=5){
+  else if(isVisited && type!=4 && type!=5){
     color[0] += 80;
     color[2] += 80;
-
-    if(f==-1) sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
-    else    sprintf(buffer1, "\033[48;2;%u;%u;%um%.2d\033[0m", color[0],color[1],color[2],(int)f%100); // %100, same here
-
   }
-  else {
-    //sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
-    if(f==-1) sprintf(buffer1, "\033[48;2;%u;%u;%um  \033[0m", color[0],color[1],color[2]);
-    else    sprintf(buffer1, "\033[48;2;%u;%u;%um%.2d\033[0m", color[0],color[1],color[2],(int)f%100);
-  }
+  char buffer1[50];
+  sprintf(buffer1, "\033[48;2;%u;%u;%um%s\033[0m", color[0],color[1],color[2],rep);
+
   std::cout << buffer1 ;
 }

@@ -35,6 +35,7 @@ public:
 
   // 4=start, 5=target, 6=path
   void SetTypeAt(int x, int y, int t);
+  void SetDirAt(int x, int y, int d);
 
   int GetWidth(){ return width; }
   int GetHeight(){ return height; }

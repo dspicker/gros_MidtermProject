@@ -15,6 +15,7 @@ protected:
   bool isVisited = false;
 
   double f=-1;
+  int direction = 0;  // 1 right, 2 up, 3 left, 4 down .
 
 public:
   // Constructor:
@@ -42,6 +43,7 @@ public:
   void ResetIsVisited();
   void Setf(double _f);
 
+  void setDirection(int dir);
 
   // prints the node to std::cout with an rgb colored whitespace
   void Print();
