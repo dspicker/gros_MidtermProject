@@ -32,7 +32,7 @@ std::string toGnuplot(std::vector<int> &x, std::vector<double> &y, std::string d
 
 int main(){
 
-  //typedef std::array<int,2> locArr; // can be deleted?
+  typedef std::array<int,2> locArr; // can be deleted?
 
   std::chrono::high_resolution_clock::time_point t1_breadth, t2_breadth,
                                                  t1_uniform, t2_uniform,
@@ -53,8 +53,8 @@ int main(){
   int width  = 10;
   int height = 10;
 
-  int sampleSize = 10; // use to calculate average time in the end?
-  int maxMapSize = 50;
+  int sampleSize = 25; // use to calculate average time in the end?
+  int maxMapSize = 80;
 
   for(int m=10; m<=maxMapSize; m+=10){
 
@@ -119,7 +119,7 @@ int main(){
     std::cout << "\n>>>" << m << "x" << m << " nodes:"
 	      << "\nBreadth: " << int_duration_breadth
 	      << "\nUniform: " << int_duration_uniform
-        << "\nGreedy:"   << int_duration_greedy
+        << "\nGreedy : "   << int_duration_greedy
 	      << "\nStar   : " << int_duration_star
 	      << std::endl;
 
