@@ -52,17 +52,24 @@ int main(){
   */
 
 
-  pfMap* map2 = pfMap::LoadMap("maps/map1_b.csv") ;
+  pfMap* map2 = pfMap::LoadMap("maps/map1.csv") ;
+/*
   int n = 50;
   pfMap* map1 = new pfMap(n,n);
   map1->SetTypeAt(2,2,4);
   map1->SetTypeAt(n-3,n-3,5);
-
-
   map1->PrintMap();
-  pfMap* map5 = new pfMap(*map2) ;
-  //map5->PrintMap();
+*/
 
+  pfMap* map3 = new pfMap(*map2) ;
+  std::cout << "starting Breadthfirst" << '\n';
+  Breadthfirst(*map3, true) ;
+  map3->PrintMap();
+  delete map3 ;
+
+
+  //map5->PrintMap();
+  pfMap* map5 = new pfMap(*map2) ;
   std::cout << "starting greedyBestFirst" << '\n';
   auto flow = GreedyBestFirst(*map5);
   ucDrawPath(flow,*map5) ;
@@ -71,6 +78,7 @@ int main(){
   //map5->PrintMap();
 
   delete map5 ;
+
 /*
   pfMap* map2 = new pfMap(*map1) ;
   // test uniformCost algorithm
@@ -82,7 +90,7 @@ int main(){
   delete map2;
 */
   // delete map(s) created on heap
-  delete map1;
+  delete map2;
 
 
   return 0;
