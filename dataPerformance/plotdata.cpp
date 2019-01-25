@@ -6,14 +6,14 @@
 
 int main(){
 
-  std::fstream inFile("dataPerformance_AStar.gnu");
+  std::fstream inFile("dataPerformance.gnu");
 
   std::string line;
   std::stringstream  sstream ;
 
-  
+
   FILE *pipeGnu = popen("gnuplot", "w");
-  
+
   while (std::getline(inFile, line))
     {
 
@@ -27,5 +27,5 @@ int main(){
   fflush(pipeGnu);
 
   std::cin >> line;
-  
+
 }
