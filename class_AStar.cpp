@@ -215,7 +215,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
       // If Node was not visited before, set Parameters for the 1st time and add it to the openList.
       // This Formulation implements the closedList of the A*-Algorithm indirectly.
-      // The advantage is, that the Node does not has to be searched in a List, that scales
+      // The advantage is, that the Node does not has to be searched in a List, which scales
       // with the size of the Map.
       // So this implementation should be faster, espacially for big Maps.
       if(!*Neig_It->isVisited()){
@@ -284,18 +284,29 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
 
 // Just a Update-Function so the Path can be plotted with the given PrintFunction in pfMap.
-void pfAStar::UpdateMap(){
+void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
 
+  typedef double* (asNode::*Fptr_Get_Value)();
+  Fptr_Get_Value VALUE_PTR;
+
+
+  //User can choose which type should be printed in map
+  if     (PRINT_VALUE_TYPE == "f") VALUE_PTR = &asNode::Getf;
+  else if(PRINT_VALUE_TYPE == "g") VALUE_PTR = &asNode::Getg;
+  else if(PRINT_VALUE_TYPE == "h") VALUE_PTR = &asNode::Geth;
+  else                             VALUE_PTR = NULL;
+  
+  
   pfNode* NodePtr;
 
   for( auto it : allNodes){
 
     if( *it.isVisited() == true){
-
       NodePtr = MapPtr->GetNodeAt( it.GetPosition()[0], it.GetPosition()[1]);
       NodePtr->SetIsVisited();
-      NodePtr->Setf(*it.Getg());
 
+      // Print chosen value
+      if(VALUE_PTR != NULL) NodePtr->Setf( *(it.*VALUE_PTR)() );
     }
   }
 

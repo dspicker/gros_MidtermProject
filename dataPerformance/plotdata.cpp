@@ -6,7 +6,7 @@
 
 int main(){
 
-  std::fstream inFile("dataPerformance.gnu");
+  std::fstream inFile("dataPerformance_AStar.gnu");
 
   std::string line;
   std::stringstream  sstream ;

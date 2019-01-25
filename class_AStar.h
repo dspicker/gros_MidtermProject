@@ -11,6 +11,7 @@
 #include <array>
 #include <vector>
 #include <queue>
+#include <string>
 
 
 typedef std::array<int,2> asLocation ;
@@ -64,7 +65,7 @@ class pfAStar {
   
   // Functions:
   int solve(std::string HeuristicName); // Actual A*-Algorithm
-  void UpdateMap(); // For Updating and Plotting the Input Map
+  void UpdateMap(std::string PRINT_VALUE_TYPE=" "); // For Updating and Plotting the Input Map
   
 };
 #endif
