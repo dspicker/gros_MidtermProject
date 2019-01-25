@@ -59,9 +59,7 @@ class pfAStar {
   pfAStar(pfMap &_map);
   
   // Getter:
-  // Just needed for Debugging
-  std::vector<asNode> GetNodes() {return allNodes;};
-  int GetStartIndex() const {return START_INDEX;};
+  std::vector<asNode*> GetPathNodes() {return PathNodes;};
   
   // Functions:
   int solve(std::string HeuristicName); // Actual A*-Algorithm
