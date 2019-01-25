@@ -9,6 +9,7 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
+    - animation in terminal
     - delete ucDrawKnown
     - write setter funciton for f in pfNode.cpp
     - use f of pfNodes to store cumCost instead of cumCostMap?
@@ -26,7 +27,8 @@ bool ucIsKnown(std::map<locArr, locArr> &myHistory, locArr loc){
 bool ucIsWall(pfMap map, locArr loc){
   return (map.GetNodeAt(loc)->GetWeight() == -1);
 }
-void ucSetHistory(std::map<locArr, locArr> &myHistory, locArr neighbor, locArr current){
+void ucSetHistory(std::map<locArr, locArr> &myHistory,
+                  locArr neighbor, locArr current){
   myHistory[neighbor] = current;
 }
 void ucSetCumCost(std::map<locArr, int> &myCumCostMap, locArr loc, int cost){
@@ -57,8 +59,10 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   while(true){
     previousLoc = myHistory.at(currentLoc);
     if(ucDebug){
-      std::cout << "DEBUG (ucDrawPath): currentLoc:  " << currentLoc[0] << "," << currentLoc[1] << '\n';
-      std::cout << "DEBUG (ucDrawPath): previousLoc: " << previousLoc[0] << "," << previousLoc[1] << '\n';
+      std::cout << "DEBUG (ucDrawPath): currentLoc:  " << currentLoc[0] << ","
+                << currentLoc[1] << '\n';
+      std::cout << "DEBUG (ucDrawPath): previousLoc: " << previousLoc[0] << ","
+                << previousLoc[1] << '\n';
       std::cout << std::endl;
     }
     if(previousLoc == startLoc)
@@ -69,7 +73,7 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
 }
 void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
   locArr startLoc  = map.GetStartLoc();
-  locArr targetLoc = map.GetTargetLoc(); 
+  locArr targetLoc = map.GetTargetLoc();
   for(auto const &it : myHistory){
     locArr loc = it.first;
     if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
@@ -83,7 +87,9 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!
 // algorithm
 // ---------
 
-std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool animate = false){
+std::map<locArr, locArr> uniformCost(pfMap &map,
+                                     bool visualize = false,
+                                     bool animate = false){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
@@ -91,7 +97,9 @@ std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool an
   auto cheapest = [&cumCostMap](locArr a, locArr b){
     return (cumCostMap.at(a) > cumCostMap.at(b));
   };
-  std::priority_queue<locArr, std::vector<locArr>, decltype(cheapest)> unvisitedPQ(cheapest);
+  std::priority_queue<locArr,
+                      std::vector<locArr>,
+                      decltype(cheapest)> unvisitedPQ(cheapest);
   std::array<locArr,4> directions {{{0,1},{1,0},{0,-1},{-1,0}}}; // to loop through neighbors
 
   // initializing varialbes
@@ -107,25 +115,30 @@ std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool an
   // set cumCost for start node, push into PQ
   ucSetCumCost(cumCostMap, startLoc, 0);
   unvisitedPQ.push(startLoc);
-  if (ucDebug){std::cout << "DEBUG: start:    " << startLoc[0] << "," << startLoc[1] << '\n';}
+  if(animate){map.PrintMap();}
+  if(ucDebug){
+    std::cout << "DEBUG: start:    " << startLoc[0] << ","
+              << startLoc[1] << '\n';
+  }
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
     if(animate){
     // poor man's animation (works though!)
     //ucDrawKnown(map, history); // 'animation'
-    map.PrintMap(); // 'animation'
+    map.ReprintMap(); // 'animation'
   }
     currentLoc = unvisitedPQ.top();
     unvisitedPQ.pop();
-    if(modifyMap || animate){map.GetNodeAt(currentLoc)->SetIsVisited();}
+    if(visualize || animate){map.GetNodeAt(currentLoc)->SetIsVisited();}
     if (currentLoc == targetLoc){        // end loop if target is found
       if(ucDebug){std::cout << "DEBUG: target reached!" << '\n';}
       targetFound = true;
       break;
     }
     if(ucDebug){
-      std::cout << "DEBUG: current:   " << currentLoc[0] << "," << currentLoc[1] << '\n';
+      std::cout << "DEBUG: current:   " << currentLoc[0] << ","
+                << currentLoc[1] << '\n';
       iterationCount+=1;
     }
 
@@ -142,9 +155,12 @@ std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool an
 
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
       ucSetHistory(history, neighborLoc, currentLoc);
-      if(modifyMap || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
+      //if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       unvisitedPQ.push(neighborLoc);
-      if(ucDebug){std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << "," << neighborLoc[1] << "\n";}
+      if(ucDebug){
+        std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << ","
+                  << neighborLoc[1] << "\n";
+      }
     } // end of for loop through neighbors
   } // end of while loop through unvisitedPQ
 
@@ -153,8 +169,11 @@ std::map<locArr, locArr> uniformCost(pfMap &map, bool modifyMap = false, bool an
     if(ucDebug){
       std::cout << "DEBUG: size of history: " << history.size() << '\n';
       std::cout << "DEBUG: iterationCount = " << iterationCount << '\n';
-      std::cout << "DEBUG: cumCost of target: " << ucGetCumCost(cumCostMap, targetLoc) << '\n';
+      std::cout << "DEBUG: cumCost of target: "
+                << ucGetCumCost(cumCostMap, targetLoc) << '\n';
     }
+    if(animate || visualize){ucDrawPath(history, map);}
+    if(animate){map.ReprintMap();}
     //std::cout << "Target found!" << '\n';
   }
   else{

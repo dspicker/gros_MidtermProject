@@ -7,7 +7,8 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
-all: class_node.o class_map.o class_asNode.o class_AStar.o testPerformance.o testAStar main testPerformance testPerformanceAStar clean
+
+all: class_node.o class_map.o class_asNode.o class_AStar.o testPerformance.o testAStar main testPerformance visualize clean #testPerformanceAStar
 #all: main
 
 # EXECUTABLES (GETTING LINKED)
@@ -18,11 +19,14 @@ main: main.o class_node.o class_map.o class_asNode.o class_AStar.o
 testAStar: testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 		g++ $(CFLAGS) -o testAStar testAStar.o class_node.o class_asNode.o class_map.o class_AStar.o
 
-testPerformance: testPerformance.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o class_asNode.o
+visualize: visualize.o breadthfirst.cpp uniformCost.cpp greedyBestFirst.cpp class_AStar.o class_node.o class_map.o class_asNode.o
+		g++ $(CFLAGS) -o visualize visualize.o class_AStar.o class_node.o class_map.o class_asNode.o
+
+testPerformance: testPerformance.o breadthfirst.cpp uniformCost.cpp greedyBestFirst.cpp class_AStar.o class_node.o class_map.o class_asNode.o
 		g++ $(CFLAGS) -o testPerformance testPerformance.o class_AStar.o class_node.o class_map.o  class_asNode.o
 
-testPerformanceAStar: testPerformanceAStar.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o class_asNode.o
-		g++ $(CFLAGS) -o testPerformanceAStar testPerformanceAStar.o class_AStar.o class_node.o class_map.o  class_asNode.o
+#testPerformanceAStar: testPerformanceAStar.o breadthfirst.cpp uniformCost.cpp class_AStar.o class_node.o class_map.o class_asNode.o
+#		g++ $(CFLAGS) -o testPerformanceAStar testPerformanceAStar.o class_AStar.o class_node.o class_map.o  class_asNode.o
 
 
 # .O's - machine language stuff
@@ -44,12 +48,15 @@ testAStar.o: testAStar.cpp class_AStar.h class_map.h
 main.o: main.cpp breadthfirst.cpp uniformCost.cpp greedyBestFirst.cpp class_AStar.h class_node.h class_map.h
 		g++ $(CFLAGS) -c main.cpp
 
+visualize.o: visualize.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp greedyBestFirst.cpp
+		g++ $(CFLAGS) -c visualize.cpp
+
 testPerformance.o: testPerformance.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp greedyBestFirst.cpp
 		g++ $(CFLAGS) -c testPerformance.cpp
 
 
-testPerformanceAStar.o: testPerformanceAStar.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp
-		g++ $(CFLAGS) -c testPerformanceAStar.cpp
+#testPerformanceAStar.o: testPerformanceAStar.cpp class_AStar.h class_map.h uniformCost.cpp breadthfirst.cpp
+#		g++ $(CFLAGS) -c testPerformanceAStar.cpp
 
 # CLEAR REPOSITORY AFTER MAKE
 # 'rm -f' (=force) -> no error if no matching file is found

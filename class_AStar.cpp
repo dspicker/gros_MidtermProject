@@ -144,9 +144,10 @@ double pfAStar::Euklid( asLocation &Pos){
  *  This is the actual A*-Algorithm *
  ************************************/
 
-int pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
-  
+int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool animate){
+  if(animate){MapPtr->PrintMap();}
+
   // Set DEBUGMOD if(1) for getting Debugging Massages
 #define DEBUGMOD if(0)
 
@@ -191,6 +192,10 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan"){
     // Pop it out the List, so it can not get viewed again
     openList.pop();
 
+    // visualisation/animation, position in loop might not be optimal
+    if(animate || visualize){this->UpdateMap();}
+    if(animate){MapPtr->ReprintMap();}
+
     // Set Neighbors of currentNode
     currentNeighbors = currentNode->GetNeighbors();
 
@@ -220,7 +225,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan"){
       // So this implementation should be faster, espacially for big Maps.
       if(!*Neig_It->isVisited()){
 	DEBUGMOD std::cout << "N(" ;
-	
+
 	Neig_It->Seth( (this->* HEURISTIC_PTR)( *Neig_It->GetPositionRef() ) );
 	Neig_It->Setg( *currentNode->Getg() + Neig_It->GetWeight() );
 	Neig_It->Setf();
@@ -252,15 +257,15 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan"){
     }// for Neig_It:*currentNeighbors
   }// while
 
-  
+
   // If a FinishNodes was reached, Set Path form Finish- to Start-Node.
   if(FINISH_FOUND){
     DEBUGMOD std::cout << ">>>FINISH FOUND!" << std::endl;
-    
+
     // Reserve Space for PathNodes.
     // Smalles Number of PathNodes correspondes to Manhattan Norm
     PathNodes.reserve( Manhattan(*allNodes[START_INDEX].GetPositionRef()) );
-    
+
     for( currentNode = &allNodes[FINISH_INDEX];
 	 currentNode->GetType() != 4;
 	 currentNode=currentNode->GetParent()){
@@ -274,6 +279,10 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan"){
 
       PathNodes.push_back(currentNode);
     }
+
+    if(animate || visualize){this->UpdateMap();}
+    if(animate){MapPtr->ReprintMap();}
+
     DEBUGMOD std::cout << std::endl << std::endl;
     return 1;
   }

@@ -2,5 +2,6 @@
 *.o
 pathfinder
 testAStar
+visualize
 testPerformance
 #*

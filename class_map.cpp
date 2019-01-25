@@ -5,6 +5,8 @@
 #include <random>
 #include <fstream>
 #include <algorithm>
+#include <stdio.h>    // required for moveCursor
+#include <stdlib.h>
 
 // default constructor
 pfMap::pfMap(){ }
@@ -107,12 +109,12 @@ void pfMap::PrintMap(){
   std::cout << std::endl;
   std::array<int,2> pos;
   for(int j=height-1 ; j>=0 ; j--){
-    
+
     if(j%2==0)
       printf("%.2d", j);
     else
       printf("\033[48;2;%u;%u;%um%.2d\033[0m", 200, 200, 200, j);
-    
+
   for(int i=0 ; i<width ; i++){
       pos[0] = i;
       pos[1] = j;
@@ -130,6 +132,42 @@ void pfMap::PrintMap(){
 
   std::cout << std::endl << std::endl ;
 }
+// start terminal-animation addition (Felix)
+// function moveCursor from lecture ( needed for ReprintMap() )
+void pfMap::moveCursor(int deltaX, int deltaY){
+  static const std::string first("\x1b[");
+  static const std::string plusY("A");
+  static const std::string minusY("B");
+  static const std::string plusX("C");
+  static const std::string minusX("D");
+  char strDeltaX[50];
+  char strDeltaY[50];
+  std::string escapeCharX, escapeCharY;
+  sprintf(strDeltaX, "%d",(deltaX>0)?deltaX:(-deltaX)); // write to string
+  sprintf(strDeltaY, "%d",(deltaY>0)?deltaY:(-deltaY));
+//
+  if (deltaX>0)
+    escapeCharX = first + strDeltaX + plusX;
+  else
+    escapeCharX = first + strDeltaX + minusX;
+//
+  if (deltaY>0)
+    escapeCharY = first + strDeltaY + plusY;
+  else
+    escapeCharY = first + strDeltaY + minusY;
+//
+  if (deltaX!=0)
+    std::cout << escapeCharX;                // stream control sequence
+  if (deltaY!=0)
+    std::cout << escapeCharY;
+}
+
+void pfMap::ReprintMap(){
+  moveCursor(0,height+3);   // mit this-> ?
+  PrintMap();
+}
+// end terminal-animation addition (Felix)
+
 
 pfNode* pfMap::GetNodeAt(int x, int y){
 
