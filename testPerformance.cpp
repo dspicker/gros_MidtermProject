@@ -101,10 +101,14 @@ int main(){
       duration_star += (t2_star-t1_star);
     }
 
-    int_duration_breadth = std::chrono::duration_cast<std::chrono::microseconds> (duration_breadth).count()/sampleSize;
-    int_duration_uniform = std::chrono::duration_cast<std::chrono::microseconds> (duration_uniform).count()/sampleSize;
-    int_duration_greedy = std::chrono::duration_cast<std::chrono::microseconds> (duration_greedy).count()/sampleSize;
-    int_duration_star    = std::chrono::duration_cast<std::chrono::microseconds>    (duration_star).count()/sampleSize;
+    int_duration_breadth = std::chrono::duration_cast<std::chrono::microseconds>
+     (duration_breadth).count()/sampleSize;
+    int_duration_uniform = std::chrono::duration_cast<std::chrono::microseconds>
+     (duration_uniform).count()/sampleSize;
+    int_duration_greedy  = std::chrono::duration_cast<std::chrono::microseconds>
+     (duration_greedy).count()/sampleSize;
+    int_duration_star    = std::chrono::duration_cast<std::chrono::microseconds>
+     (duration_star).count()/sampleSize;
 
     vBreadth.push_back(int_duration_breadth);
     vUniform.push_back(int_duration_uniform);
