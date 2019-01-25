@@ -96,5 +96,10 @@ void gbDrawPath(std::map< gbLoc , double > dist_to_target, pfMap &Map){
     return ;
   }
 
+  for( auto it : dist_to_target ){
+    gbLoc loc = it.first ;
+    Map.GetNodeAt(loc)->Setf(it.second) ;
+    //std::cout << it.second << '\n';
+  }
 
 }

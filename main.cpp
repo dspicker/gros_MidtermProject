@@ -59,7 +59,8 @@ int main(){
 
   std::cout << "starting greedyBestFirst" << '\n';
   auto flow = GreedyBestFirst(*map5);
-
+  gbDrawPath(flow,*map5) ;
+  map5->PrintMap();
 
   //map5->PrintMap();
 
