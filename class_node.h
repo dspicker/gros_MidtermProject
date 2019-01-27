@@ -30,7 +30,9 @@ public:
   int GetType() const { return type; }
   int GetWeight() const { return weight; }
   std::string GetTypeName() const; // returns "Wall", "Grass", etc..
-
+  bool GetIsPath() const {return isPath;}
+  bool GetIsVisited() const {return isVisited;}
+  
 
   // Setter:
   // set the node as a start or end point of the path.

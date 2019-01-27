@@ -4,7 +4,7 @@
 CFLAGS = -Wall -W -O -std=c++11
 
 # EVERY PART INSERTED HERE WILL BE EXECUTED IN EXACT THIS ORDER
-TARGETS = main visualize testPerformance testAStar clean
+TARGETS = main visualize testPerformance testAStar plotGnuMap clean
 all: $(TARGETS)
 $(info make: $(TARGETS) )
 
@@ -21,6 +21,9 @@ visualize: visualize.o
 testPerformance: testPerformance.o
 		g++ $(CFLAGS) -o testPerformance testPerformance.o class_AStar.o class_node.o class_map.o  class_asNode.o
 
+
+plotGnuMap: plotGnuMap.o
+		g++ $(CFLAGS) -o plotGnuMap plotGnuMap.o class_node.o class_map.o class_AStar.o class_asNode.o
 
 
 ###### classes
@@ -51,6 +54,10 @@ visualize.o: visualize.cpp $(CLASSES) $(ALGORITHMS)
 
 testPerformance.o: testPerformance.cpp $(CLASSES) $(ALGORITHMS)
 		g++ $(CFLAGS) -c testPerformance.cpp
+
+
+plotGnuMap.o: plotGnuMap.cpp $(CLASSES)
+		g++ $(CFLAGS) -c plotGnuMap.cpp
 
 
 # CLEAR REPOSITORY AFTER MAKE

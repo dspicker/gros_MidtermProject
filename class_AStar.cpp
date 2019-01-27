@@ -145,7 +145,7 @@ double pfAStar::Euklid( asLocation &Pos){
  ************************************/
 
 
-int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool animate){
+int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
   if(animate){MapPtr->PrintMap();}
 
   // Set DEBUGMOD if(1) for getting Debugging Massages
