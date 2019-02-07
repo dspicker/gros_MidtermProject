@@ -145,7 +145,7 @@ double pfAStar::Euklid( asLocation &Pos){
  ************************************/
 
 
-int pfAStar::solve(std::string HeuristicName = "Manhattan", // <- merge conflict upcoming..
+int pfAStar::solve(std::string HeuristicName, // <- merge conflict upcoming.. (use this!)
                    bool visualize,
                    bool animate,
                    int iterationCount){

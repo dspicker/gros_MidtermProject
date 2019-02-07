@@ -63,7 +63,7 @@ class pfAStar {
   std::vector<asNode*> GetPathNodes() {return PathNodes;};
 
   // Functions:
-  int solve(std::string HeuristicName,
+  int solve(std::string HeuristicName="Manhattan",
             bool visualize=false,
             bool animate=false,
             int iterationCount=0); // Actual A*-Algorithm
