@@ -56,7 +56,9 @@ double gbDistance( gbLoc loc1, gbLoc loc2){
 
 
 // main algorithm
-std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map, bool visualize=false, bool animate=false){
+std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map, bool visualize=false,
+                                          bool animate=false,
+                                          int iterationCount=0){
   std::map< gbLoc , double > result;
   std::map<gbLoc, gbLoc> history;
   gbQueue search_queue ;
@@ -70,6 +72,7 @@ std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map, bool visualize=false, bool
   if(animate){Map.PrintMap();}
   //std::cout << "gBF before loop" << '\n';
   while ( !search_queue.empty() ) {
+    iterationCount+=1;
     gbNode curr = search_queue.top() ;
     search_queue.pop() ;
     // move below neighbor loop?

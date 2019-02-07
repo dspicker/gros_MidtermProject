@@ -89,7 +89,8 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!
 
 std::map<locArr, locArr> uniformCost(pfMap &map,
                                      bool visualize = false,
-                                     bool animate = false){
+                                     bool animate = false,
+                                     int iterationCount = 0){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
@@ -110,7 +111,6 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
   locArr neighborLoc;
   int neighborCumCost;
   int currentCumCost;
-  int iterationCount = 0; // only for ucDebugging!
 
   // set cumCost for start node, push into PQ
   ucSetCumCost(cumCostMap, startLoc, 0);
@@ -123,9 +123,9 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
+    iterationCount+=1;
     if(animate){
     // poor man's animation (works though!)
-    //ucDrawKnown(map, history); // 'animation'
     map.ReprintMap(); // 'animation'
   }
     currentLoc = unvisitedPQ.top();
@@ -139,24 +139,20 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
     if(ucDebug){
       std::cout << "DEBUG: current:   " << currentLoc[0] << ","
                 << currentLoc[1] << '\n';
-      iterationCount+=1;
     }
-
-    // check neighbors of current node
+    // check neighbors of current node:
     for(auto direction : directions){
-      neighborLoc = ucAddLocArr(currentLoc, direction);
-      //pfNode* pt2Node = map.GetNodeAt(neighborLoc); // store pointer to neighbor node
-
-      if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc))
+      neighborLoc = ucAddLocArr(currentLoc, direction); // get location of next neighbor
+      if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc)) // skip if known/wall
         continue;
 
       currentCumCost = ucGetCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
-
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
       ucSetHistory(history, neighborLoc, currentLoc);
-      if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       unvisitedPQ.push(neighborLoc);
+
+      if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       if(ucDebug){
         std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << ","
                   << neighborLoc[1] << "\n";

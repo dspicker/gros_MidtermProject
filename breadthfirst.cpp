@@ -33,7 +33,10 @@ std::vector< bfLocation > bfNeighbours( bfLocation id ){
 void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map);
 
 // main algorithm
-std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,bool visualize=false, bool animate=false){
+std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
+                                                 bool visualize=false,
+                                                 bool animate=false,
+                                                 int iterationCount=0){
   std::queue< bfLocation > search_queue ;           // the queue of the algorithm
   // get target node from map. this algorithm starts at the target
   bfLocation search_begin = Map.GetTargetLoc() ;

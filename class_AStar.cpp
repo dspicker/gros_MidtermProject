@@ -145,7 +145,10 @@ double pfAStar::Euklid( asLocation &Pos){
  ************************************/
 
 
-int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool animate){
+int pfAStar::solve(std::string HeuristicName = "Manhattan", // <- merge conflict upcoming..
+                   bool visualize,
+                   bool animate,
+                   int iterationCount){
   if(animate){MapPtr->PrintMap();}
 
   // Set DEBUGMOD if(1) for getting Debugging Massages
@@ -185,7 +188,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool 
   // if openList is empty    => no Path could be found
   // if FINISH_FOUND == true => shortest Path is found
   while(!openList.empty() && !FINISH_FOUND){
-
+    iterationCount+=1;
     // Set new Node getting viewed
     currentNode = openList.top();
 
