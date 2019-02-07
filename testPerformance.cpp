@@ -54,7 +54,6 @@ int main(){
     std::chrono::duration<double> duration_star;
 */
   int itCount_breadth, itCount_uniform, itCount_greedy, itCount_star;
-  int totIt_breadth, totIt_uniform, totIt_greedy, totIt_star;
 
   std::vector<double> vBreadth, vUniform, vStar, vGreedy;
   std::vector<int> vNodes;
@@ -74,6 +73,13 @@ int main(){
 
     width = m;
     height = m;
+    // reset totInt counters:
+    int totIt_breadth = 0;
+    int totIt_uniform = 0;
+    int totIt_greedy = 0;
+    int totIt_star = 0;
+
+
 /*  old using time
     duration_breadth.zero();
     duration_uniform.zero();
@@ -96,7 +102,7 @@ int main(){
       // create AStar object
       pfAStar star(map);
 
-      // reset iteration counters:
+      // (re)set iteration counters:
       itCount_breadth = 0;
       itCount_uniform = 0;
       itCount_star = 0;
@@ -108,8 +114,6 @@ int main(){
 
       uniformCost(map_uniform,0,0,&itCount_uniform);
       totIt_uniform += itCount_uniform;
-      std::cout << itCount_uniform << '\n';
-
 
       GreedyBestFirst(map_greedy,0,0,&itCount_greedy);
       totIt_greedy += itCount_greedy;
@@ -117,7 +121,7 @@ int main(){
       star.solve("Manhattan",0,0,&itCount_star);
       totIt_star += itCount_star;
 
-/*
+/*    old using time
       t1_breadth = std::chrono::high_resolution_clock::now();
       Breadthfirst(map_breadth);
       t2_breadth = std::chrono::high_resolution_clock::now();
@@ -156,6 +160,14 @@ int main(){
     vNodes.push_back(width*height);
 */
 
+    // calculate average
+    totIt_breadth = totIt_breadth/sampleSize;
+    totIt_uniform = totIt_uniform/sampleSize;
+    totIt_greedy = totIt_greedy/sampleSize;
+    totIt_star = totIt_star/sampleSize;
+
+
+
     vBreadth.push_back(totIt_breadth);
     vUniform.push_back(totIt_uniform);
     vGreedy.push_back(totIt_greedy);
@@ -168,7 +180,6 @@ int main(){
         << "\nGreedy : "   << totIt_greedy
         << "\nStar   : " << totIt_star
         << std::endl;
-
 
 
 /*  old using time
