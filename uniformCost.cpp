@@ -90,7 +90,7 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!
 std::map<locArr, locArr> uniformCost(pfMap &map,
                                      bool visualize = false,
                                      bool animate = false,
-                                     int iterationCount = 0){
+                                     int *iterationCount = 0){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
@@ -123,7 +123,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
-    iterationCount+=1;
+    *iterationCount+=1;
     if(animate){
     // poor man's animation (works though!)
     map.ReprintMap(); // 'animation'

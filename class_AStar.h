@@ -66,7 +66,7 @@ class pfAStar {
   int solve(std::string HeuristicName="Manhattan",
             bool visualize=false,
             bool animate=false,
-            int iterationCount=0); // Actual A*-Algorithm
+            int *iterationCount=0); // Actual A*-Algorithm
   void UpdateMap(std::string PRINT_VALUE_TYPE=" "); // For Updating and Plotting the Input Map
 
 };

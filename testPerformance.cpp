@@ -15,7 +15,7 @@
 /* TODO:
     - delete old code or keep option for both time and iterations?
     - use pointer to int instead
-    - 
+    -
 
 */
 
@@ -103,17 +103,18 @@ int main(){
       itCount_greedy = 0;
 
       // run algorithms on maps
-      Breadthfirst(map_breadth,0,0,itCount_breadth);
-      std::cout << itCount_breadth << '\n';
+      Breadthfirst(map_breadth,0,0,&itCount_breadth);
       totIt_breadth += itCount_breadth;
 
-      uniformCost(map_uniform,0,0,itCount_uniform);
+      uniformCost(map_uniform,0,0,&itCount_uniform);
       totIt_uniform += itCount_uniform;
+      std::cout << itCount_uniform << '\n';
 
-      GreedyBestFirst(map_greedy,0,0,itCount_greedy);
+
+      GreedyBestFirst(map_greedy,0,0,&itCount_greedy);
       totIt_greedy += itCount_greedy;
 
-      star.solve("Manhattan",0,0,itCount_star);
+      star.solve("Manhattan",0,0,&itCount_star);
       totIt_star += itCount_star;
 
 /*

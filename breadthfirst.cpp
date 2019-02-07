@@ -36,7 +36,7 @@ void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map);
 std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
                                                  bool visualize=false,
                                                  bool animate=false,
-                                                 int iterationCount=0){
+                                                 int *iterationCount=0){
   std::queue< bfLocation > search_queue ;           // the queue of the algorithm
   // get target node from map. this algorithm starts at the target
   bfLocation search_begin = Map.GetTargetLoc() ;
@@ -52,7 +52,7 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
   if(animate){Map.PrintMap();}
   // actual algorithm
   while ( !search_queue.empty() ) {
-    iterationCount+=1;
+    *iterationCount+=1;
     // take an element out of the queue
     bfLocation current = search_queue.front();
     search_queue.pop();
