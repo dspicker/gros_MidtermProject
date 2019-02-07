@@ -52,6 +52,7 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
   if(animate){Map.PrintMap();}
   // actual algorithm
   while ( !search_queue.empty() ) {
+    iterationCount+=1;
     // take an element out of the queue
     bfLocation current = search_queue.front();
     search_queue.pop();
