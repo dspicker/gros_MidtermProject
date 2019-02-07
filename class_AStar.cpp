@@ -188,7 +188,7 @@ int pfAStar::solve(std::string HeuristicName, // <- merge conflict upcoming.. (u
   // if openList is empty    => no Path could be found
   // if FINISH_FOUND == true => shortest Path is found
   while(!openList.empty() && !FINISH_FOUND){
-    *iterationCount+=1;
+    if(iterationCount){*iterationCount+=1;} // do only if iterationCount given as argument
     // Set new Node getting viewed
     currentNode = openList.top();
 

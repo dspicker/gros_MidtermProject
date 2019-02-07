@@ -72,7 +72,7 @@ std::map< gbLoc , gbLoc > GreedyBestFirst(pfMap &Map, bool visualize=false,
   if(animate){Map.PrintMap();}
   //std::cout << "gBF before loop" << '\n';
   while ( !search_queue.empty() ) {
-    *iterationCount+=1;
+    if(iterationCount){*iterationCount+=1;} // do only if iterationCount given as argument
     gbNode curr = search_queue.top() ;
     search_queue.pop() ;
     // move below neighbor loop?

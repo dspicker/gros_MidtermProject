@@ -9,13 +9,9 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
-    - animation in terminal
     - delete ucDrawKnown
-    - write setter funciton for f in pfNode.cpp
     - use f of pfNodes to store cumCost instead of cumCostMap?
     - get rid of cumCostMap? <- make up for performance reduction of altering map!
-    - store pointer to node in usDrawKnown
-    - add functionality to measure time taken to find the targetLoc
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
 */
@@ -45,7 +41,7 @@ locArr ucAddLocArr(locArr &a, locArr &b){
   return res;
 }
 
-// functions for visualisation (call in main)
+// functions for visualisation (call in main) :
 void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   locArr targetLoc = map.GetTargetLoc();
   locArr startLoc  = map.GetStartLoc();
@@ -82,6 +78,7 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!
     }
   }
 }
+
 
 // ---------
 // algorithm
@@ -123,7 +120,7 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
-    *iterationCount+=1;
+    if(iterationCount){*iterationCount+=1;} // do only if iterationCount given as argument
     if(animate){
     // poor man's animation (works though!)
     map.ReprintMap(); // 'animation'
