@@ -12,15 +12,29 @@
 
 void plotMap(pfMap Map){
 
-  std::array<std::stringstream, 6> typestream; //Wall, Grass, Forest, 
+  std::array<std::stringstream, 6> typestream; //Wall, Grass, Forest, visited Grass, visited Forest
 
+  std::array<std::string, 6>  strTypeName  = {"$Wall",
+					      "$Grass",
+					      "$Forest",
+					      "$visitedGrass",
+					      "$visitedForest",
+					      "$Path"};
 
-  typestream[0] << "$Wall"          << "<<" << "EOD\n";
-  typestream[1] << "$Grass"         << "<<" << "EOD\n";
-  typestream[2] << "$Forest"        << "<<" << "EOD\n"; 
-  typestream[3] << "$visitedGrass"   << "<<" << "EOD\n";
-  typestream[4] << "$visitetdForest"  << "<<" << "EOD\n";
-  typestream[5] << "$Path"          << "<<" << "EOD\n"; 
+  
+  std::array<std::string, 6>  strTypeColor  = {"#646464",
+					       "#33cc33",
+					       "#009933",
+					       "#83cc83",
+					       "#509983",
+					       "yellow"};
+ 
+
+  double pointsize = 2; 
+  
+  for(int n=0; n<typestream.size(); n++)
+    typestream[n] << strTypeName[n] << "<<" << "EOD\n";
+  
   
   
   for(int x=0; x<Map.GetWidth(); x++){
@@ -52,22 +66,30 @@ void plotMap(pfMap Map){
     }
   }
 
-  typestream[0] << "EOD\n" << "plot $Wall     w p ls 5 ps 2 lc rgb 'grey'  \n" ;
-  typestream[1] << "EOD\n" << "replot $Grass  w p ls 5 ps 2 lc rgb 'green' \n" ;
-  typestream[2] << "EOD\n" << "replot $Forest w p ls 5 ps 2 lc rgb 'blue'  \n" ;
-  typestream[3] << "EOD\n" << "replot $visitedGrass w p ls 5 ps 2 lt rgb \"#7EAC84\"\n" ;
-  typestream[4] << "EOD\n" << "replot $visitedForest w p ls 5 ps 2 lt rgb '#4F6652'  \n" ;
-  typestream[5] << "EOD\n" << "replot $Path w p ls 5 ps 2 lc rgb 'yellow'  \n" ;
+
+
+  
+
+  typestream[0] << "EOD\n" << "plot   $Wall          w p ls 5 ps 2 lc rgb '#646464' \n" ;
+  typestream[1] << "EOD\n" << "replot $Grass         w p ls 5 ps 2 lc rgb '#33cc33' \n" ;
+  typestream[2] << "EOD\n" << "replot $Forest        w p ls 5 ps 2 lc rgb '#009933'  \n" ;
+  typestream[3] << "EOD\n" << "replot $visitedGrass  w p ls 5 ps 2 lt rgb '#83cc83' \n" ;
+  typestream[4] << "EOD\n" << "replot $visitedForest w p ls 5 ps 2 lt rgb '#509983  \n" ;
+  typestream[5] << "EOD\n" << "replot $Path          w p ls 5 ps 2 lc rgb 'yellow'  \n" ;
 
  
 
 
   FILE *pipeGnu = popen("gnuplot", "w");
+  fprintf(pipeGnu, "set term qt persist size 800,800\n");
+  fprintf(pipeGnu, "set nokey\n"); 
   fprintf(pipeGnu, "set xlabel \"Width\"\n");
   fprintf(pipeGnu, "set ylabel \"Heigh\"\n");
   fprintf(pipeGnu, "set title \"Map\"\n");
   fprintf(pipeGnu, "set size 1,1\n");
-  fprintf(pipeGnu, "set terminal wxt size 800,800\n"); //sets canvas size 
+
+  fprintf(pipeGnu, "set xrange [0:%d]\n", Map.GetWidth()-1);
+  fprintf(pipeGnu, "set yrange [0:%d]\n", Map.GetHeight()-1);  
 
 
   for(int i=0; i<6; i++){
@@ -89,11 +111,8 @@ int main(){
   star1.UpdateMap();  
  
   
-  plotMap(map1);
+  //plotMap(map1);
 
-  int wait;
 
-  std::cin>>wait;
-  
   return 0;
 }

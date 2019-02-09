@@ -4,6 +4,9 @@
 #include "class_map.h"
 #include "class_asNode.h"
 
+#include "GnuGif.cpp"
+
+
 #include <map>
 #include <array>
 #include <math.h>
@@ -181,6 +184,8 @@ int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
 
   bool FINISH_FOUND = false;
 
+  int run = 0;
+  
   // Start looping over the openList.
   // if openList is empty    => no Path could be found
   // if FINISH_FOUND == true => shortest Path is found
@@ -253,6 +258,10 @@ int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
 			 << *Neig_It->Getg() << ", "
 			 << *Neig_It->Getf() << ")" << std::endl;
 
+      this->UpdateMap();
+      GnuGif(*MapPtr, run);
+
+      run++;
 
     }// for Neig_It:*currentNeighbors
   }// while

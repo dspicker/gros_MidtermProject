@@ -36,7 +36,7 @@ class_map.o: class_node.h class_map.cpp
 class_asNode.o:	class_node.h class_asNode.cpp class_asNode.h
 		g++ $(CFLAGS) -c class_asNode.cpp
 
-class_AStar.o: 	class_node.h class_map.h class_asNode.h
+class_AStar.o: 	class_node.h class_map.h class_asNode.h GnuGif.cpp
 		g++ $(CFLAGS) -c class_AStar.cpp
 
 CLASSES = class_node.o class_map.o class_asNode.o class_AStar.o
