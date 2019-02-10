@@ -29,8 +29,10 @@ std::vector< bfLocation > bfNeighbours( bfLocation id ){
   return result;
 }
 
-// forward definition to use for animation:
-void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map);
+// forward definitions to use for animation:
+std::array<int,2> bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map);
+int bfDirection( bfLocation curr, bfLocation next );
+
 
 // main algorithm
 std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
@@ -57,7 +59,17 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
     bfLocation current = search_queue.front();
     search_queue.pop();
 
-    if(animate || visualize){Map.GetNodeAt(current)->SetIsVisited();}
+    if(animate || visualize){
+      Map.GetNodeAt(current)->SetIsVisited();
+      // set directions to display in terminal
+      // (copy-paste from bfDrawPath, could be optimized..)
+      for(auto &it : search_result ){
+        bfLocation cur = it.first;
+        bfLocation nxt = it.second;
+        int dir = bfDirection(cur,nxt) ;
+        Map.SetDirAt(cur[0],cur[1],dir);
+      } // end for loop to mark flow directions
+    } // end if(animate || visualize)
     if(animate){Map.ReprintMap();}
 
     // early exit as soon as start node is reached.
@@ -106,28 +118,34 @@ int bfDirection( bfLocation curr, bfLocation next ){
 }
 
 // modifies the map to draw the resulting path. call only after Breadthfirst
-void bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
+std::array<int,2> bfDrawPath(std::map< bfLocation , bfLocation > flow, pfMap &Map){
   bfLocation start = Map.GetStartLoc() ;
   bfLocation target = Map.GetTargetLoc() ;
+  // initialize return values:
+  static std::array<int,2> returnArr;
+  returnArr[0] = 0; // lengh of Path
+  returnArr[1] = 0; // cost of Path
 
   if( flow.find(start) == flow.end() ){
     std::cout << "Breadthfirst: No Path found!" << '\n';
-    return ;
+    return returnArr;
   }
 
   bfLocation next = flow[start] ;
-    //for(int i=0; i<20 ; i++) {
     while ( next != target ) {
-      //Map.SetTypeAt(next[0],next[1],6);
+      returnArr[0] += 1;
+      returnArr[1] += Map.GetNodeAt(next)->GetWeight();
       Map.GetNodeAt(next)->SetIsPath();
       next = flow[next];
-  }
+  } // end while loop
 
+  // set directions to display in terminal
+  // (could be implemented into breadthfirst function in visualize/animate sections)
   for(auto &it : flow ){
     bfLocation cur = it.first;
     bfLocation nxt = it.second;
     int dir = bfDirection(cur,nxt) ;
     Map.SetDirAt(cur[0],cur[1],dir);
-  }
-
-}
+  } // end for loop to mark flow directions
+  return returnArr;
+} // end bfDrawPath

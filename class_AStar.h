@@ -67,7 +67,7 @@ class pfAStar {
             bool visualize=false,
             bool animate=false,
             int *iterationCount=0); // Actual A*-Algorithm
-  void UpdateMap(std::string PRINT_VALUE_TYPE=" "); // For Updating and Plotting the Input Map
+  std::array<int,2> UpdateMap(std::string PRINT_VALUE_TYPE=" "); // For Updating and Plotting the Input Map
 
 };
 #endif

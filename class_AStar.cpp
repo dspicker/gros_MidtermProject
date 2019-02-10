@@ -296,7 +296,7 @@ int pfAStar::solve(std::string HeuristicName, // <- merge conflict upcoming.. (u
 
 
 // Just a Update-Function so the Path can be plotted with the given PrintFunction in pfMap.
-void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
+std::array<int,2> pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
 
   typedef double* (asNode::*Fptr_Get_Value)();
   Fptr_Get_Value VALUE_PTR;
@@ -322,9 +322,16 @@ void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
     }
   }
 
+  // initialize return values:
+  static std::array<int,2> returnArr;
+  returnArr[0] = 0; // lengh of Path
+  returnArr[1] = 0; // cost of Path
+
   for( auto it : PathNodes){
     NodePtr = MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]);
+    returnArr[0] += 1;
+    returnArr[1] += NodePtr->GetWeight();
     NodePtr->SetIsPath();
   }
-
+  return returnArr;
 }

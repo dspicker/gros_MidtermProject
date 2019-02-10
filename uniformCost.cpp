@@ -42,15 +42,21 @@ locArr ucAddLocArr(locArr &a, locArr &b){
 }
 
 // functions for visualisation (call in main) :
-void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
+std::array<int,2> ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   locArr targetLoc = map.GetTargetLoc();
   locArr startLoc  = map.GetStartLoc();
   locArr currentLoc = targetLoc;
   locArr previousLoc;
+  // initialize return values:
+  static std::array<int,2> returnArr;
+  returnArr[0] = 0; // lengh of Path
+  returnArr[1] = 0; // cost of Path
+
   if( myHistory.find(targetLoc) == myHistory.end() ){ // check if target found, abourt if not
     std::cout << "UniformCost: Target not found!" << '\n';
-    return;
+    return returnArr;
   }
+
   // loop through linked locations starting at target location
   while(true){
     previousLoc = myHistory.at(currentLoc);
@@ -63,10 +69,13 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
     }
     if(previousLoc == startLoc)
       break;
+    returnArr[0] += 1;
+    returnArr[1] += (map.GetNodeAt(previousLoc)->GetWeight());
     map.GetNodeAt(previousLoc)->SetIsPath();
     currentLoc = previousLoc;
-  }
-}
+  } // end while loop
+  return returnArr;
+} // end ucDrawPath
 void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
   locArr startLoc  = map.GetStartLoc();
   locArr targetLoc = map.GetTargetLoc();
@@ -142,10 +151,11 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
       neighborLoc = ucAddLocArr(currentLoc, direction); // get location of next neighbor
       if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc)) // skip if known/wall
         continue;
-
+      // calcualte and set cumCost:
       currentCumCost = ucGetCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
+      // link neighbors to current location and push into queue:
       ucSetHistory(history, neighborLoc, currentLoc);
       unvisitedPQ.push(neighborLoc);
 
