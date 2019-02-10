@@ -44,6 +44,7 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
   bfLocation search_begin = Map.GetTargetLoc() ;
   // put coordinates of starting-point into queue
   search_queue.push(search_begin) ;
+  bool targetFound = false;
 
   bfLocation goal = Map.GetStartLoc();
 
@@ -73,7 +74,10 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
     if(animate){Map.ReprintMap();}
 
     // early exit as soon as start node is reached.
-    if( current == goal ) break ;
+    if( current == goal ){
+      targetFound = true;
+      break;
+    }
 
     // loop trough all neighbours of current element
     for (bfLocation next : bfNeighbours(current) ) {
@@ -89,10 +93,10 @@ std::map< bfLocation , bfLocation > Breadthfirst(pfMap &Map,
       }
     }
   }
-
-  if(animate || visualize){bfDrawPath(search_result, Map);}
-  if(animate){Map.ReprintMap();}
-
+  if(targetFound){
+    if(animate || visualize){bfDrawPath(search_result, Map);}
+    if(animate){Map.ReprintMap();}
+  }
   return search_result;
 }
 
