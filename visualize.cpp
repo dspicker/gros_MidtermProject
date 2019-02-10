@@ -26,6 +26,8 @@ void enterToContinue(){
 
 int main(){
 
+  bool showPathData = false;  // show cost and lengh of path
+
   // change size of random map if you want
   int hight = 40;
   int width = 40;
@@ -73,20 +75,38 @@ int main(){
   std::cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
 
   std::cout << "breadthfirst:";
-  Breadthfirst(compare1BF,visualize, animate);
+  auto flow = Breadthfirst(compare1BF,visualize, animate);
   if(!animate){compare1BF.PrintMap();}
+  if(showPathData){
+    std::cout << "length: " << bfDrawPath(flow, compare1BF)[0] << "\n"
+              << "cost:   " << bfDrawPath(flow, compare1BF)[1]
+              << '\n'
+              << '\n';
+  }
 
   enterToContinue();
 
   std::cout << "uniform cost:";
-  uniformCost(compare1UC,visualize, animate);
+  auto ucHistory = uniformCost(compare1UC,visualize, animate);
   if(!animate){compare1UC.PrintMap();}
+  if(showPathData){
+    std::cout << "length: " << ucDrawPath(ucHistory, compare1UC)[0] << "\n"
+              << "cost:   " << ucDrawPath(ucHistory, compare1UC)[1]
+              << '\n'
+              << '\n';
+  }
 
   enterToContinue();
 
   std::cout << "greedy best first:";
-  GreedyBestFirst(compare1GB, visualize, animate);
+  auto gbHistory = GreedyBestFirst(compare1GB, visualize, animate);
   if(!animate){compare1GB.PrintMap();}
+  if(showPathData){
+    std::cout << "length: " << gbDrawPath(gbHistory, compare1GB)[0] << "\n"
+              << "cost:   " << gbDrawPath(gbHistory, compare1GB)[1]
+              << '\n'
+              << '\n';
+  }
 
   enterToContinue();
 
@@ -94,6 +114,12 @@ int main(){
   pfAStar ASMan(compare1ASMan);
   ASMan.solve("Manhattan",visualize, animate);
   if(!animate){compare1ASMan.PrintMap();}
+  if(showPathData){
+    std::cout << "length: " << ASMan.UpdateMap()[0] << "\n"
+              << "cost:   " << ASMan.UpdateMap()[1]
+              << '\n'
+              << '\n';
+  }
 
   enterToContinue();
 
@@ -101,6 +127,12 @@ int main(){
   pfAStar ASEuk(compare1ASEuk);
   ASEuk.solve("Euklid",visualize, animate);
   if(!animate){compare1ASEuk.PrintMap();}
+  if(showPathData){
+    std::cout << "length: " << ASEuk.UpdateMap()[0] << "\n"
+              << "cost:   " << ASEuk.UpdateMap()[1]
+              << '\n'
+              << '\n';
+  }
 
   enterToContinue();
 
@@ -108,6 +140,12 @@ int main(){
   pfAStar ASMin(compare1ASMin);
   ASMin.solve("Minimum",visualize, animate);
   if(!animate){compare1ASMin.PrintMap();}
+  if(showPathData){
+    std::cout << "length: " << ASMin.UpdateMap()[0] << "\n"
+              << "cost:   " << ASMin.UpdateMap()[1]
+              << '\n'
+              << '\n';
+  }
 
   enterToContinue();
 
@@ -115,6 +153,11 @@ int main(){
   pfAStar ASSup(compare1ASSup);
   ASSup.solve("Supremum",visualize, animate);
   if(!animate){compare1ASSup.PrintMap();}
-
+  if(showPathData){
+    std::cout << "length: " << ASSup.UpdateMap()[0] << "\n"
+              << "cost:   " << ASSup.UpdateMap()[1]
+              << '\n'
+              << '\n';
+  }
   return 0;
 }
