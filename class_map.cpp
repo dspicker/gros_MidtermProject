@@ -24,7 +24,7 @@ pfMap::pfMap(int w, int h, bool weighted){
   // obtain a seed, initialize a random number generator and  initialize a uniform distribution
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   std::mt19937_64 gen(seed);
-  std::uniform_int_distribution<int> random(1,4);
+  std::uniform_int_distribution<int> random(1,5);
 
   for(int i=0 ; i<width ; i++){
     for(int j=0 ; j<height ; j++){
@@ -41,7 +41,7 @@ pfMap::pfMap(int w, int h, bool weighted){
 	  }
 	}
 
-        if(rnd_type == 4 ){ rnd_type = 2; }
+        if(rnd_type == 4 || rnd_type==5 ){ rnd_type = 2; }
         if( !weighted && rnd_type==3 ){rnd_type=2;}
         nodes.insert( std::make_pair( std::array<int,2>{i,j}, pfNode(rnd_type) ) );
       }
