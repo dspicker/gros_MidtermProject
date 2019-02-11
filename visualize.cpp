@@ -37,15 +37,15 @@ int main(){
     pfMap compare(*pfMap::LoadMap("maps/compare1.csv"));
   //pfMap compare(*pfMap::LoadMap("maps/map1.csv"));
   //pfMap compare(*pfMap::LoadMap("maps/map2.csv"));
+  //pfMap compare(*pfMap::LoadMap("maps/map1_b.csv"));
 
   // Use random generated map with specified dimensions:
-  // (be careful not to initiate compare twice)
-
-  //pfMap compare(hight, width);
-  if(false){ // toggle if using random maps
+  /* // (be careful not to initiate compare twice)
+  pfMap compare(hight, width);
   compare.SetTypeAt(2,2,4);  // set start
   compare.SetTypeAt(hight-2, width-2, 5);  // set target
-}
+  */
+
 
   // copy maps for all algorithms
   pfMap compareBF(compare);
