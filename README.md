@@ -36,3 +36,11 @@ showing different behaviours of the algorithms. As an implementation detail, `st
 After cloning the repository, or making changes in the sourcecode, just do   
 ` /gros_MidtermProject$ make `   
 if this succeeds without errors, there will be an executable "pathfinder".
+
+
+
+# How to convert GIF into mp4
+$ ffmpeg -i animate.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" video.mp4
+
+# How to get no shell output while using gnuplot
+$ ./plotGnuMap &> /dev/null

@@ -107,8 +107,8 @@ int main(){
 
  
   pfAStar star1(map1);
-  star1.solve();
-  star1.UpdateMap();  
+  star1.solve("Manhattan", 0, 0, 1);
+
  
   
   //plotMap(map1);

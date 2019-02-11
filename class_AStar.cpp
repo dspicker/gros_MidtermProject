@@ -148,7 +148,7 @@ double pfAStar::Euklid( asLocation &Pos){
  ************************************/
 
 
-int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
+int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate, bool makeGif){
   if(animate){MapPtr->PrintMap();}
 
   // Set DEBUGMOD if(1) for getting Debugging Massages
@@ -184,7 +184,6 @@ int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
 
   bool FINISH_FOUND = false;
 
-  int run = 0;
   
   // Start looping over the openList.
   // if openList is empty    => no Path could be found
@@ -237,6 +236,12 @@ int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
 	Neig_It->SetParent(*currentNode);
 	Neig_It->SetVisited();
 	openList.push(Neig_It);
+
+	if(makeGif){
+	  this->UpdateMap();
+	  GnuGif(*MapPtr);
+	}
+	
       }
       // If Node was visited befor, just test, wheather a shorter Path to this Node was found
       // and update it, if it is true.
@@ -258,11 +263,6 @@ int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
 			 << *Neig_It->Getg() << ", "
 			 << *Neig_It->Getf() << ")" << std::endl;
 
-      this->UpdateMap();
-      GnuGif(*MapPtr, run);
-
-      run++;
-
     }// for Neig_It:*currentNeighbors
   }// while
 
@@ -279,14 +279,14 @@ int pfAStar::solve(std::string HeuristicName, bool visualize, bool animate){
 	 currentNode->GetType() != 4;
 	 currentNode=currentNode->GetParent()){
 
+      PathNodes.push_back(currentNode);
+      
       //std::cout <<  currentNode->GetPosition()[0] << "|" << currentNode->GetPosition()[1];
       DEBUGMOD {
 	std::cout << " >> "
 		  << currentNode->GetParent()->GetPosition()[0] << "|"
 		  << currentNode->GetParent()->GetPosition()[1];
       }//DEBUGMOD
-
-      PathNodes.push_back(currentNode);
     }
 
     if(animate || visualize){this->UpdateMap("f");}
