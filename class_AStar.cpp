@@ -196,7 +196,7 @@ int pfAStar::solve(std::string HeuristicName, // <- merge conflict upcoming.. (u
     openList.pop();
 
     // visualisation/animation, position in loop might not be optimal
-    if(animate || visualize){this->UpdateMap("f");}
+    if(animate || visualize){this->UpdateMap("g");}
     if(animate){MapPtr->ReprintMap();}
 
     // Set Neighbors of currentNode
@@ -283,7 +283,7 @@ int pfAStar::solve(std::string HeuristicName, // <- merge conflict upcoming.. (u
       PathNodes.push_back(currentNode);
     }
 
-    if(animate || visualize){this->UpdateMap("f");}
+    if(animate || visualize){this->UpdateMap("g");}
     if(animate){MapPtr->ReprintMap();}
 
     DEBUGMOD std::cout << std::endl << std::endl;
