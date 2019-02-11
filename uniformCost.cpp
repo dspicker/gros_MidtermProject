@@ -9,7 +9,6 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
-    - delete ucDrawKnown
     - use f of pfNodes to store cumCost instead of cumCostMap?
     - get rid of cumCostMap? <- make up for performance reduction of altering map!
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
@@ -76,17 +75,6 @@ std::array<int,2> ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   } // end while loop
   return returnArr;
 } // end ucDrawPath
-void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
-  locArr startLoc  = map.GetStartLoc();
-  locArr targetLoc = map.GetTargetLoc();
-  for(auto const &it : myHistory){
-    locArr loc = it.first;
-    if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
-      pfNode* pt2Node = map.GetNodeAt(loc);
-      pt2Node->SetIsVisited();
-    }
-  }
-}
 
 
 // ---------
