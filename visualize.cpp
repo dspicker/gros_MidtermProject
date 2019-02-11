@@ -10,7 +10,7 @@
 #include "class_AStar.h"
 
 void enterToContinue(){
-  std::cout << "press ENTER to continue" << '\n';
+  std::cout << "press ENTER to continue" << '\n'; // disable for crappy screenrecording?
   std::cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
 }
 
@@ -26,34 +26,35 @@ void enterToContinue(){
 
 int main(){
 
-  bool showPathData = false;  // show cost and lengh of path
+  bool showPathData = true;  // show cost and lengh of path
+  int iterationCount = 0;
 
   // change size of random map if you want
   int hight = 40;
   int width = 40;
 
   // Use saved maps:
-    pfMap compare1(*pfMap::LoadMap("maps/compare1.csv"));
-  //pfMap compare1(*pfMap::LoadMap("maps/map1.csv"));
-  //pfMap compare1(*pfMap::LoadMap("maps/map2.csv"));
+    pfMap compare(*pfMap::LoadMap("maps/compare1.csv"));
+  //pfMap compare(*pfMap::LoadMap("maps/map1.csv"));
+  //pfMap compare(*pfMap::LoadMap("maps/map2.csv"));
 
   // Use random generated map with specified dimensions:
-  // (be careful not to initiate compare1 twice)
+  // (be careful not to initiate compare twice)
 
-  //pfMap compare1(hight, width);
+  //pfMap compare(hight, width);
   if(false){ // toggle if using random maps
-  compare1.SetTypeAt(2,2,4);  // set start
-  compare1.SetTypeAt(hight-2, width-2, 5);  // set target
+  compare.SetTypeAt(2,2,4);  // set start
+  compare.SetTypeAt(hight-2, width-2, 5);  // set target
 }
 
   // copy maps for all algorithms
-  pfMap compare1BF(compare1);
-  pfMap compare1UC(compare1);
-  pfMap compare1GB(compare1);
-  pfMap compare1ASMan(compare1);
-  pfMap compare1ASEuk(compare1);
-  pfMap compare1ASMin(compare1);
-  pfMap compare1ASSup(compare1);
+  pfMap compareBF(compare);
+  pfMap compareUC(compare);
+  pfMap compareGB(compare);
+  pfMap compareASMan(compare);
+  pfMap compareASEuk(compare);
+  pfMap compareASMin(compare);
+  pfMap compareASSup(compare);
 
   bool animate = false;
   bool visualize = false;
@@ -75,89 +76,106 @@ int main(){
   std::cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
 
   std::cout << "breadthfirst:";
-  auto flow = Breadthfirst(compare1BF,visualize, animate);
-  if(!animate){compare1BF.PrintMap();}
+  auto flow = Breadthfirst(compareBF,visualize, animate, &iterationCount);
+  if(!animate){compareBF.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << bfDrawPath(flow, compare1BF)[0] << "\n"
-              << "cost:   " << bfDrawPath(flow, compare1BF)[1]
-              << '\n'
+    std::cout << "length:     " << bfDrawPath(flow, compareBF)[0] << "\n"
+              << "cost:       " << bfDrawPath(flow, compareBF)[1] << "\n"
+              << "iterations: " << iterationCount
+              << "\n"
               << '\n';
   }
+  iterationCount = 0;
 
   enterToContinue();
 
   std::cout << "uniform cost:";
-  auto ucHistory = uniformCost(compare1UC,visualize, animate);
-  if(!animate){compare1UC.PrintMap();}
+  auto ucHistory = uniformCost(compareUC, visualize, animate, &iterationCount);
+  if(!animate){compareUC.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << ucDrawPath(ucHistory, compare1UC)[0] << "\n"
-              << "cost:   " << ucDrawPath(ucHistory, compare1UC)[1]
+    std::cout << "length:     " << ucDrawPath(ucHistory, compareUC)[0] << "\n"
+              << "cost:       " << ucDrawPath(ucHistory, compareUC)[1] << "\n"
+              << "iterations: " << iterationCount
               << '\n'
               << '\n';
   }
+  iterationCount = 0;
 
   enterToContinue();
 
   std::cout << "greedy best first:";
-  auto gbHistory = GreedyBestFirst(compare1GB, visualize, animate);
-  if(!animate){compare1GB.PrintMap();}
+  auto gbHistory = GreedyBestFirst(compareGB, visualize, animate, &iterationCount);
+  if(!animate){compareGB.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << gbDrawPath(gbHistory, compare1GB)[0] << "\n"
-              << "cost:   " << gbDrawPath(gbHistory, compare1GB)[1]
+    std::cout << "length:     " << gbDrawPath(gbHistory, compareGB)[0] << "\n"
+              << "cost:       " << gbDrawPath(gbHistory, compareGB)[1] << "\n"
+              << "iterations: " << iterationCount
               << '\n'
               << '\n';
   }
+  iterationCount = 0;
 
   enterToContinue();
 
   std::cout << "A* (manhattan):";
-  pfAStar ASMan(compare1ASMan);
-  ASMan.solve("Manhattan",visualize, animate);
-  if(!animate){compare1ASMan.PrintMap();}
+  pfAStar ASMan(compareASMan);
+  ASMan.solve("Manhattan", visualize, animate, &iterationCount);
+  if(!animate){compareASMan.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << ASMan.UpdateMap()[0] << "\n"
-              << "cost:   " << ASMan.UpdateMap()[1]
+    std::cout << "length:     " << ASMan.UpdateMap()[0] << "\n"
+              << "cost:       " << ASMan.UpdateMap()[1] << "\n"
+              << "iterations: " << iterationCount
               << '\n'
               << '\n';
   }
+  iterationCount = 0;
+
+  /*  Skip other metrics of AStar
 
   enterToContinue();
 
   std::cout << "A* (euklid):";
-  pfAStar ASEuk(compare1ASEuk);
-  ASEuk.solve("Euklid",visualize, animate);
-  if(!animate){compare1ASEuk.PrintMap();}
+  pfAStar ASEuk(compareASEuk);
+  ASEuk.solve("Euklid", visualize, animate, &iterationCount);
+  if(!animate){compareASEuk.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << ASEuk.UpdateMap()[0] << "\n"
-              << "cost:   " << ASEuk.UpdateMap()[1]
+    std::cout << "length:     " << ASEuk.UpdateMap()[0] << "\n"
+              << "cost:       " << ASEuk.UpdateMap()[1] << "\n"
+              << "iterations: " << iterationCount
               << '\n'
               << '\n';
   }
+  iterationCount = 0;
 
   enterToContinue();
 
   std::cout << "A* (minimum):";
-  pfAStar ASMin(compare1ASMin);
-  ASMin.solve("Minimum",visualize, animate);
-  if(!animate){compare1ASMin.PrintMap();}
+  pfAStar ASMin(compareASMin);
+  ASMin.solve("Minimum", visualize, animate, &iterationCount);
+  if(!animate){compareASMin.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << ASMin.UpdateMap()[0] << "\n"
-              << "cost:   " << ASMin.UpdateMap()[1]
+    std::cout << "length:     " << ASMin.UpdateMap()[0] << "\n"
+              << "cost:       " << ASMin.UpdateMap()[1] << "\n"
+              << "iterations: " << iterationCount
               << '\n'
               << '\n';
   }
+  iterationCount = 0;
 
   enterToContinue();
 
   std::cout << "A* (supremum):";
-  pfAStar ASSup(compare1ASSup);
-  ASSup.solve("Supremum",visualize, animate);
-  if(!animate){compare1ASSup.PrintMap();}
+  pfAStar ASSup(compareASSup);
+  ASSup.solve("Supremum", visualize, animate, &iterationCount);
+  if(!animate){compareASSup.PrintMap();}
   if(showPathData){
-    std::cout << "length: " << ASSup.UpdateMap()[0] << "\n"
-              << "cost:   " << ASSup.UpdateMap()[1]
+    std::cout << "length:     " << ASSup.UpdateMap()[0] << "\n"
+              << "cost:       " << ASSup.UpdateMap()[1] << "\n"
+              << "iterations: " << iterationCount
               << '\n'
               << '\n';
   }
+  iterationCount = 0;
+  */
   return 0;
 }
