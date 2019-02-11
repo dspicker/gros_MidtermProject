@@ -145,7 +145,10 @@ double pfAStar::Euklid( asLocation &Pos){
  ************************************/
 
 
-int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool animate){
+int pfAStar::solve(std::string HeuristicName, // <- merge conflict upcoming.. (use this!)
+                   bool visualize,
+                   bool animate,
+                   int *iterationCount){
   if(animate){MapPtr->PrintMap();}
 
   // Set DEBUGMOD if(1) for getting Debugging Massages
@@ -185,7 +188,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool 
   // if openList is empty    => no Path could be found
   // if FINISH_FOUND == true => shortest Path is found
   while(!openList.empty() && !FINISH_FOUND){
-
+    if(iterationCount){*iterationCount+=1;} // do only if iterationCount given as argument
     // Set new Node getting viewed
     currentNode = openList.top();
 
@@ -293,7 +296,7 @@ int pfAStar::solve(std::string HeuristicName = "Manhattan",bool visualize, bool 
 
 
 // Just a Update-Function so the Path can be plotted with the given PrintFunction in pfMap.
-void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
+std::array<int,2> pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
 
   typedef double* (asNode::*Fptr_Get_Value)();
   Fptr_Get_Value VALUE_PTR;
@@ -319,9 +322,16 @@ void pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
     }
   }
 
+  // initialize return values:
+  static std::array<int,2> returnArr;
+  returnArr[0] = 0; // lengh of Path
+  returnArr[1] = 0; // cost of Path
+
   for( auto it : PathNodes){
     NodePtr = MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]);
+    returnArr[0] += 1;
+    returnArr[1] += NodePtr->GetWeight();
     NodePtr->SetIsPath();
   }
-
+  return returnArr;
 }

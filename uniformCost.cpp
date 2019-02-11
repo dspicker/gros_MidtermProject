@@ -9,13 +9,8 @@ typedef std::array<int,2> locArr;
 bool ucDebug = false;  // display test output at different stages of algorithm
 
 /* TODO
-    - animation in terminal
-    - delete ucDrawKnown
-    - write setter funciton for f in pfNode.cpp
     - use f of pfNodes to store cumCost instead of cumCostMap?
     - get rid of cumCostMap? <- make up for performance reduction of altering map!
-    - store pointer to node in usDrawKnown
-    - add functionality to measure time taken to find the targetLoc
     - use 2D array 'cumCostArr' instead of cumCostMap for better performance?
       (using library arrays, initializing every location with INT_MAX)
 */
@@ -45,16 +40,22 @@ locArr ucAddLocArr(locArr &a, locArr &b){
   return res;
 }
 
-// functions for visualisation (call in main)
-void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
+// functions for visualisation (call in main) :
+std::array<int,2> ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
   locArr targetLoc = map.GetTargetLoc();
   locArr startLoc  = map.GetStartLoc();
   locArr currentLoc = targetLoc;
   locArr previousLoc;
+  // initialize return values:
+  static std::array<int,2> returnArr;
+  returnArr[0] = 0; // lengh of Path
+  returnArr[1] = 0; // cost of Path
+
   if( myHistory.find(targetLoc) == myHistory.end() ){ // check if target found, abourt if not
     std::cout << "UniformCost: Target not found!" << '\n';
-    return;
+    return returnArr;
   }
+
   // loop through linked locations starting at target location
   while(true){
     previousLoc = myHistory.at(currentLoc);
@@ -67,21 +68,14 @@ void ucDrawPath(std::map<locArr, locArr> &myHistory, pfMap &map){
     }
     if(previousLoc == startLoc)
       break;
+    returnArr[0] += 1;
+    returnArr[1] += (map.GetNodeAt(previousLoc)->GetWeight());
     map.GetNodeAt(previousLoc)->SetIsPath();
     currentLoc = previousLoc;
-  }
-}
-void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!!!
-  locArr startLoc  = map.GetStartLoc();
-  locArr targetLoc = map.GetTargetLoc();
-  for(auto const &it : myHistory){
-    locArr loc = it.first;
-    if(loc != startLoc && loc != targetLoc){  // ignore start and target locations
-      pfNode* pt2Node = map.GetNodeAt(loc);
-      pt2Node->SetIsVisited();
-    }
-  }
-}
+  } // end while loop
+  return returnArr;
+} // end ucDrawPath
+
 
 // ---------
 // algorithm
@@ -89,7 +83,8 @@ void ucDrawKnown(std::map<locArr, locArr> &myHistory, pfMap &map){ // REDUNDANT!
 
 std::map<locArr, locArr> uniformCost(pfMap &map,
                                      bool visualize = false,
-                                     bool animate = false){
+                                     bool animate = false,
+                                     int *iterationCount = 0){
   // initializing containers
   std::map<locArr, int> cumCostMap;   // save cumCost for found locations
   std::map<locArr, locArr> history;   // link visited location to predecessor
@@ -110,7 +105,6 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
   locArr neighborLoc;
   int neighborCumCost;
   int currentCumCost;
-  int iterationCount = 0; // only for ucDebugging!
 
   // set cumCost for start node, push into PQ
   ucSetCumCost(cumCostMap, startLoc, 0);
@@ -123,9 +117,9 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
 
   // central loop (algorithm)
   while(!unvisitedPQ.empty()){
+    if(iterationCount){*iterationCount+=1;} // do only if iterationCount given as argument
     if(animate){
     // poor man's animation (works though!)
-    //ucDrawKnown(map, history); // 'animation'
     map.ReprintMap(); // 'animation'
   }
     currentLoc = unvisitedPQ.top();
@@ -139,24 +133,21 @@ std::map<locArr, locArr> uniformCost(pfMap &map,
     if(ucDebug){
       std::cout << "DEBUG: current:   " << currentLoc[0] << ","
                 << currentLoc[1] << '\n';
-      iterationCount+=1;
     }
-
-    // check neighbors of current node
+    // check neighbors of current node:
     for(auto direction : directions){
-      neighborLoc = ucAddLocArr(currentLoc, direction);
-      //pfNode* pt2Node = map.GetNodeAt(neighborLoc); // store pointer to neighbor node
-
-      if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc))
+      neighborLoc = ucAddLocArr(currentLoc, direction); // get location of next neighbor
+      if(ucIsWall(map, neighborLoc) || ucIsKnown(history, neighborLoc)) // skip if known/wall
         continue;
-
+      // calcualte and set cumCost:
       currentCumCost = ucGetCumCost(cumCostMap, currentLoc);
       neighborCumCost = currentCumCost + map.GetNodeAt(neighborLoc)->GetWeight();
-
       ucSetCumCost(cumCostMap, neighborLoc, neighborCumCost);
+      // link neighbors to current location and push into queue:
       ucSetHistory(history, neighborLoc, currentLoc);
-      if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       unvisitedPQ.push(neighborLoc);
+
+      if(visualize || animate){map.GetNodeAt(neighborLoc)->Setf(neighborCumCost);}
       if(ucDebug){
         std::cout << "DEBUG: neighbor:  " << neighborLoc[0] << ","
                   << neighborLoc[1] << "\n";
