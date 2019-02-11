@@ -324,8 +324,8 @@ std::array<int,2> pfAStar::UpdateMap(std::string PRINT_VALUE_TYPE){
 
   // initialize return values:
   static std::array<int,2> returnArr;
-  returnArr[0] = 0; // lengh of Path
-  returnArr[1] = 0; // cost of Path
+  returnArr[0] = -1; // lengh of Path; -1 because there is one too many compared to uniformCost
+  returnArr[1] = -1; // cost of Path
 
   for( auto it : PathNodes){
     NodePtr = MapPtr->GetNodeAt( it->GetPosition()[0], it->GetPosition()[1]);
